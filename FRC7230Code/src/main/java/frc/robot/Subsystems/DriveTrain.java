@@ -85,12 +85,12 @@ public class DriveTrain {
             }
         }
 
-        if(m_stick.getRawButton(robotConstants.L_BUMPER)){
+        if(m_stick.getRawButton(robotConstants.SPEED_BUTTON)){
             speedY *= driveTrainConstants.zoomFactor;
             speedX *= driveTrainConstants.zoomFactor;
         }
         
-        if(m_stick.getRawButton(robotConstants.R_BUMPER)){
+        if(m_stick.getRawButton(robotConstants.SLOW_BUTTON)){
             speedX=x;
             speedY=y;
             speedY*=driveTrainConstants.slowFactor;
@@ -112,7 +112,7 @@ public class DriveTrain {
         }
         
         // inverting
-        swapState = m_stick.getRawButton(robotConstants.Y_BUTTON);
+        swapState = m_stick.getRawButton(robotConstants.REVERSE_BUTTON);
         if (swapState == true && prevState == false){
             invertAxis *= -1;
             prevState = true;
@@ -127,7 +127,7 @@ public class DriveTrain {
             DriverStation.reportWarning(Double.toString(speedY), false);
             m_robotDrive.arcadeDrive(-1 * invertAxis * (speedY), invertAxis *(speedX));
         }
-        bButtonState = m_stick.getRawButton(robotConstants.B_BUTTON);
+        bButtonState = m_stick.getRawButton(robotConstants.SMART_INTAKE_BUTTON);
         if (bButtonState){
             Mechanisms.intakeSolenoid.set(bButtonState);
             Mechanisms.intakeMotor.set(ControlMode.PercentOutput, 0.65);

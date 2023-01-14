@@ -14,7 +14,7 @@ public class RunMechanisms {
     private CANSparkMax shooterMotor = Mechanisms.shooterMotor, conveyorMotor = Mechanisms.conveyorMotor, climberMotor = Mechanisms.climberMotor; 
     private VictorSPX intakeMotor = Mechanisms.intakeMotor;
     private Solenoid intakeSolenoid = Mechanisms.intakeSolenoid, climberSolenoid = Mechanisms.climberSolenoid;
-    private Joystick m_stick = Mechanisms.joystick;
+    private Joystick m_stick = Mechanisms.mechanismsJoystick;
     private boolean previousState = false;
     private boolean previousClimb = false;
     private boolean currentClimb;
