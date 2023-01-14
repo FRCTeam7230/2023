@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
 public class Robot extends TimedRobot {
 
-  private DriveTrain driveTrain = new DriveTrain(Mechanisms.driveSubsystem, Mechanisms.joystick);
+  private DriveTrain driveTrain = new DriveTrain(Mechanisms.driveSubsystem, Mechanisms.driveJoystick);
   private Autonomous auton = new Autonomous();
   private RunMechanisms runMechanisms = new RunMechanisms();
   private boolean red = true;
@@ -62,8 +62,8 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     driveTrain.drive(false);
-    runMechanisms.runShotAndIntake(robotConstants.L_TRIGGER,robotConstants.R_TRIGGER, robotConstants.START_BUTTON, robotConstants.shootingPower, true);
-    runMechanisms.runClimber(robotConstants.X_BUTTON, robotConstants.A_BUTTON);
+    runMechanisms.runShotAndIntake(robotConstants.SHOOT_BUTTON,robotConstants.INTAKE_BUTTON, robotConstants.INTAKE_MOTOR_BUTTON, robotConstants.shootingPower, true);
+    runMechanisms.runClimber(robotConstants.CLIMBER_UP_BUTTON, robotConstants.CLIMBER_DOWN_BUTTON);
 
   }
 

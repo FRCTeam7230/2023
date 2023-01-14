@@ -23,18 +23,28 @@ public final class Constants {
     public static final int L2MOTOR_ID = 2;
     public static final int R2MOTOR_ID = 4;
     
-    public static final int X_BUTTON = 1; //X BUTTON: CLIMBER UP
-    public static final int A_BUTTON = 2; //A BUTTON: CLIMBER DOWN
-    public static final int B_BUTTON = 3; //B BUTTON: SMART VISION INTAKE
-    public static final int Y_BUTTON = 4; //Y BUTTON: REVERSE
-    public static final int L_BUMPER = 5; //L BUMPER: SPEED
-    public static final int R_BUMPER = 6; //R BUMPER: SLOW
-    public static final int L_TRIGGER = 7; //L TRIGGER: SHOOT
-    public static final int R_TRIGGER = 8; //R TRIGGER: INTAKE
-    public static final int BACK_BUTTON = 9; 
-    public static final int START_BUTTON = 10; //START BUTTON: RUN INTAKE MOTOR/NO SOLENOID
-    public static final int L_JOYSTICK_PRESS = 11;
-    public static final int R_JOYSTICK_PRESS = 12;
+    public static final int BUTTON1 = 1; //X BUTTON: CLIMBER UP
+    public static final int BUTTON2 = 2; //A BUTTON: CLIMBER DOWN
+    public static final int BUTTON3 = 3; //B BUTTON: SMART VISION INTAKE
+    public static final int BUTTON4 = 4; //Y BUTTON: REVERSE
+    public static final int BUTTON5 = 5; //L BUMPER: SPEED
+    public static final int BUTTON6 = 6; //R BUMPER: SLOW
+    public static final int BUTTON7 = 7; //L TRIGGER: SHOOT
+    public static final int BUTTON8 = 8; //R TRIGGER: INTAKE
+    public static final int BUTTON9 = 9; 
+    public static final int BUTTON10 = 10; //START BUTTON: RUN INTAKE MOTOR/NO SOLENOID
+    public static final int BUTTON11 = 11;
+    public static final int BUTTON12 = 12;
+
+    public static final int CLIMBER_UP_BUTTON = BUTTON1;
+    public static final int CLIMBER_DOWN_BUTTON = BUTTON2;
+    public static final int SMART_INTAKE_BUTTON = BUTTON3;
+    public static final int REVERSE_BUTTON = BUTTON4;
+    public static final int SPEED_BUTTON = BUTTON5;
+    public static final int SLOW_BUTTON = BUTTON6;
+    public static final int SHOOT_BUTTON = BUTTON7;
+    public static final int INTAKE_BUTTON = BUTTON8;
+    public static final int INTAKE_MOTOR_BUTTON = BUTTON10;
 
     public static final double shootingPower = 0.6;
     public static final double climbPower = 0.6;
