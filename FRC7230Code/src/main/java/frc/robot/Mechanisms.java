@@ -17,5 +17,6 @@ public class Mechanisms {
     public static Solenoid climberSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 2);
     public static ThresholdInRange vision = new ThresholdInRange();
     public static DriveSubsystem driveSubsystem = new DriveSubsystem();
-    public static Joystick joystick = new Joystick(0);
+    public static Joystick driveJoystick = new Joystick(0);
+    public static Joystick mechanismsJoystick = new Joystick(1);
 }
