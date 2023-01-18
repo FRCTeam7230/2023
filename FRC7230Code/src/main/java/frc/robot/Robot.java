@@ -78,4 +78,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testPeriodic() {}
+  @Override
+  public void simulationInit() {
+      ClassInformationSender.updateReflectionInformation("frc");
+  }
 }

@@ -3,8 +3,8 @@ plugins {
     id "edu.wpi.first.GradleRIO" version "2022.2.1"
 }
 
-sourceCompatibility = JavaVersion.VERSION_11
-targetCompatibility = JavaVersion.VERSION_11
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
 
 def ROBOT_MAIN_CLASS = "frc.robot.Main"
 
@@ -66,6 +66,8 @@ dependencies {
     simulationRelease wpi.sim.enableRelease()
 
     testImplementation 'junit:junit:4.12'
+    
+    implementation 'com.dacubeking:autobuilder-robot:2.2.1'
 }
 
 // Simulation configuration (e.g. environment variables).
@@ -85,3 +87,8 @@ jar {
 deployArtifact.jarTask = jar
 wpi.java.configureExecutableTasks(jar)
 wpi.java.configureTestTasks(test)
+repositories {
+    maven {//autobuilder
+        url "https://maven.dacubeking.com/releases/"
+    }
+}
