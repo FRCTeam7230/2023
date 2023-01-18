@@ -18,7 +18,7 @@ public class Robot extends TimedRobot {
   private DriveTrain driveTrain = new DriveTrain(Mechanisms.driveSubsystem, Mechanisms.driveJoystick);
   private Autonomous auton = new Autonomous();
   private RunMechanisms runMechanisms = new RunMechanisms();
-  private boolean red = true;
+  private boolean red = true;   
   private final SendableChooser<String> color_chooser = new SendableChooser<>();
   @Override
   public void robotInit() {

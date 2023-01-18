@@ -32,7 +32,7 @@ public class DriveTrain {
     }
 
     public void drive(boolean tank){
-        double y = Math.pow(m_stick.getRawAxis(2),1);
+        double y = Math.pow(m_stick.getRawAxis(0),1);
         double x = Math.pow(m_stick.getRawAxis(1),1);
         y *= Math.abs(y);
         x *= Math.abs(x);
@@ -154,13 +154,6 @@ public class DriveTrain {
         else{
           driveModified = false;
         }
-        button9State = m_stick.getRawButton(robotConstants.BALANCING_BUTTON);
-        if (button9State){
-            Mechanisms.gyro.calibrate();
-            error = targetAngle - gyroAngle;
-            if (error > gyroAngle) {
-
-            }
-        }
+        
     }
 }
