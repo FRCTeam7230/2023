@@ -31,7 +31,7 @@ public final class Constants {
     public static final int BUTTON6 = 6; //R BUMPER: SLOW
     public static final int BUTTON7 = 7; //L TRIGGER: SHOOT
     public static final int BUTTON8 = 8; //R TRIGGER: INTAKE
-    public static final int BUTTON9 = 9; 
+    public static final int BUTTON9 = 9; //Button 9: BALANCING
     public static final int BUTTON10 = 10; //START BUTTON: RUN INTAKE MOTOR/NO SOLENOID
     public static final int BUTTON11 = 11;
     public static final int BUTTON12 = 12;
@@ -45,6 +45,7 @@ public final class Constants {
     public static final int SHOOT_BUTTON = BUTTON7;
     public static final int INTAKE_BUTTON = BUTTON8;
     public static final int INTAKE_MOTOR_BUTTON = BUTTON10;
+    public static final int BALANCING_BUTTON = BUTTON9;
 
     public static final double shootingPower = 0.6;
     public static final double climbPower = 0.6;

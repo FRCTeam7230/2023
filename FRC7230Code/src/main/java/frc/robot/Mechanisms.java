@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.Joystick;
+import com.kauailabs.navx.frc.AHRS;
 import frc.robot.Subsystems.DriveSubsystem;
 public class Mechanisms {
     public static CANSparkMax shooterMotor = new CANSparkMax(5, CANSparkMax.MotorType.kBrushless);
@@ -19,4 +20,5 @@ public class Mechanisms {
     public static DriveSubsystem driveSubsystem = new DriveSubsystem();
     public static Joystick driveJoystick = new Joystick(0);
     public static Joystick mechanismsJoystick = new Joystick(1);
+    public static AHRS gyro = new AHRS();//SPI.Port.kMXP);
 }

@@ -19,7 +19,12 @@ public class DriveTrain {
     private double rateOfSpeedYChange = 0.0;
     private double rateOfSpeedXChange = 0.0;
     private boolean prevDrive = false, nowDrive = false;
-    private boolean bButtonState;
+    private double targetAngle;
+    private double gyroAngle;
+    private double error;
+    private boolean button3State;
+    private boolean button9State;
+    
     private boolean driveModified;
     public DriveTrain(DriveSubsystem subsystem, Joystick stick){
         m_robotDrive = subsystem;
@@ -127,9 +132,9 @@ public class DriveTrain {
             DriverStation.reportWarning(Double.toString(speedY), false);
             m_robotDrive.arcadeDrive(-1 * invertAxis * (speedY), invertAxis *(speedX));
         }
-        bButtonState = m_stick.getRawButton(robotConstants.SMART_INTAKE_BUTTON);
-        if (bButtonState){
-            Mechanisms.intakeSolenoid.set(bButtonState);
+        button3State = m_stick.getRawButton(robotConstants.SMART_INTAKE_BUTTON);
+        if (button3State){
+            Mechanisms.intakeSolenoid.set(button3State);
             Mechanisms.intakeMotor.set(ControlMode.PercentOutput, 0.65);
             Mechanisms.conveyorMotor.set(0.5);
             double angle = Mechanisms.vision.getAngleX();
@@ -148,6 +153,14 @@ public class DriveTrain {
         }
         else{
           driveModified = false;
+        }
+        button9State = m_stick.getRawButton(robotConstants.BALANCING_BUTTON);
+        if (button9State){
+            Mechanisms.gyro.calibrate();
+            error = targetAngle - gyroAngle;
+            if (error > gyroAngle) {
+
+            }
         }
     }
 }
