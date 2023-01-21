@@ -19,11 +19,11 @@ public class DriveTrain {
     private double rateOfSpeedYChange = 0.0;
     private double rateOfSpeedXChange = 0.0;
     private boolean prevDrive = false, nowDrive = false;
-    private double targetAngle;
     private double gyroAngle;
     private double error;
     private boolean button3State;
     private boolean button9State;
+    private boolean button11State;
     
     private boolean driveModified;
     public DriveTrain(DriveSubsystem subsystem, Joystick stick){
@@ -32,7 +32,7 @@ public class DriveTrain {
     }
 
     public void drive(boolean tank){
-        double y = Math.pow(m_stick.getRawAxis(2),1);
+        double y = Math.pow(m_stick.getRawAxis(0),1);
         double x = Math.pow(m_stick.getRawAxis(1),1);
         y *= Math.abs(y);
         x *= Math.abs(x);
@@ -156,11 +156,21 @@ public class DriveTrain {
         }
         button9State = m_stick.getRawButton(robotConstants.BALANCING_BUTTON);
         if (button9State){
-            Mechanisms.gyro.calibrate();
-            error = targetAngle - gyroAngle;
-            if (error > gyroAngle) {
-
+            gyroAngle = Mechanisms.gyro.getPitch();
+            error = driveTrainConstants.targetAngle - gyroAngle;
+            if (error > driveTrainConstants.targetAngle + driveTrainConstants.smartAngleMargin){
+                m_robotDrive.drive(driveTrainConstants.smartSpeed, driveTrainConstants.smartSpeed);
             }
+            else if (error < driveTrainConstants.targetAngle - driveTrainConstants.smartAngleMargin){
+                m_robotDrive.drive(-driveTrainConstants.smartSpeed, -driveTrainConstants.smartSpeed);
+            }
+            else{
+                m_robotDrive.drive(0, 0);
+            }
+        }
+        button11State = m_stick.getRawButton(robotConstants.SMART_ORIENT_BUTTON);
+        if (button11State){
+            
         }
     }
 }
