@@ -15,7 +15,7 @@ public class Mechanisms {
     public static Compressor pcmCompressor = new Compressor(0, PneumaticsModuleType.CTREPCM);
     public static Solenoid intakeSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 1);
     public static Solenoid climberSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 2);
-    //public static ThresholdInRange vision = new ThresholdInRange();
+    public static ThresholdInRange vision = new ThresholdInRange();
     public static DriveSubsystem driveSubsystem = new DriveSubsystem();
     public static Joystick joystick = new Joystick(0);
 }

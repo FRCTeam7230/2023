@@ -34,13 +34,13 @@ public class CameraStarter {
                 tempColor = "blue";
               }
                 // System.out.println(red);
-                //Mat processed = Mechanisms.vision.process(source, tempColor);
+                Mat processed = Mechanisms.vision.process(source, tempColor);
               
               // else {
               //   Mat processed = vision.process(source, "blue");
               // }
               outputStream.putFrame(source);
-              //outputStream2.putFrame(processed);
+              outputStream2.putFrame(processed);
             }
         }).start();
     }

@@ -132,19 +132,19 @@ public class DriveTrain {
             Mechanisms.intakeSolenoid.set(bButtonState);
             Mechanisms.intakeMotor.set(ControlMode.PercentOutput, 0.65);
             Mechanisms.conveyorMotor.set(0.5);
-            //double angle = Mechanisms.vision.getAngleX();
-            // if (angle>0 && angle>driveTrainConstants.smartAngleMargin){
-            //   driveModified = true;
-            //   m_robotDrive.drive(driveTrainConstants.smartSpeed/2, -driveTrainConstants.smartSpeed);
-            // }
-            // else if (angle<0 && angle<-driveTrainConstants.smartAngleMargin){
-            //   driveModified = true;
-            //   m_robotDrive.drive(-driveTrainConstants.smartSpeed, driveTrainConstants.smartSpeed/2);
-            // }
-            // else if (Math.abs(angle) < driveTrainConstants.smartAngleMargin){
-            //   driveModified = true;
-            //   m_robotDrive.arcadeDrive(0, -driveTrainConstants.smartSpeed);
-           // }
+            double angle = Mechanisms.vision.getAngleX();
+            if (angle>0 && angle>driveTrainConstants.smartAngleMargin){
+              driveModified = true;
+              m_robotDrive.drive(driveTrainConstants.smartSpeed/2, -driveTrainConstants.smartSpeed);
+            }
+            else if (angle<0 && angle<-driveTrainConstants.smartAngleMargin){
+              driveModified = true;
+              m_robotDrive.drive(-driveTrainConstants.smartSpeed, driveTrainConstants.smartSpeed/2);
+            }
+            else if (Math.abs(angle) < driveTrainConstants.smartAngleMargin){
+              driveModified = true;
+              m_robotDrive.arcadeDrive(0, -driveTrainConstants.smartSpeed);
+            }
         }
         else{
           driveModified = false;

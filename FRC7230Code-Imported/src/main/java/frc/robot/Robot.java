@@ -12,7 +12,7 @@ import frc.robot.Subsystems.DriveTrain;
 import frc.robot.Subsystems.RunMechanisms;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-//import com.dacubeking.AutoBuilder.robot.reflection.ClassInformationSender;
+import com.dacubeking.AutoBuilder.robot.reflection.ClassInformationSender;
 
 public class Robot extends TimedRobot {
 
@@ -79,9 +79,9 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testPeriodic() {}
-  // @Override
-  // public void simulationInit() {
-  //     ClassInformationSender.updateReflectionInformation("frc");
-  // }
+  @Override
+  public void simulationInit() {
+      ClassInformationSender.updateReflectionInformation("frc");
+  }
 }
 
