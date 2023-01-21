@@ -36,9 +36,9 @@ public final class Constants {
     public static final int BUTTON11 = 11;
     public static final int BUTTON12 = 12;
 
-    public static final int CLIMBER_UP_BUTTON = BUTTON1;
-    public static final int CLIMBER_DOWN_BUTTON = BUTTON2;
-    public static final int SMART_INTAKE_BUTTON = BUTTON3;
+    public static final int CLIMBER_UP_BUTTON = BUTTON10;
+    public static final int CLIMBER_DOWN_BUTTON = BUTTON12;
+    public static final int SMART_INTAKE_BUTTON = BUTTON2;
     public static final int REVERSE_BUTTON = BUTTON4;
     public static final int SPEED_BUTTON = BUTTON5;
     public static final int SLOW_BUTTON = BUTTON6;
