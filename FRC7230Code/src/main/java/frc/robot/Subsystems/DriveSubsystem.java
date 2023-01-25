@@ -15,14 +15,18 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.robotConstants;
 import frc.robot.Constants.driveTrainConstants;
+import edu.wpi.first.wpilibj.motorcontrol.Spark;
 public class DriveSubsystem extends SubsystemBase {
 
   public double initialLeft, initialRight;
-  public CANSparkMax l_motor1 = new CANSparkMax(robotConstants.L1MOTOR_ID, CANSparkMax.MotorType.kBrushless);
-  public CANSparkMax r_motor1 = new CANSparkMax(robotConstants.R1MOTOR_ID, CANSparkMax.MotorType.kBrushless);
-  public CANSparkMax l_motor2 = new CANSparkMax(robotConstants.L2MOTOR_ID, CANSparkMax.MotorType.kBrushless);
-  public CANSparkMax r_motor2 = new CANSparkMax(robotConstants.R2MOTOR_ID, CANSparkMax.MotorType.kBrushless);
-  
+  // public CANSparkMax l_motor1 = new CANSparkMax(robotConstants.L1MOTOR_ID, CANSparkMax.MotorType.kBrushless);
+  // public CANSparkMax r_motor1 = new CANSparkMax(robotConstants.R1MOTOR_ID, CANSparkMax.MotorType.kBrushless);
+  // public CANSparkMax l_motor2 = new CANSparkMax(robotConstants.L2MOTOR_ID, CANSparkMax.MotorType.kBrushless);
+  // public CANSparkMax r_motor2 = new CANSparkMax(robotConstants.R2MOTOR_ID, CANSparkMax.MotorType.kBrushless);
+  public Spark l_motor1 = new Spark(0);
+  public Spark r_motor1 = new Spark(2);
+  public Spark l_motor2 = new Spark(1);
+  public Spark r_motor2 = new Spark(3);
   private final MotorControllerGroup m_leftMotors =
       new MotorControllerGroup(l_motor1,
                                l_motor2);
@@ -34,23 +38,23 @@ public class DriveSubsystem extends SubsystemBase {
   private final DifferentialDrive m_drive = new DifferentialDrive(m_leftMotors, m_rightMotors);
 
   // The left-side drive encoder
-  private final RelativeEncoder m_leftEncoder = 
-  l_motor1.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42);
+  // private final RelativeEncoder m_leftEncoder = 
+  // l_motor1.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42);
 
   // The right-side drive encoder
-  private final RelativeEncoder m_rightEncoder = 
-  r_motor1.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42);
+  // private final RelativeEncoder m_rightEncoder = 
+  // r_motor1.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42);
 
   /**
    * Creates a new DriveSubsystem.
    */
   public DriveSubsystem() {
 
-    m_leftEncoder.setPositionConversionFactor(driveTrainConstants.kEncoderDistancePerPulse);
-    m_rightEncoder.setPositionConversionFactor(driveTrainConstants.kEncoderDistancePerPulse);
+    // m_leftEncoder.setPositionConversionFactor(driveTrainConstants.kEncoderDistancePerPulse);
+    // m_rightEncoder.setPositionConversionFactor(driveTrainConstants.kEncoderDistancePerPulse);
 
-    initialLeft = m_leftEncoder.getPosition();
-    initialRight = m_rightEncoder.getPosition();
+    // initialLeft = m_leftEncoder.getPosition();
+    // initialRight = m_rightEncoder.getPosition();
     
     m_drive.setSafetyEnabled(false);
   }
@@ -84,8 +88,8 @@ public class DriveSubsystem extends SubsystemBase {
    * Resets the drive encoders to currently read a position of 0.
    */
   public void resetEncoders() {
-    initialLeft = m_leftEncoder.getPosition();
-    initialRight = m_rightEncoder.getPosition();
+    // initialLeft = m_leftEncoder.getPosition();
+    // initialRight = m_rightEncoder.getPosition();
     
   }
 
@@ -94,37 +98,37 @@ public class DriveSubsystem extends SubsystemBase {
    *
    * @return the average of the two encoder readings
    */
-  public double getAverageEncoderDistance() {
-    return (m_leftEncoder.getPosition() + m_rightEncoder.getPosition()) / 2.0;
-  }
+  // public double getAverageEncoderDistance() {
+  //   return (m_leftEncoder.getPosition() + m_rightEncoder.getPosition()) / 2.0;
+  // }
 
-  public double getLeftDistance(){
-    return m_leftEncoder.getPosition()-initialLeft;
-  }
-  public double getRightDistance(){
-    return m_rightEncoder.getPosition()-initialRight;
-  }
+  // public double getLeftDistance(){
+  //   return m_leftEncoder.getPosition()-initialLeft;
+  // }
+  // public double getRightDistance(){
+  //   return m_rightEncoder.getPosition()-initialRight;
+  // }
   /**
    * Gets the left drive encoder.
    *
    * @return the left drive encoder
    */
-  public RelativeEncoder getLeftEncoder() {
-    return m_leftEncoder;
-  }
+  // public RelativeEncoder getLeftEncoder() {
+  //   return m_leftEncoder;
+  // }
 
   /**
    * Gets the right drive encoder.
    *
    * @return the right drive encoder
    */
-  public RelativeEncoder getRightEncoder() {
-    return m_rightEncoder;
-  }
+  // public RelativeEncoder getRightEncoder() {
+  //   return m_rightEncoder;
+  // }
 
-  public double getError(){
-    return m_leftEncoder.getPosition()-m_rightEncoder.getPosition();
-  }
+  // public double getError(){
+  //   return m_leftEncoder.getPosition()-m_rightEncoder.getPosition();
+  // }
 
   /**
    * Sets the max output of the drive.  Useful for scaling the drive to drive more slowly.
