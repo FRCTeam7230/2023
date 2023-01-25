@@ -6,6 +6,7 @@ import frc.robot.Constants.driveTrainConstants;
 import frc.robot.Constants.robotConstants;
 import frc.robot.Mechanisms;
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class DriveTrain {
 
     private DriveSubsystem m_robotDrive;
@@ -140,6 +141,7 @@ public class DriveTrain {
             DriverStation.reportWarning(Double.toString(speedY), false);
             m_robotDrive.arcadeDrive(1 * invertAxis * (speedY), invertAxis *(speedX));
         }
+<<<<<<< Updated upstream
         button3State = m_stick.getRawButton(robotConstants.SMART_INTAKE_BUTTON);
         if (button3State){
             // Mechanisms.intakeSolenoid.set(button3State);
@@ -163,5 +165,51 @@ public class DriveTrain {
           driveModified = false;
         }
         
+=======
+        // button3State = m_stick.getRawButton(robotConstants.SMART_INTAKE_BUTTON);
+        // if (button3State){
+        //     Mechanisms.intakeSolenoid.set(button3State);
+        //     Mechanisms.intakeMotor.set(ControlMode.PercentOutput, 0.65);
+        //     Mechanisms.conveyorMotor.set(0.5);
+        //     double angle = Mechanisms.vision.getAngleX();
+        //     if (angle>0 && angle>driveTrainConstants.smartAngleMargin){
+        //       driveModified = true;
+        //       m_robotDrive.drive(driveTrainConstants.smartSpeed/2, -driveTrainConstants.smartSpeed);
+        //     }
+        //     else if (angle<0 && angle<-driveTrainConstants.smartAngleMargin){
+        //       driveModified = true;
+        //       m_robotDrive.drive(-driveTrainConstants.smartSpeed, driveTrainConstants.smartSpeed/2);
+        //     }
+        //     else if (Math.abs(angle) < driveTrainConstants.smartAngleMargin){
+        //       driveModified = true;
+        //       m_robotDrive.arcadeDrive(0, -driveTrainConstants.smartSpeed);
+        //     }
+        // }
+        // else{
+        //   driveModified = false;
+        // }
+        button9State = m_stick.getRawButton(robotConstants.BALANCING_BUTTON);
+        if (button9State){
+            gyroAngle = Mechanisms.gyro.getPitch();
+            error = driveTrainConstants.targetAngle - gyroAngle;
+            
+            if (error > driveTrainConstants.targetAngle + driveTrainConstants.smartAngleMargin){
+                // m_robotDrive.drive(driveTrainConstants.smartSpeed, driveTrainConstants.smartSpeed);
+                SmartDashboard.putString("tilted forward", " driving back");
+            }
+            else if (error < driveTrainConstants.targetAngle - driveTrainConstants.smartAngleMargin){
+                // m_robotDrive.drive(-driveTrainConstants.smartSpeed, -driveTrainConstants.smartSpeed);
+                SmartDashboard.putString("tilted back", " driving forward");
+            }
+            else{
+                // m_robotDrive.drive(0, 0);
+                SmartDashboard.putString("balanced", "stopping");
+            }
+        }
+        button11State = m_stick.getRawButton(robotConstants.SMART_ORIENT_BUTTON);
+        if (button11State){
+            
+        }
+>>>>>>> Stashed changes
     }
 }
