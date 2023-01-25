@@ -16,14 +16,16 @@ public class DriveTrain {
     private int invertAxis = -1;
     private double speedY = 0.0;
     private double speedX = 0.0;
+    private double speedLimitChangeX = 0.0;
+    private double speedLimitChangeY = 0.0;
     private double rateOfSpeedYChange = 0.0;
     private double rateOfSpeedXChange = 0.0;
     private boolean prevDrive = false, nowDrive = false;
+    private double targetAngle;
     private double gyroAngle;
     private double error;
     private boolean button3State;
     private boolean button9State;
-    private boolean button11State;
     
     private boolean driveModified;
     public DriveTrain(DriveSubsystem subsystem, Joystick stick){
@@ -32,6 +34,8 @@ public class DriveTrain {
     }
 
     public void drive(boolean tank){
+        speedLimitChangeX = 0.0;
+        speedLimitChangeY = 0.0;
         double y = Math.pow(m_stick.getRawAxis(0),1);
         double x = Math.pow(m_stick.getRawAxis(1),1);
         y *= Math.abs(y);
@@ -93,27 +97,31 @@ public class DriveTrain {
         if(m_stick.getRawButton(robotConstants.SPEED_BUTTON)){
             speedY *= driveTrainConstants.zoomFactor;
             speedX *= driveTrainConstants.zoomFactor;
+            speedLimitChangeX = 0.1;
+            speedLimitChangeY = 0.1;
         }
         
         if(m_stick.getRawButton(robotConstants.SLOW_BUTTON)){
             speedX=x;
             speedY=y;
+            speedLimitChangeX = -0.2;
+            speedLimitChangeY = -0.2;
             speedY*=driveTrainConstants.slowFactor;
             speedX*=driveTrainConstants.slowFactor; 
         }
         // IMPORTANT
         // I DONT KNOW WHY BUT X AND Y LIMITS HERE ARE SWITCHED
         if (speedX > 0){
-            speedX = Math.min(speedX, driveTrainConstants.limitX);
+            speedX = Math.min(speedX, driveTrainConstants.limitX + speedLimitChangeX);
         }
         else {
-            speedX = Math.max(speedX, -driveTrainConstants.limitX);
+            speedX = Math.max(speedX, -driveTrainConstants.limitX - speedLimitChangeX);
         }
         if (speedY > 0){
-            speedY = Math.min(speedY, driveTrainConstants.limitY);
+            speedY = Math.min(speedY, driveTrainConstants.limitY + speedLimitChangeY);
         }
         else {
-            speedY = Math.max(speedY, -driveTrainConstants.limitY);
+            speedY = Math.max(speedY, -driveTrainConstants.limitY - speedLimitChangeY);
         }
         
         // inverting
@@ -130,47 +138,30 @@ public class DriveTrain {
 
         if (!tank && !driveModified){
             DriverStation.reportWarning(Double.toString(speedY), false);
-            m_robotDrive.arcadeDrive(-1 * invertAxis * (speedY), invertAxis *(speedX));
+            m_robotDrive.arcadeDrive(1 * invertAxis * (speedY), invertAxis *(speedX));
         }
         button3State = m_stick.getRawButton(robotConstants.SMART_INTAKE_BUTTON);
         if (button3State){
-            Mechanisms.intakeSolenoid.set(button3State);
-            Mechanisms.intakeMotor.set(ControlMode.PercentOutput, 0.65);
-            Mechanisms.conveyorMotor.set(0.5);
-            double angle = Mechanisms.vision.getAngleX();
-            if (angle>0 && angle>driveTrainConstants.smartAngleMargin){
-              driveModified = true;
-              m_robotDrive.drive(driveTrainConstants.smartSpeed/2, -driveTrainConstants.smartSpeed);
-            }
-            else if (angle<0 && angle<-driveTrainConstants.smartAngleMargin){
-              driveModified = true;
-              m_robotDrive.drive(-driveTrainConstants.smartSpeed, driveTrainConstants.smartSpeed/2);
-            }
-            else if (Math.abs(angle) < driveTrainConstants.smartAngleMargin){
-              driveModified = true;
-              m_robotDrive.arcadeDrive(0, -driveTrainConstants.smartSpeed);
-            }
+            // Mechanisms.intakeSolenoid.set(button3State);
+            // Mechanisms.intakeMotor.set(ControlMode.PercentOutput, 0.65);
+            // Mechanisms.conveyorMotor.set(0.5);
+            // double angle = Mechanisms.vision.getAngleX();
+            // if (angle>0 && angle>driveTrainConstants.smartAngleMargin){
+            //   driveModified = true;
+            //   m_robotDrive.drive(driveTrainConstants.smartSpeed/2, -driveTrainConstants.smartSpeed);
+            // }
+            // else if (angle<0 && angle<-driveTrainConstants.smartAngleMargin){
+            //   driveModified = true;
+            //   m_robotDrive.drive(-driveTrainConstants.smartSpeed, driveTrainConstants.smartSpeed/2);
+            // }
+            // else if (Math.abs(angle) < driveTrainConstants.smartAngleMargin){
+            //   driveModified = true;
+            //   m_robotDrive.arcadeDrive(0, -driveTrainConstants.smartSpeed);
+            // }
         }
         else{
           driveModified = false;
         }
-        button9State = m_stick.getRawButton(robotConstants.BALANCING_BUTTON);
-        if (button9State){
-            gyroAngle = Mechanisms.gyro.getPitch();
-            error = driveTrainConstants.targetAngle - gyroAngle;
-            if (error > driveTrainConstants.targetAngle + driveTrainConstants.smartAngleMargin){
-                m_robotDrive.drive(driveTrainConstants.smartSpeed, driveTrainConstants.smartSpeed);
-            }
-            else if (error < driveTrainConstants.targetAngle - driveTrainConstants.smartAngleMargin){
-                m_robotDrive.drive(-driveTrainConstants.smartSpeed, -driveTrainConstants.smartSpeed);
-            }
-            else{
-                m_robotDrive.drive(0, 0);
-            }
-        }
-        button11State = m_stick.getRawButton(robotConstants.SMART_ORIENT_BUTTON);
-        if (button11State){
-            
-        }
+        
     }
 }
