@@ -11,9 +11,9 @@ import org.opencv.core.Scalar;
 import java.util.ArrayList;
 
 public class ThresholdInRange {   
-    static {
-      System.load("C:/Users/ttaw2/Documents/GitHub/2023/FRC7230Code/build/jni/release/opencv_java470.dll");
-    }
+    // static {
+    //   System.load("C:/Users/ttaw2/Documents/GitHub/2023/FRC7230Code/build/jni/release/opencv_java470.dll");
+    // }
     private static int screenCenterX = 80;
     //screen size: x= 634, y =  480
     

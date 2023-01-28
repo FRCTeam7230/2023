@@ -42,7 +42,7 @@ public final class Constants {
     public static final int REVERSE_BUTTON = BUTTON4;
     public static final int SPEED_BUTTON = BUTTON5;
     public static final int SLOW_BUTTON = BUTTON6;
-    public static final int SHOOT_BUTTON = BUTTON7;
+    public static final int SHOOT_BUTTON = BUTTON1;
     public static final int INTAKE_BUTTON = BUTTON8;
     public static final int INTAKE_MOTOR_BUTTON = BUTTON10;
     public static final int BALANCING_BUTTON = BUTTON9;
@@ -51,12 +51,12 @@ public final class Constants {
     public static final double shootingPower = 0.6;
     public static final double climbPower = 0.6;
 
-    public static final int cameraWidth = 160;
-    public static final int cameraLength = 120;
+    public static final int cameraWidth = 80;
+    public static final int cameraLength = 60;
   }
   
   public static final class driveTrainConstants {
-    public static final double deadZone=0.3;
+    public static final double deadZone=0.2;
     public static final double zoomFactor = 2.0;
     public static final double slowFactor = 0.45;
     public static final double speedFactor = 0.775;

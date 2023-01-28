@@ -22,7 +22,7 @@ public class Robot extends TimedRobot {
   private final SendableChooser<String> color_chooser = new SendableChooser<>();
   @Override
   public void robotInit() {
-    // CameraStarter.runCamera(robotConstants.cameraWidth, robotConstants.cameraLength, red);
+    CameraStarter.runCamera(robotConstants.cameraWidth, robotConstants.cameraLength, red);
     // color_chooser.setDefaultOption("Red", "red");
     color_chooser.setDefaultOption("Blue", "blue");
     // color_chooser.addOption("Blue", "blue");

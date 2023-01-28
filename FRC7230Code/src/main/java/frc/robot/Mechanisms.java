@@ -19,6 +19,6 @@ public class Mechanisms {
     // public static ThresholdInRange vision = new ThresholdInRange();
     public static DriveSubsystem driveSubsystem = new DriveSubsystem();
     public static Joystick driveJoystick = new Joystick(0);
-    public static Joystick mechanismsJoystick = new Joystick(1);
+    public static Joystick mechanismsJoystick = driveJoystick;
     public static AHRS gyro = new AHRS();//SPI.Port.kMXP);
 }

@@ -14,7 +14,7 @@ public class DriveTrain {
     private Joystick m_stick;
     
     private boolean swapState = false, prevState = false;
-    private int invertAxis = -1;
+    private int invertAxis = 1;
     private double speedY = 0.0;
     private double speedX = 0.0;
     private double speedLimitChangeX = 0.0;
@@ -96,6 +96,8 @@ public class DriveTrain {
                 speedY += driveTrainConstants.initSpeed * invertChangeY;
             }
         }
+        speedX=x;
+        speedY=y;
 
         if(m_stick.getRawButton(robotConstants.SPEED_BUTTON)){
             speedY *= driveTrainConstants.zoomFactor;
@@ -140,7 +142,9 @@ public class DriveTrain {
         prevDrive = nowDrive;
 
         if (!tank && !driveModified){
-            DriverStation.reportWarning(Double.toString(speedY), false);
+            DriverStation.reportWarning(Double.toString(invertAxis * speedX), false);
+            DriverStation.reportWarning(Double.toString(invertAxis * speedY), false);
+            DriverStation.reportWarning("\n", false);
             m_robotDrive.arcadeDrive(1 * invertAxis * (speedY), invertAxis *(speedX));
         }
         // button3State = m_stick.getRawButton(robotConstants.SMART_INTAKE_BUTTON);
@@ -166,7 +170,7 @@ public class DriveTrain {
         //   driveModified = false;
         // }
         button9State = m_stick.getRawButton(robotConstants.BALANCING_BUTTON);
-        if (true){
+        if (button9State){
             gyroAngle = Mechanisms.gyro.getPitch();
             error = driveTrainConstants.targetAngle - gyroAngle;
             // System.out.println(gyroAngle);

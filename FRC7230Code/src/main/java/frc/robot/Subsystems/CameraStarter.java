@@ -1,5 +1,4 @@
 package frc.robot.Subsystems;
-
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.CvSink;
@@ -7,10 +6,10 @@ import edu.wpi.first.cscore.CvSource;
 import org.opencv.core.Mat;
 import edu.wpi.first.cscore.VideoMode.PixelFormat;
 import frc.robot.Mechanisms;
-public class CameraStarter {
+public class CameraStarter { 
     public static void runCamera(int width, int height, boolean red){
         new Thread(() -> {
-            UsbCamera camera = CameraServer.startAutomaticCapture();
+            UsbCamera camera = CameraServer.startAutomaticCapture(0);
             camera.setResolution(width, height);
             camera.setVideoMode(PixelFormat.kYUYV, width, height, 10);
             CvSink cvSink = CameraServer.getVideo();
@@ -24,8 +23,8 @@ public class CameraStarter {
                 continue;
               }
               // SmartDashboard.putString("temp", "1");
-              //Imgproc.cvtColor(source, output, Imgproc.COLOR_BGR2GRAY);
-              //outputStream.putFrame(output);
+              // Imgproc.cvtColor(source, output, Imgproc.COLOR_BGR2GRAY);
+              // outputStream.putFrame(output);
               String tempColor;
               if (red) {
                 tempColor = "red";
