@@ -6,7 +6,6 @@ import frc.robot.Constants.driveTrainConstants;
 import frc.robot.Constants.robotConstants;
 import frc.robot.Mechanisms;
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class DriveTrain {
 
     private DriveSubsystem m_robotDrive;
@@ -24,11 +23,9 @@ public class DriveTrain {
     private boolean prevDrive = false, nowDrive = false;
     private double targetAngle;
     private double gyroAngle;
-
     private double error;
     private boolean button3State;
     private boolean button9State;
-    private boolean button11State;
     
     private boolean driveModified;
     public DriveTrain(DriveSubsystem subsystem, Joystick stick){
@@ -143,53 +140,28 @@ public class DriveTrain {
             DriverStation.reportWarning(Double.toString(speedY), false);
             m_robotDrive.arcadeDrive(1 * invertAxis * (speedY), invertAxis *(speedX));
         }
-        // button3State = m_stick.getRawButton(robotConstants.SMART_INTAKE_BUTTON);
-        // if (button3State){
-        //     Mechanisms.intakeSolenoid.set(button3State);
-        //     Mechanisms.intakeMotor.set(ControlMode.PercentOutput, 0.65);
-        //     Mechanisms.conveyorMotor.set(0.5);
-        //     double angle = Mechanisms.vision.getAngleX();
-        //     if (angle>0 && angle>driveTrainConstants.smartAngleMargin){
-        //       driveModified = true;
-        //       m_robotDrive.drive(driveTrainConstants.smartSpeed/2, -driveTrainConstants.smartSpeed);
-        //     }
-        //     else if (angle<0 && angle<-driveTrainConstants.smartAngleMargin){
-        //       driveModified = true;
-        //       m_robotDrive.drive(-driveTrainConstants.smartSpeed, driveTrainConstants.smartSpeed/2);
-        //     }
-        //     else if (Math.abs(angle) < driveTrainConstants.smartAngleMargin){
-        //       driveModified = true;
-        //       m_robotDrive.arcadeDrive(0, -driveTrainConstants.smartSpeed);
-        //     }
-        // }
-        // else{
-        //   driveModified = false;
-        // }
-        button9State = m_stick.getRawButton(robotConstants.BALANCING_BUTTON);
-        if (true){
-            gyroAngle = Mechanisms.gyro.getPitch();
-            error = driveTrainConstants.targetAngle - gyroAngle;
-            // System.out.println(gyroAngle);
-            System.out.println(error);
-            
-            if (error > driveTrainConstants.smartAngleMargin){
-                m_robotDrive.drive(driveTrainConstants.smartSpeed, driveTrainConstants.smartSpeed);
-                SmartDashboard.putString("tilted forward", " driving back");
-                System.out.println("forward");
-            }
-            else if (error < - driveTrainConstants.smartAngleMargin){
-                m_robotDrive.drive(-driveTrainConstants.smartSpeed, -driveTrainConstants.smartSpeed);
-                System.out.println("backward");
-                SmartDashboard.putString("tilted back", " driving forward");
-            }
-            else{
-                // m_robotDrive.drive(0, 0);
-                SmartDashboard.putString("balanced", "stopping");
-            }
+        button3State = m_stick.getRawButton(robotConstants.SMART_INTAKE_BUTTON);
+        if (button3State){
+            // Mechanisms.intakeSolenoid.set(button3State);
+            // Mechanisms.intakeMotor.set(ControlMode.PercentOutput, 0.65);
+            // Mechanisms.conveyorMotor.set(0.5);
+            // double angle = Mechanisms.vision.getAngleX();
+            // if (angle>0 && angle>driveTrainConstants.smartAngleMargin){
+            //   driveModified = true;
+            //   m_robotDrive.drive(driveTrainConstants.smartSpeed/2, -driveTrainConstants.smartSpeed);
+            // }
+            // else if (angle<0 && angle<-driveTrainConstants.smartAngleMargin){
+            //   driveModified = true;
+            //   m_robotDrive.drive(-driveTrainConstants.smartSpeed, driveTrainConstants.smartSpeed/2);
+            // }
+            // else if (Math.abs(angle) < driveTrainConstants.smartAngleMargin){
+            //   driveModified = true;
+            //   m_robotDrive.arcadeDrive(0, -driveTrainConstants.smartSpeed);
+            // }
         }
-        button11State = m_stick.getRawButton(robotConstants.SMART_ORIENT_BUTTON);
-        if (button11State){
-            
+        else{
+          driveModified = false;
         }
+        
     }
 }

@@ -11,9 +11,6 @@ import org.opencv.core.Scalar;
 import java.util.ArrayList;
 
 public class ThresholdInRange {   
-    static {
-      System.load("C:/Users/ttaw2/Documents/GitHub/2023/FRC7230Code/build/jni/release/opencv_java470.dll");
-    }
     private static int screenCenterX = 80;
     //screen size: x= 634, y =  480
     
@@ -53,9 +50,10 @@ public class ThresholdInRange {
             //Old Values for blue:
             // Core.inRange(frameHSV, new Scalar(95, 50, 0),
             //         new Scalar(110, 255, 255), thresh);
-            // New values for Blue: Low HSV; 90, 110, 110 High HSV; 110, 255, 255
-            Core.inRange(frameHSV, new Scalar(90, 110, 110), //100,
-                    new Scalar(120, 200, 255), thresh);
+            // New values for Yellow: 44, 85.4, 80.8
+            //Low HSV; 30, 70, 65 High HSV; 60, 100, 105
+            Core.inRange(frameHSV, new Scalar(30, 70, 65), 
+                    new Scalar(60, 100, 105), thresh);
            
         }
     

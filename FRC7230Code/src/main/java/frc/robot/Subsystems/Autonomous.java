@@ -36,8 +36,9 @@ public class Autonomous {
 
     // if (!m_stick.getRawButton(4)) { //emergency button Y
 
-      // double ballAngleX = Mechanisms.vision.getAngleX();
-      double ballAngleX = 0;
+      //double ballAngleX = Mechanisms.vision.getAngleX();
+      double ballAngleX = 0.0;
+
       // Phase 1 - Move forward to the hub
       
       if (autoState == "firstDrive") {
