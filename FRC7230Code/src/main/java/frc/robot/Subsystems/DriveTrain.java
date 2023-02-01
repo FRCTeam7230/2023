@@ -12,7 +12,8 @@ public class DriveTrain {
     private DriveSubsystem m_robotDrive;
 
     private Joystick m_stick;
-    
+    private boolean surpassedMargin;
+    private boolean surpassedMargin2;
     private boolean swapState = false, prevState = false;
     private int invertAxis = 1;
     private double speedY = 0.0;
@@ -28,12 +29,14 @@ public class DriveTrain {
     private double error;
     private boolean button3State;
     private boolean button9State;
+    private boolean prevButton9;
     private boolean button11State;
     
     private boolean driveModified;
     public DriveTrain(DriveSubsystem subsystem, Joystick stick){
         m_robotDrive = subsystem;
         m_stick = stick;
+        surpassedMargin = false;
     }
 
     public void drive(boolean tank){
@@ -169,28 +172,52 @@ public class DriveTrain {
         // else{
         //   driveModified = false;
         // }
+        DriverStation.reportWarning(((Double)error).toString(), false);
         button9State = m_stick.getRawButton(robotConstants.BALANCING_BUTTON);
         if (button9State){
+            if (!prevButton9){
+                surpassedMargin = false;
+                surpassedMargin2 = false;
+            }
+            if (Math.abs(error)>driveTrainConstants.smartAngleMargin && !surpassedMargin){
+                surpassedMargin = true;
+                DriverStation.reportWarning("MARGIN PASSED", false);
+            }
+            if (Math.abs(error)>driveTrainConstants.smartAngleMargin2 && surpassedMargin && !surpassedMargin2){
+                surpassedMargin2 = true;
+                DriverStation.reportWarning("MARGIN 2 PASSED", false);
+            }
             gyroAngle = Mechanisms.gyro.getPitch();
             error = driveTrainConstants.targetAngle - gyroAngle;
             // System.out.println(gyroAngle);
             System.out.println(error);
             
-            if (error > driveTrainConstants.smartAngleMargin){
+            if (error > driveTrainConstants.smartAngleMargin || (!surpassedMargin && !surpassedMargin2 && error>0.3)){
                 m_robotDrive.drive(driveTrainConstants.smartSpeed, driveTrainConstants.smartSpeed);
                 SmartDashboard.putString("tilted forward", " driving back");
                 System.out.println("forward");
             }
-            else if (error < - driveTrainConstants.smartAngleMargin){
+            else if (error>0.3 && error > driveTrainConstants.smartAngleMargin && surpassedMargin){
+                m_robotDrive.drive(-driveTrainConstants.slowSmartSpeed, -driveTrainConstants.slowSmartSpeed);
+                SmartDashboard.putString("tilted forward", " driving back");
+                System.out.println("forward");
+            }
+            else if (error < - driveTrainConstants.smartAngleMargin || (!surpassedMargin&& !surpassedMargin2  && error<-0.3)){
                 m_robotDrive.drive(-driveTrainConstants.smartSpeed, -driveTrainConstants.smartSpeed);
                 System.out.println("backward");
                 SmartDashboard.putString("tilted back", " driving forward");
             }
+            else if (error<-0.3 && error <- driveTrainConstants.smartAngleMargin && surpassedMargin){
+                m_robotDrive.drive(driveTrainConstants.slowSmartSpeed, driveTrainConstants.slowSmartSpeed);
+                SmartDashboard.putString("tilted forward", " driving back");
+                System.out.println("forward");
+            }
             else{
-                // m_robotDrive.drive(0, 0);
+                m_robotDrive.drive(0, 0);
                 SmartDashboard.putString("balanced", "stopping");
             }
         }
+        prevButton9 = button9State;
         button11State = m_stick.getRawButton(robotConstants.SMART_ORIENT_BUTTON);
         if (button11State){
             
