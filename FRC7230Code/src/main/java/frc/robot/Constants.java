@@ -68,9 +68,11 @@ public final class Constants {
     public static final double limitX = 0.8;
     public static final double limitY = 0.6;
     public static final double initSpeed = 0.2;
-    public static final double smartAngleMargin = 3;
+    public static final double smartAngleMargin = 10;
+    public static final double smartAngleMargin2 = 5;
     public static final double targetAngle = -67.33;
-    public static final double smartSpeed = 0.6;
+    public static final double smartSpeed = 0.55;
+    public static final double slowSmartSpeed = 0.475;
     public static final double dropOff = 0.4; //drop off point when speed is able to drop to 0
     public static final int kEncoderCPR = 1024;
     public static final double kWheelDiameterMeters = 0.15;

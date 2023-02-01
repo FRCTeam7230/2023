@@ -5,6 +5,9 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Mechanisms;
+import frc.robot.Constants.*;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Autonomous {
   private Timer autonomousTimer = new Timer();
   private String autoState;
@@ -13,7 +16,11 @@ public class Autonomous {
   private CANSparkMax conveyor;
   private CANSparkMax shooter;
   private VictorSPX intake;
+  private double error;
   private Solenoid intakeSol;
+  private final double k=0.8;
+  private boolean surpassedMargin = true;
+  private boolean surpassedMargin2 = true;
   public Autonomous(){
     m_dDriveSubsystem = Mechanisms.driveSubsystem;
     conveyor = Mechanisms.conveyorMotor;
@@ -26,38 +33,30 @@ public class Autonomous {
     m_dDriveSubsystem.resetEncoders();    
     autonomousTimer.reset();
     autonomousTimer.start();
+    autoState = "firstDrive";
   }
   public void execute(){
 
-    // First phase - drive - drive to the hub and shoot ball
-    // Second phase - drive backwards
-    // Third phase - findNewBall - turn around, find ball
-    // Forth phase - grabBall - drive toward the ball and grab it then
-
-    // if (!m_stick.getRawButton(4)) { //emergency button Y
-
-      // double ballAngleX = Mechanisms.vision.getAngleX();
-      double ballAngleX = 0;
       // Phase 1 - Move forward to the hub
-      
+      error = driveTrainConstants.targetAngle-Mechanisms.gyro.getPitch();
       if (autoState == "firstDrive") {
         System.out.println(autonomousTimer.get());
-        if (autonomousTimer.get()<2.0){ 
-          m_dDriveSubsystem.arcadeDrive(0,0);
+        if (Math.abs(error) < driveTrainConstants.smartAngleMargin){ 
+          m_dDriveSubsystem.drive(0.6,0.6);
           conveyor.set(0.5); 
           shooter.set(0.5);
         }
         else {
-          autoState = "secondDrive";
+          autoState = "tilting";
           autonomousTimer.reset();
           autonomousTimer.start();
         }
       } 
 
       //Phase 2 - Drive backwards - do we need intake and conveyor running? To catch random balls
-      else if (autoState == "secondDrive"){ 
-        if (autonomousTimer.get() < 2.0){
-          m_dDriveSubsystem.arcadeDrive(0, -0.7);
+      else if (autoState == "tilting"){ 
+        if (autonomousTimer.get() < 1.5){
+          m_dDriveSubsystem.drive(0.55, 0.55);
           // intakeSol.set(true);
           // intake.set(ControlMode.PercentOutput, 0.65);
           // conveyor.set(0.5);
@@ -66,41 +65,47 @@ public class Autonomous {
         else {
           autonomousTimer.reset();
           autonomousTimer.start();
-          // intakeSol.set(false);
-          // intake.set(ControlMode.PercentOutput, 0);
-          // conveyor.set(0);
-          // shooter.set(0);
-          autoState = "findNewBall";
+          autoState = "smart";
         }
       }
 
       // Phase 3 - Turn around and check where is the ball
-      else if (autoState == "findNewBall") {
-
-        // Phase 4 - Drive towards the ball and grab it
-        if (search4Ball) { // Minuses - if the ball is swinging, if Robot  detected another colored object, not the ball
-          
-            intakeSol.set(true);
-            intake.set(ControlMode.PercentOutput, 0.65);
-            conveyor.set(0.5);
-            // driveTrain.drive(true, driveModified);
-            double speed = 0.9;
-            double margin = 3;
-            double angle = ballAngleX;
-
-            if (angle>0 && angle>margin){ // Find right direction
-              m_dDriveSubsystem.drive(speed/4, -speed/2);
-            }
-            else if (angle<0 && angle<-margin){
-              m_dDriveSubsystem.drive(-speed/2, speed/4);
-            }
-            else if (Math.abs(angle) < margin){
-              m_dDriveSubsystem.arcadeDrive(0, -speed/2);
-            }
-        }
-        // Phase 5 - receive information from encoders - calculate the distance that the robot has traveled. 
-        //Also, add code for "remembering" the angle of rotation of the robot - maybe encoder too.
-        // Or, when moving to grab the ball, "remeber" the change in position (which direction they turned and how long) of left and right wheels - just turn in opposite direction
+      else if (autoState == "smart") {
+        
+        if (Math.abs(error)>driveTrainConstants.smartAngleMargin && !surpassedMargin){
+          surpassedMargin = true;
+          DriverStation.reportWarning("MARGIN PASSED", false);
+      }
+      if (Math.abs(error)>driveTrainConstants.smartAngleMargin2 && surpassedMargin && !surpassedMargin2){
+          surpassedMargin2 = true;
+          DriverStation.reportWarning("MARGIN 2 PASSED", false);
+      }
+        System.out.println(error);
+      if (error > driveTrainConstants.smartAngleMargin || (!surpassedMargin && !surpassedMargin2 && error>0.3)){
+        m_dDriveSubsystem.drive(driveTrainConstants.smartSpeed, driveTrainConstants.smartSpeed);
+          SmartDashboard.putString("tilted forward", " driving back");
+          System.out.println("forward");
+      }
+      else if (error>0.3 && error > driveTrainConstants.smartAngleMargin2 && surpassedMargin){
+        m_dDriveSubsystem.drive(driveTrainConstants.slowSmartSpeed, driveTrainConstants.slowSmartSpeed);
+          SmartDashboard.putString("tilted forward", " driving back");
+          System.out.println("forward slow");
+      }
+      else if (error < - driveTrainConstants.smartAngleMargin || (!surpassedMargin && !surpassedMargin2 && error<-0.3)){
+        m_dDriveSubsystem.drive(-driveTrainConstants.smartSpeed, -driveTrainConstants.smartSpeed);
+          System.out.println("backward");
+          SmartDashboard.putString("tilted back", " driving forward");
+      }
+      else if (error<-0.3 && error < -driveTrainConstants.smartAngleMargin2 && surpassedMargin){
+        m_dDriveSubsystem.drive(-driveTrainConstants.slowSmartSpeed, -driveTrainConstants.slowSmartSpeed);
+          SmartDashboard.putString("tilted forward", " driving back");
+          System.out.println("backward slow");
+      }
+      else{
+        m_dDriveSubsystem.drive(0, 0);
+        System.out.println("Balanced");
+          SmartDashboard.putString("balanced", "stopping");
+      }
       }
   }
 }
