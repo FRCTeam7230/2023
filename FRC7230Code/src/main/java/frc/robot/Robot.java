@@ -64,9 +64,10 @@ public class Robot extends TimedRobot {
     driveTrain.drive(false);
     runMechanisms.runShotAndIntake(robotConstants.SHOOT_BUTTON,robotConstants.INTAKE_BUTTON, robotConstants.INTAKE_MOTOR_BUTTON, robotConstants.shootingPower, true);
     runMechanisms.runClimber(robotConstants.CLIMBER_UP_BUTTON, robotConstants.CLIMBER_DOWN_BUTTON);
+    runMechanisms.PID(robotConstants.PID_TEST_BUTTON, 5);
 
   }
-
+  
   @Override
   public void disabledInit() {}
 

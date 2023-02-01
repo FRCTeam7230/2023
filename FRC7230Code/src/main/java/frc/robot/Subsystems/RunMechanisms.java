@@ -10,17 +10,37 @@ import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Mechanisms;
+import edu.wpi.first.math.controller.*;
+import com.revrobotics.SparkMaxRelativeEncoder;
+import com.revrobotics.RelativeEncoder;
+import frc.robot.Constants;
+
 public class RunMechanisms {
     private CANSparkMax shooterMotor = Mechanisms.shooterMotor, conveyorMotor = Mechanisms.conveyorMotor, climberMotor = Mechanisms.climberMotor; 
     private VictorSPX intakeMotor = Mechanisms.intakeMotor;
     private Solenoid intakeSolenoid = Mechanisms.intakeSolenoid, climberSolenoid = Mechanisms.climberSolenoid;
     private Joystick m_stick = Mechanisms.mechanismsJoystick;
     private boolean previousState = false;
-    private boolean previousClimb = false;
+    private boolean previousClimb = false; 
     private boolean currentClimb;
     private Timer climberTimer = new Timer();
     private Timer shotTimer = new Timer();
     
+
+    public double kP = 0;
+    public double kI = 0;
+    public double kD = 0;
+    PIDController pid = new PIDController(kP,kI,kD);
+    public static CANSparkMax PIDTest = new CANSparkMax(9, CANSparkMax.MotorType.kBrushless);
+    private final RelativeEncoder PIDEncoder = PIDTest.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42);
+    
+    public void PID(int button, int setPoint) {
+      // Calculates the output of the PID algorithm based on the sensor reading
+      // and sends it to a motor
+      PIDTest.set(pid.calculate(PIDEncoder.getPosition(), setPoint));
+    }
+
+
    public void runCANMechanism(CANSparkMax motor, int button, double power, boolean invert, double offPower){
     boolean state = m_stick.getRawButton(button); 
     double newPower = power;
