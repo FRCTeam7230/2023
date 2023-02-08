@@ -52,6 +52,13 @@ public class Limelight {
 
         System.out.println(distanceToTarget);
         System.out.println(targetAngleX);
-
     }
+    public static double targetAngleX() {
+        return targetAngleX;
+    }
+
 }
+
+
+// New values for Yellow: 44, 85.4, 80.8
+//Low HSV; 30, 70, 65 High HSV; 60, 100, 105
