@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.Constants.driveTrainConstants;
 import frc.robot.Constants.robotConstants;
-import frc.robot.Limelight;
 import frc.robot.Mechanisms;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 public class DriveTrain {
@@ -142,22 +141,7 @@ public class DriveTrain {
             m_robotDrive.arcadeDrive(1 * invertAxis * (speedY), invertAxis *(speedX));
         }
         button3State = m_stick.getRawButton(robotConstants.SMART_INTAKE_BUTTON);
-        if (button3State)
-        {
-            double angle = Limelight.targetAngleX();
-            if (angle>0 && angle>driveTrainConstants.smartAngleMargin){
-              driveModified = true;
-              m_robotDrive.drive(driveTrainConstants.smartSpeed/4, -driveTrainConstants.smartSpeed/2);
-            }
-            else if (angle<0 && angle<-driveTrainConstants.smartAngleMargin){
-              driveModified = true;
-              m_robotDrive.drive(-driveTrainConstants.smartSpeed/2, driveTrainConstants.smartSpeed/4);
-            }
-            else if (Math.abs(angle) < driveTrainConstants.smartAngleMargin){
-              driveModified = true;
-              m_robotDrive.arcadeDrive(0, -driveTrainConstants.smartSpeed/2);
-            }
-
+        if (button3State){
             // Mechanisms.intakeSolenoid.set(button3State);
             // Mechanisms.intakeMotor.set(ControlMode.PercentOutput, 0.65);
             // Mechanisms.conveyorMotor.set(0.5);

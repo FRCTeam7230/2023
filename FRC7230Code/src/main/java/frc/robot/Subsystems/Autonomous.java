@@ -23,7 +23,7 @@ public class Autonomous {
 
   }
   public void init(){
-    //m_dDriveSubsystem.resetEncoders();    
+    m_dDriveSubsystem.resetEncoders();    
     autonomousTimer.reset();
     autonomousTimer.start();
   }
