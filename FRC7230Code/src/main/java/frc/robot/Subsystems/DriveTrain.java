@@ -4,8 +4,14 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.Constants.driveTrainConstants;
 import frc.robot.Constants.robotConstants;
+import frc.robot.Limelight;
 import frc.robot.Mechanisms;
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
+
 public class DriveTrain {
 
     private DriveSubsystem m_robotDrive;
@@ -21,11 +27,14 @@ public class DriveTrain {
     private double rateOfSpeedYChange = 0.0;
     private double rateOfSpeedXChange = 0.0;
     private boolean prevDrive = false, nowDrive = false;
-    private double targetAngle;
+    private double angleToTarget;
     private double gyroAngle;
-    private double error;
+    private double gyroError;
+    private double errorToTarget;
     private boolean button3State;
     private boolean button9State;
+    private boolean button4State;
+    private boolean button12State;
     
     private boolean driveModified;
     public DriveTrain(DriveSubsystem subsystem, Joystick stick){
@@ -140,28 +149,80 @@ public class DriveTrain {
             DriverStation.reportWarning(Double.toString(speedY), false);
             m_robotDrive.arcadeDrive(1 * invertAxis * (speedY), invertAxis *(speedX));
         }
-        button3State = m_stick.getRawButton(robotConstants.SMART_INTAKE_BUTTON);
+        button3State = m_stick.getRawButton(robotConstants.AUTO_SCORE_MID_BUTTON);
         if (button3State){
-            // Mechanisms.intakeSolenoid.set(button3State);
-            // Mechanisms.intakeMotor.set(ControlMode.PercentOutput, 0.65);
-            // Mechanisms.conveyorMotor.set(0.5);
-            // double angle = Mechanisms.vision.getAngleX();
-            // if (angle>0 && angle>driveTrainConstants.smartAngleMargin){
-            //   driveModified = true;
-            //   m_robotDrive.drive(driveTrainConstants.smartSpeed/2, -driveTrainConstants.smartSpeed);
-            // }
-            // else if (angle<0 && angle<-driveTrainConstants.smartAngleMargin){
-            //   driveModified = true;
-            //   m_robotDrive.drive(-driveTrainConstants.smartSpeed, driveTrainConstants.smartSpeed/2);
-            // }
-            // else if (Math.abs(angle) < driveTrainConstants.smartAngleMargin){
-            //   driveModified = true;
-            //   m_robotDrive.arcadeDrive(0, -driveTrainConstants.smartSpeed);
-            // }
+            NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(7);
+            double angle = Limelight.getTargetAngleX();
+            double distanceToMidTarget = Limelight.getDistanceToMiddleTarget();
+
+            if (angle>0 && angle>driveTrainConstants.smartAngleMarginVision){
+              driveModified = true;
+              m_robotDrive.drive(driveTrainConstants.smartSpeedVision/2, -driveTrainConstants.smartSpeedVision);
+            }
+            else if (angle<0 && angle<-driveTrainConstants.smartAngleMarginVision){
+              driveModified = true;
+              m_robotDrive.drive(-driveTrainConstants.smartSpeedVision, driveTrainConstants.smartSpeedVision/2);
+            }
+            else if (Math.abs(angle) < driveTrainConstants.smartAngleMarginVision && distanceToMidTarget <= driveTrainConstants.optimalScoringDistance){
+              driveModified = true;
+              m_robotDrive.drive(driveTrainConstants.smartSpeedVision, driveTrainConstants.smartSpeedVision);
+            }
         }
         else{
           driveModified = false;
         }
-        
+        button4State = m_stick.getRawButton(robotConstants.AUTO_SCORE_HIGH_BUTTON);
+        if (button4State){
+            
+            NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(7);
+            double angle = Limelight.getTargetAngleX();
+            double distanceToHighTarget = Limelight.getDistanceToHighTarget();
+            System.out.println(distanceToHighTarget);
+
+            if (angle>0 && angle>driveTrainConstants.smartAngleMarginVision){
+              driveModified = true;
+              m_robotDrive.drive(driveTrainConstants.smartSpeedVision/2, -driveTrainConstants.smartSpeedVision);
+            }
+            else if (angle<0 && angle<-driveTrainConstants.smartAngleMarginVision){
+              driveModified = true;
+              m_robotDrive.drive(-driveTrainConstants.smartSpeedVision, driveTrainConstants.smartSpeedVision/2);
+            }
+            else if (Math.abs(angle) < driveTrainConstants.smartAngleMarginVision && distanceToHighTarget <= driveTrainConstants.optimalScoringDistance){
+              driveModified = true;
+              m_robotDrive.drive(driveTrainConstants.smartSpeedVision, driveTrainConstants.smartSpeedVision);
+            }
+        }
+        else{
+          driveModified = false;
+        }
+        button12State = m_stick.getRawButton(robotConstants.AUTO_CONE_PICKUP_BUTTON);
+        if (button12State){
+         
+            NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(0);
+        }
+        else{
+          driveModified = false;
+        }
+        button9State = m_stick.getRawButton(robotConstants.BALANCING_BUTTON);
+        if (button9State){
+     
+            gyroAngle = Mechanisms.gyro.getPitch();
+            gyroError = driveTrainConstants.targetAngle - gyroAngle;
+            System.out.println(gyroAngle);
+            System.out.println(gyroError);
+            if (gyroError > driveTrainConstants.smartAngleMargin){
+                m_robotDrive.drive(driveTrainConstants.smartSpeed, driveTrainConstants.smartSpeed);
+                System.out.println("forward");
+            }
+            else if (gyroError < - driveTrainConstants.smartAngleMargin){
+                m_robotDrive.drive(-driveTrainConstants.smartSpeed, -driveTrainConstants.smartSpeed);
+                System.out.println("backward");
+               
+            }
+            else{
+                m_robotDrive.drive(0, 0);
+              
+            }
+        }
     }
 }

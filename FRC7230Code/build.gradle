@@ -50,8 +50,8 @@ def includeDesktopSupport = false
 dependencies {
     implementation wpi.java.deps.wpilib()
     implementation wpi.java.vendor.java()
-    implementation files('build/libs/opencv-455.jar')
-    testImplementation files('build/libs/opencv-455.jar')
+    // implementation files('build/libs/opencv-455.jar')
+    // testImplementation files('build/libs/opencv-455.jar')
 
     roborioDebug wpi.java.deps.wpilibJniDebug(wpi.platforms.roborio)
     roborioDebug wpi.java.vendor.jniDebug(wpi.platforms.roborio)

@@ -46,7 +46,10 @@ public final class Constants {
     public static final int INTAKE_BUTTON = BUTTON8;
     public static final int INTAKE_MOTOR_BUTTON = BUTTON10;
     public static final int BALANCING_BUTTON = BUTTON9;
-    public static final int SMART_ORIENT_BUTTON = BUTTON11;
+    public static final int AUTO_SCORE_HIGH_BUTTON = BUTTON4;
+    public static final int AUTO_CUBE_PICKUP_BUTTON = BUTTON12;
+    public static final int AUTO_CONE_PICKUP_BUTTON = BUTTON12;
+    public static final int AUTO_SCORE_MID_BUTTON = BUTTON3;
 
     public static final double shootingPower = 0.6;
     public static final double climbPower = 0.6;
@@ -69,8 +72,11 @@ public final class Constants {
     public static final double limitY = 0.6;
     public static final double initSpeed = 0.2;
     public static final double smartAngleMargin = 3;
+    public static final double smartAngleMarginVision = 3;
+    public static final double optimalScoringDistance = 0;
     public static final double targetAngle = 0;
     public static final double smartSpeed = 0.45;
+    public static final double smartSpeedVision = 0.55;
     public static final double dropOff = 0.4; //drop off point when speed is able to drop to 0
     public static final int kEncoderCPR = 1024;
     public static final double kWheelDiameterMeters = 0.15;
