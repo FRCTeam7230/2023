@@ -36,23 +36,22 @@ public final class Constants {
     public static final int BUTTON11 = 11;
     public static final int BUTTON12 = 12;
 
-    public static final int CLIMBER_UP_BUTTON = BUTTON10;
-    public static final int CLIMBER_DOWN_BUTTON = BUTTON12;
-    public static final int SMART_INTAKE_BUTTON = BUTTON2;
+    
     public static final int REVERSE_BUTTON = BUTTON4;
     public static final int SPEED_BUTTON = BUTTON5;
     public static final int SLOW_BUTTON = BUTTON6;
-    public static final int SHOOT_BUTTON = BUTTON1;
-    public static final int INTAKE_BUTTON = BUTTON8;
-    public static final int INTAKE_MOTOR_BUTTON = BUTTON10;
-    public static final int BALANCING_BUTTON = BUTTON9;
-    public static final int SMART_ORIENT_BUTTON = BUTTON11;
+    public static final int BALANCING_BUTTON = BUTTON3;
 
-    public static final double shootingPower = 0.6;
-    public static final double climbPower = 0.6;
-
-    public static final int cameraWidth = 80;
-    public static final int cameraLength = 60;
+    public static final int CLAW_TOGGLE_BUTTON = BUTTON1; 
+    public static final int ARM_EXTENSION_TOGGLE_BUTTON = BUTTON2;
+    public static final int SMART_ORIENT_CONE_SHELF_PICKUP = BUTTON3;
+    public static final int SMART_ORIENT_CUBE_SHELF_PICKUP = BUTTON4;
+    public static final int SMART_ORIENT_CONE_LOW_ANGLE = BUTTON5;
+    public static final int SMART_ORIENT_CUBE_LOW_ANGLE = BUTTON6;
+    public static final int SMART_ORIENT_CONE_HIGH_ANGLE = BUTTON7;
+    public static final int SMART_ORIENT_CONE_MID_ANGLE = BUTTON8;
+    public static final int AUTO_SCORE_MID_BUTTON = BUTTON9;
+    public static final int PID_TEST_BUTTON = BUTTON10;
   }
   
   public static final class driveTrainConstants {
@@ -73,9 +72,15 @@ public final class Constants {
     public static final double targetAngle = -67.33;
     public static final double smartSpeed = 0.55;
     public static final double slowSmartSpeed = 0.475;
+    public static final double smartAngleMarginVision = 3;
+    public static final double smartSpeedVision = 0.55;
     public static final double dropOff = 0.4; //drop off point when speed is able to drop to 0
     public static final int kEncoderCPR = 1024;
     public static final double kWheelDiameterMeters = 0.15;
+    public static final double highAngleEncoderCounts = 30;
+    public static final double midAngleEncoderCounts = 30;
+    public static final double shelfAngleEncoderCounts = 30;
+    public static final double lowAngleEncoderCounts = 30;
     public static final double kEncoderDistancePerPulse =
         (kWheelDiameterMeters * Math.PI) / (double) kEncoderCPR;
   }

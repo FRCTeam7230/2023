@@ -5,43 +5,39 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
-import frc.robot.Constants.robotConstants;
 import frc.robot.Subsystems.Autonomous;
-import frc.robot.Subsystems.CameraStarter;
+
 import frc.robot.Subsystems.DriveTrain;
 import frc.robot.Subsystems.RunMechanisms;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-
+import frc.robot.Constants;
 public class Robot extends TimedRobot {
 
   private DriveTrain driveTrain = new DriveTrain(Mechanisms.driveSubsystem, Mechanisms.driveJoystick);
   private Autonomous auton = new Autonomous();
   private RunMechanisms runMechanisms = new RunMechanisms();
-  private boolean red = true;   
-  private final SendableChooser<String> color_chooser = new SendableChooser<>();
+  private boolean midPosition;
+  private final SendableChooser<String> position_chooser = new SendableChooser<>();
+
   @Override
   public void robotInit() {
-    CameraStarter.runCamera(robotConstants.cameraWidth, robotConstants.cameraLength, red);
-    // color_chooser.setDefaultOption("Red", "red");
-    color_chooser.setDefaultOption("Blue", "blue");
-    // color_chooser.addOption("Blue", "blue");
-    color_chooser.addOption("Red", "red");
-    SmartDashboard.putData("Color choice", color_chooser);
+    position_chooser.setDefaultOption("Middle", "Middle");
+    position_chooser.addOption("Side", "Side");
+    SmartDashboard.putData("Position choice", position_chooser);
   }
 
   @Override
   public void robotPeriodic() {
-    String colorSelected = color_chooser.getSelected();
-    switch (colorSelected) {
-      case "red":
-        red = true;
+    String positionSelected = position_chooser.getSelected();
+    switch (positionSelected) {
+      case "Middle":
+        midPosition = true;
         break;
-      case "blue":
-        red = false;
+      case "Side":
+        midPosition = false;
         break;
-    }    
-
+    }
   }
 
   @Override
@@ -51,7 +47,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
-    auton.execute();
+    auton.execute(midPosition);
   }
 
   @Override
@@ -62,9 +58,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     driveTrain.drive(false);
-    runMechanisms.runShotAndIntake(robotConstants.SHOOT_BUTTON,robotConstants.INTAKE_BUTTON, robotConstants.INTAKE_MOTOR_BUTTON, robotConstants.shootingPower, true);
-    runMechanisms.runClimber(robotConstants.CLIMBER_UP_BUTTON, robotConstants.CLIMBER_DOWN_BUTTON);
-    runMechanisms.PID(robotConstants.PID_TEST_BUTTON, 5);
+    // runmechanisms.
 
   }
   
