@@ -9,111 +9,101 @@ public class Limelight {
 
     public static double targetX, targetY;
     public static double targetArea;
-    public static double distanceToTarget;
-    public static double targetAngleX;
 
-    private static double focalLength = 0.0; //focal length in pixels
-    private static int robotDepth = 0;
+    private static double cubeAreaPrc = 10.5; //percentage of cube on the screen to be able to get the piece 
+    private static double coneAreaPrc = 10.0; //percentage of cube on the screen to be able to get the piece 
+    private static double tapeAreaPrc = 0.09; //percentage of cube on the screen to be able to score game piece 
+    private static double objAreaRequired = 0.0;
 
-    //cube:
-    private static double cubeHeight = 0.0;
-    private static double cubeHeightPxl = 0.0;
+    public  static boolean moveToTarget = true;
 
-    //cone:
-    private static double coneSide = 0.0;
-    private static double coneHeight = 0.0;
-    private static double coneHeightPxl = 0.0;
-    
-    public static void setUpLimelightData(){
+    public static void updateData(){
         NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
         NetworkTableEntry tx = table.getEntry("tx");
         NetworkTableEntry ty = table.getEntry("ty");
         NetworkTableEntry ta = table.getEntry("ta");
         
-
-        //read values periodically (куда эти строчки кода?)
-        double targetX = tx.getDouble(0.0);
-        double targetY = ty.getDouble(0.0);
-        double targetArea = ta.getDouble(0.0);
+        //read values periodically
+        targetX = tx.getDouble(0.0);
+        targetY = ty.getDouble(0.0);
+        targetArea = ta.getDouble(0.0);
     }
 
-    public static void getTargetPosition(boolean cube) {
-
-        if(cube){
-            distanceToTarget = Math.round(focalLength*cubeHeight/cubeHeightPxl) - cubeHeight/2 - robotDepth;
-            targetAngleX = (double) Math.round(Math.toDegrees(Math.atan(cubeHeight*targetX/(cubeHeightPxl*distanceToTarget)))/2)*2;
+    public static void setTarget(int targetNumber) { // targetNumber: 0 -tape, 1 - cube, 2 - cone
+        if(targetNumber == 0) {
+            objAreaRequired = tapeAreaPrc;
+        }
+        else if (targetNumber == 1){
+            objAreaRequired = cubeAreaPrc;
         }
         else {
-            distanceToTarget = Math.round(focalLength*coneHeight/coneHeightPxl) - coneSide/2 - robotDepth;
-            targetAngleX = (double) Math.round(Math.toDegrees(Math.atan(cubeHeight*coneHeight/(coneHeightPxl*distanceToTarget)))/2)*2;
+            objAreaRequired = coneAreaPrc;
         }
-
-        SmartDashboard.putNumber("Target X-coordinates", distanceToTarget);
-        SmartDashboard.putNumber("Distance to target", targetAngleX);
-
-        System.out.println(distanceToTarget);
-        System.out.println(targetAngleX);
-
     }
 
     public static double getTargetAngleX() {
-        NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-        NetworkTableEntry tx = table.getEntry("tx");
-        
-        double targetX = tx.getDouble(0.0);
-        targetAngleX = targetX;
-        return targetAngleX;
+        updateData();
+        return targetX;
     }
 
-    public static double getDistanceToMiddleTarget() {
-        NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-        NetworkTableEntry ty = table.getEntry("ty");
-        double targetOffsetAngle_Vertical = ty.getDouble(0.0);
+    public static boolean procedMoving() {
+        updateData();
+        System.out.println(targetArea);
 
-        // how many degrees back is your limelight rotated from perfectly vertical?
-        double limelightMountAngleDegrees = 38.0;
-
-        // distance from the center of the Limelight lens to the floor
-        double limelightLensHeightInches = 20.0;
-
-        // distance from the target to the floor
-        double middleNodeTapeHeight = 24.125;
-        
-
-        double angleToGoalDegrees = limelightMountAngleDegrees + targetOffsetAngle_Vertical;
-        double angleToGoalRadians = angleToGoalDegrees * (3.14159 / 180.0);
-
-        //calculate distance
-        double distanceToTargetInches = (middleNodeTapeHeight - limelightLensHeightInches)/Math.tan(angleToGoalRadians);
-        distanceToTarget = distanceToTargetInches;
-        return distanceToTarget;
+        if (targetArea >= objAreaRequired) {
+            moveToTarget = false;
+        }
+        // else {
+        //     moveToTarget = true;
+        // }
+        return moveToTarget; 
     }
 
-    public static double getDistanceToHighTarget() {
-        NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-        NetworkTableEntry ty = table.getEntry("ty");
-        double targetOffsetAngle_Vertical = ty.getDouble(0.0);
+    // public static double getDistanceToMiddleTarget() {
+    //     NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+    //     NetworkTableEntry ty = table.getEntry("ty");
+    //     double targetOffsetAngle_Vertical = ty.getDouble(0.0);
 
-        // how many degrees back is your limelight rotated from perfectly vertical?
-        double limelightMountAngleDegrees = 25.0;
+    //     // how many degrees back is your limelight rotated from perfectly vertical?
+    //     double limelightMountAngleDegrees = 38.0;
 
-        // distance from the center of the Limelight lens to the floor
-        double limelightLensHeightInches = 20.0;
+    //     // distance from the center of the Limelight lens to the floor
+    //     double limelightLensHeightInches = 20.0;
 
-        // distance from the target to the floor
-        double highNodeTapeHeight = 41.875;
+    //     // distance from the target to the floor
+    //     double middleNodeTapeHeight = 24.125;
         
 
-        double angleToGoalDegrees = limelightMountAngleDegrees + targetOffsetAngle_Vertical;
-        double angleToGoalRadians = angleToGoalDegrees * (3.14159 / 180.0);
+    //     double angleToGoalDegrees = limelightMountAngleDegrees + targetOffsetAngle_Vertical;
+    //     double angleToGoalRadians = angleToGoalDegrees * (3.14159 / 180.0);
 
-        //calculate distance
-        double distanceToTargetInches = (highNodeTapeHeight - limelightLensHeightInches)/Math.tan(angleToGoalRadians);
-        distanceToTarget = distanceToTargetInches;
-        return distanceToTarget;
-    }
-    // public static double getAngleToTarget(){
+    //     //calculate distance
+    //     double distanceToTargetInches = (middleNodeTapeHeight - limelightLensHeightInches)/Math.tan(angleToGoalRadians);
+    //     distanceToTarget = distanceToTargetInches;
+    //     return distanceToTarget;
+    // }
+
+    // public static double getDistanceToHighTarget() {
+    //     NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+    //     NetworkTableEntry ty = table.getEntry("ty");
+    //     double targetOffsetAngle_Vertical = ty.getDouble(0.0);
+
+    //     // how many degrees back is your limelight rotated from perfectly vertical?
+    //     double limelightMountAngleDegrees = 25.0;
+
+    //     // distance from the center of the Limelight lens to the floor
+    //     double limelightLensHeightInches = 20.0;
+
+    //     // distance from the target to the floor
+    //     double highNodeTapeHeight = 41.875;
         
-    //     return double me;
+
+    //     double angleToGoalDegrees = limelightMountAngleDegrees + targetOffsetAngle_Vertical;
+    //     double angleToGoalRadians = angleToGoalDegrees * (3.14159 / 180.0);
+
+    //     //calculate distance
+    //     double distanceToTargetInches = (highNodeTapeHeight - limelightLensHeightInches)/Math.tan(angleToGoalRadians);
+    //     distanceToTarget = distanceToTargetInches;
+    //     return distanceToTarget;
     // }
 }

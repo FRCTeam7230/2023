@@ -27,6 +27,7 @@ public class DriveTrain {
     private double rateOfSpeedYChange = 0.0;
     private double rateOfSpeedXChange = 0.0;
     private boolean prevDrive = false, nowDrive = false;
+    private int targetNumber = 0; // 0 - tape, 1 - cube, 2 - cone
     private double angleToTarget;
     private double gyroAngle;
     private double gyroError;
@@ -35,6 +36,8 @@ public class DriveTrain {
     private boolean button9State;
     private boolean button4State;
     private boolean button12State;
+
+    private boolean button12Pressed = false;
     
     private boolean driveModified;
     public DriveTrain(DriveSubsystem subsystem, Joystick stick){
@@ -149,63 +152,90 @@ public class DriveTrain {
             DriverStation.reportWarning(Double.toString(speedY), false);
             m_robotDrive.arcadeDrive(1 * invertAxis * (speedY), invertAxis *(speedX));
         }
+
+        // Switching target - tape, cube, or cone 
+        button12State = m_stick.getRawButton(robotConstants.AUTO_CONE_PICKUP_BUTTON);
+        if (button12State && !button12Pressed) {
+
+            Limelight.moveToTarget = true;
+            button12Pressed = true;
+            if(targetNumber < 2) {
+                targetNumber += 1;
+            }
+           else {
+            targetNumber = 0;
+           }
+        }
+        else if (!button12State) {
+            button12Pressed = false;
+        }
+        
+        System.out.println(targetNumber);
+
+        if (targetNumber == 0) {
+            NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(7);
+        } else {
+        NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(targetNumber);
+        }
+        Limelight.setTarget(targetNumber);
+
+
         button3State = m_stick.getRawButton(robotConstants.AUTO_SCORE_MID_BUTTON);
         if (button3State){
-            NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(7);
-            double angle = Limelight.getTargetAngleX();
-            double distanceToMidTarget = Limelight.getDistanceToMiddleTarget();
+            // NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(7);
+            double angle = Limelight.getTargetAngleX(); // get angle to drive to target
+            boolean continueMoving = Limelight.procedMoving(); // checking if target if enouph close to robot, could we pick up or score game piace
 
-            if (angle>0 && angle>driveTrainConstants.smartAngleMarginVision){
-              driveModified = true;
-              m_robotDrive.drive(driveTrainConstants.smartSpeedVision/2, -driveTrainConstants.smartSpeedVision);
-            }
-            else if (angle<0 && angle<-driveTrainConstants.smartAngleMarginVision){
-              driveModified = true;
-              m_robotDrive.drive(-driveTrainConstants.smartSpeedVision, driveTrainConstants.smartSpeedVision/2);
-            }
-            else if (Math.abs(angle) < driveTrainConstants.smartAngleMarginVision && distanceToMidTarget <= driveTrainConstants.optimalScoringDistance){
-              driveModified = true;
-              m_robotDrive.drive(driveTrainConstants.smartSpeedVision, driveTrainConstants.smartSpeedVision);
+            if (continueMoving) {
+                if (angle>0 && angle>driveTrainConstants.smartAngleMarginVision){
+                driveModified = true;
+                m_robotDrive.drive(driveTrainConstants.smartSpeedVision/2, -driveTrainConstants.smartSpeedVision);
+                }
+                else if (angle<0 && angle<-driveTrainConstants.smartAngleMarginVision){
+                driveModified = true;
+                m_robotDrive.drive(-driveTrainConstants.smartSpeedVision, driveTrainConstants.smartSpeedVision/2);
+                }
+                else if (Math.abs(angle) < driveTrainConstants.smartAngleMarginVision){
+                driveModified = true;
+                m_robotDrive.drive(-driveTrainConstants.smartSpeedVision, -driveTrainConstants.smartSpeedVision);
+                }
             }
         }
         else{
           driveModified = false;
         }
-        button4State = m_stick.getRawButton(robotConstants.AUTO_SCORE_HIGH_BUTTON);
-        if (button4State){
+
+        
+        
+        // button4State = m_stick.getRawButton(robotConstants.AUTO_SCORE_HIGH_BUTTON);
+        // if (button4State){
             
-            NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(7);
-            double angle = Limelight.getTargetAngleX();
-            double distanceToHighTarget = Limelight.getDistanceToHighTarget();
-            System.out.println(distanceToHighTarget);
+        //     NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(7);
+        //     double angle = Limelight.getTargetAngleX();
+        //     double distanceToHighTarget = Limelight.getDistanceToHighTarget();
+        //     System.out.println(distanceToHighTarget);
 
-            if (angle>0 && angle>driveTrainConstants.smartAngleMarginVision){
-              driveModified = true;
-              m_robotDrive.drive(driveTrainConstants.smartSpeedVision/2, -driveTrainConstants.smartSpeedVision);
-            }
-            else if (angle<0 && angle<-driveTrainConstants.smartAngleMarginVision){
-              driveModified = true;
-              m_robotDrive.drive(-driveTrainConstants.smartSpeedVision, driveTrainConstants.smartSpeedVision/2);
-            }
-            else if (Math.abs(angle) < driveTrainConstants.smartAngleMarginVision && distanceToHighTarget <= driveTrainConstants.optimalScoringDistance){
-              driveModified = true;
-              m_robotDrive.drive(driveTrainConstants.smartSpeedVision, driveTrainConstants.smartSpeedVision);
-            }
-        }
-        else{
-          driveModified = false;
-        }
-        button12State = m_stick.getRawButton(robotConstants.AUTO_CONE_PICKUP_BUTTON);
-        if (button12State){
-         
-            NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(0);
-        }
-        else{
-          driveModified = false;
-        }
+        //     if (angle>0 && angle>driveTrainConstants.smartAngleMarginVision){
+        //       driveModified = true;
+        //       m_robotDrive.drive(driveTrainConstants.smartSpeedVision/2, -driveTrainConstants.smartSpeedVision);
+        //     }
+        //     else if (angle<0 && angle<-driveTrainConstants.smartAngleMarginVision){
+        //       driveModified = true;
+        //       m_robotDrive.drive(-driveTrainConstants.smartSpeedVision, driveTrainConstants.smartSpeedVision/2);
+        //     }
+        //     else if (Math.abs(angle) < driveTrainConstants.smartAngleMarginVision && distanceToHighTarget <= driveTrainConstants.optimalScoringDistance){
+        //       driveModified = true;
+        //       m_robotDrive.drive(driveTrainConstants.smartSpeedVision, driveTrainConstants.smartSpeedVision);
+        //     }
+        // }
+        // else{
+        //   driveModified = false;
+        // }
+
+        
+
         button9State = m_stick.getRawButton(robotConstants.BALANCING_BUTTON);
         if (button9State){
-     
             gyroAngle = Mechanisms.gyro.getPitch();
             gyroError = driveTrainConstants.targetAngle - gyroAngle;
             System.out.println(gyroAngle);

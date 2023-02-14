@@ -35,6 +35,7 @@ public final class Constants {
     public static final int BUTTON10 = 10; //START BUTTON: RUN INTAKE MOTOR/NO SOLENOID
     public static final int BUTTON11 = 11;
     public static final int BUTTON12 = 12;
+    public static final int BUTTON13 = 13;
 
     public static final int CLIMBER_UP_BUTTON = BUTTON10;
     public static final int CLIMBER_DOWN_BUTTON = BUTTON12;

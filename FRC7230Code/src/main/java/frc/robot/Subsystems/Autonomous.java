@@ -14,6 +14,7 @@ public class Autonomous {
   private CANSparkMax shooter;
   private VictorSPX intake;
   private Solenoid intakeSol;
+
   public Autonomous(){
     m_dDriveSubsystem = Mechanisms.driveSubsystem;
     conveyor = Mechanisms.conveyorMotor;
@@ -28,6 +29,10 @@ public class Autonomous {
     autonomousTimer.start();
   }
   public void execute(){
+    // 2 scenarious for autonomous period:
+    // 1 - if robot is placed on the center grid, then during Auto it should score piece, then go backwards and engade chanrign station
+    // 2 - if robot is place on the side grids, 
+
 
     // First phase - drive - drive to the hub and shoot ball
     // Second phase - drive backwards

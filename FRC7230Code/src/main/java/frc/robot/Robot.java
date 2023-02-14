@@ -20,8 +20,8 @@ public class Robot extends TimedRobot {
   private Autonomous auton = new Autonomous();
   private RunMechanisms runMechanisms = new RunMechanisms();
   private boolean red = true;  
-  private boolean cube = true; // selected cube figure as a target
-  private boolean scoringMode = true; 
+  // private boolean cube = true; // selected cube figure as a target
+  // private boolean scoringMode = true; 
   private final SendableChooser<String> color_chooser = new SendableChooser<>();
   private final SendableChooser<String> figure_chooser = new SendableChooser<>();
   private final SendableChooser<String> vision_chooser = new SendableChooser<>();
@@ -57,28 +57,27 @@ public class Robot extends TimedRobot {
         break;
     }    
 
-    String figureSelected = figure_chooser.getSelected();
-    switch (figureSelected) {
-      case "cube":
-        cube = true;
-        break;
-      case "cone":
-        cube = false;
-        break;
-    }    
-    
-    
-    Limelight.getTargetPosition(cube);
-    
-    String visionModeSelected = vision_chooser.getSelected();
-    switch (visionModeSelected) {
-      case "scoring":
-        scoringMode = true;
-        break;
-      case "pickup":
-        scoringMode = false;
-        break;
-    }
+    // String visionModeSelected = vision_chooser.getSelected();
+    // switch (visionModeSelected) {
+    //   case "scoring":
+    //     scoringMode = true;
+    //     break;
+    //   case "pickup":
+    //     scoringMode = false;
+    //     break;
+    // }
+
+    // String figureSelected = figure_chooser.getSelected();
+    // switch (figureSelected) {
+    //   case "cube":
+    //     cube = true;
+    //     break;
+    //   case "cone":
+    //     cube = false;
+    //     break;
+    // }    
+
+    // Limelight.setTarget(scoringMode, cube);
   }
 
   @Override
