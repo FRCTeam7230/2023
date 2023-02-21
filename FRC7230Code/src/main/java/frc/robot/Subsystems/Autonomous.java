@@ -10,7 +10,10 @@ public class Autonomous {
   private String autoState;
   private DriveSubsystem m_DriveSubsystem;
   private RunMechanisms m_RunMechanisms;
-  
+  private boolean surpassedMargin = false;
+  private boolean surpassedMargin2 = false;
+  private double gyroAngle;
+  private double error;
   
   public Autonomous(){
     m_DriveSubsystem = Mechanisms.driveSubsystem;
@@ -55,13 +58,41 @@ public class Autonomous {
       m_RunMechanisms.toggleClaw(true);
       m_RunMechanisms.toggleArmExtension(true);
     }
-    if(autoState == "fourth" && midPosition){
+    if(autoState == "fourth" && !midPosition){
       m_DriveSubsystem.autonDriveSetDistance(driveTrainConstants.distanceToPieceFromSide);
     }
     if(autoState == "fourth" && midPosition){
       m_DriveSubsystem.autonDriveSetDistance(driveTrainConstants.distanceToPieceFromMiddle);
       if (m_DriveSubsystem.completedDrive){
-         //autobalance
+            if (Math.abs(error)>driveTrainConstants.smartAngleMargin && !surpassedMargin){
+                surpassedMargin = true;
+            }
+            if (Math.abs(error)>driveTrainConstants.smartAngleMargin2 && surpassedMargin && !surpassedMargin2){
+                surpassedMargin2 = true;
+            }
+            gyroAngle = Mechanisms.gyro.getPitch();
+            error = driveTrainConstants.targetAngle - gyroAngle;
+            System.out.println(error);
+            
+            if (error > driveTrainConstants.smartAngleMargin || (!surpassedMargin && !surpassedMargin2 && error>0.3)){
+                m_DriveSubsystem.drive(driveTrainConstants.smartSpeed, driveTrainConstants.smartSpeed);
+                System.out.println("forward");
+            }
+            else if (error>0.3 && error > driveTrainConstants.smartAngleMargin && surpassedMargin){
+                m_DriveSubsystem.drive(-driveTrainConstants.slowSmartSpeed, -driveTrainConstants.slowSmartSpeed);
+                System.out.println("forward");
+            }
+            else if (error < - driveTrainConstants.smartAngleMargin || (!surpassedMargin&& !surpassedMargin2  && error<-0.3)){
+                m_DriveSubsystem.drive(-driveTrainConstants.smartSpeed, -driveTrainConstants.smartSpeed);
+                System.out.println("backward");
+            }
+            else if (error<-0.3 && error <- driveTrainConstants.smartAngleMargin && surpassedMargin){
+                m_DriveSubsystem.drive(driveTrainConstants.slowSmartSpeed, driveTrainConstants.slowSmartSpeed);
+                System.out.println("forward");
+            }
+            else{
+                m_DriveSubsystem.drive(0, 0);
+            }
       }
     }
   }
