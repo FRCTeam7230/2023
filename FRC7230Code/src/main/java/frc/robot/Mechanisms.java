@@ -7,6 +7,8 @@ import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.Joystick;
 import com.kauailabs.navx.frc.AHRS;
 import frc.robot.Subsystems.DriveSubsystem;
+import frc.robot.Subsystems.RunMechanisms;
+
 public class Mechanisms {
     public static CANSparkMax armMotor = new CANSparkMax(5, CANSparkMax.MotorType.kBrushless);
     public static Compressor pcmCompressor = new Compressor(0, PneumaticsModuleType.CTREPCM);
@@ -15,6 +17,7 @@ public class Mechanisms {
     public static Solenoid clawRightSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 3);
     public static DriveSubsystem driveSubsystem = new DriveSubsystem();
     public static Joystick driveJoystick = new Joystick(0);
+    public static RunMechanisms runMechanisms = new RunMechanisms();
     public static Joystick mechanismsJoystick = new Joystick(1);
     public static AHRS gyro = new AHRS();
 }

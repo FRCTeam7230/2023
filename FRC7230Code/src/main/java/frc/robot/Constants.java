@@ -36,22 +36,34 @@ public final class Constants {
     public static final int BUTTON11 = 11;
     public static final int BUTTON12 = 12;
 
-    
+    //Drive Buttons:
     public static final int REVERSE_BUTTON = BUTTON4;
     public static final int SPEED_BUTTON = BUTTON5;
     public static final int SLOW_BUTTON = BUTTON6;
     public static final int BALANCING_BUTTON = BUTTON3;
 
-    public static final int CLAW_TOGGLE_BUTTON = BUTTON1; 
-    public static final int ARM_EXTENSION_TOGGLE_BUTTON = BUTTON2;
+
+    //Smart Buttons:
     public static final int SMART_ORIENT_CONE_SHELF_PICKUP = BUTTON3;
     public static final int SMART_ORIENT_CUBE_SHELF_PICKUP = BUTTON4;
     public static final int SMART_ORIENT_CONE_LOW_ANGLE = BUTTON5;
     public static final int SMART_ORIENT_CUBE_LOW_ANGLE = BUTTON6;
+    public static final int AUTO_CONE_PICKUP_BUTTON = BUTTON12;
     public static final int SMART_ORIENT_CONE_HIGH_ANGLE = BUTTON7;
     public static final int SMART_ORIENT_CONE_MID_ANGLE = BUTTON8;
     public static final int AUTO_SCORE_MID_BUTTON = BUTTON9;
+
+    //Manual Buttons:
+    public static final int SHELF_ANGLE_BUTTON = BUTTON5;
+    public static final int LOW_ANGLE_BUTTON = BUTTON6;
+    public static final int HIGH_ANGLE_BUTTON = BUTTON7;
+    public static final int MID_ANGLE_BUTTON = BUTTON8;
+    public static final int CLAW_TOGGLE_BUTTON = BUTTON1; 
+    public static final int ARM_EXTENSION_TOGGLE_BUTTON = BUTTON2;
+
+    //Test Buttons:
     public static final int PID_TEST_BUTTON = BUTTON10;
+    public static final int ENCODER_TEST_BUTTON = BUTTON11;
   }
   
   public static final class driveTrainConstants {
@@ -75,13 +87,25 @@ public final class Constants {
     public static final double smartAngleMarginVision = 3;
     public static final double smartSpeedVision = 0.55;
     public static final double dropOff = 0.4; //drop off point when speed is able to drop to 0
-    public static final int kEncoderCPR = 1024;
+    public static final int kEncoderCPR = 4096;
     public static final double kWheelDiameterMeters = 0.15;
-    public static final double highAngleEncoderCounts = 30;
-    public static final double midAngleEncoderCounts = 30;
-    public static final double shelfAngleEncoderCounts = 30;
-    public static final double lowAngleEncoderCounts = 30;
-    public static final double kEncoderDistancePerPulse =
-        (kWheelDiameterMeters * Math.PI) / (double) kEncoderCPR;
+    public static final int degreesToArmEncoderCounts = 8192/360;
+    public static final double highAngleEncoderCounts = 30*degreesToArmEncoderCounts;
+    public static final double midAngleEncoderCounts = 30*degreesToArmEncoderCounts;
+    public static final double shelfAngleEncoderCounts = 30*degreesToArmEncoderCounts;
+    public static final double lowAngleEncoderCounts = 30*degreesToArmEncoderCounts;
+    public static final double armAngleMargin = 4;
+    public static final double motorRevsToWheelRevs = 1/10.71; //last year's
+    // public static final double motorRevsToWheelRevs = 1/8.45; //this year's
+    public static final double kEncoderMetersPerMotorRev = motorRevsToWheelRevs*kWheelDiameterMeters * Math.PI;
+    public static final double midScoreMeters = 1;
+    public static final double distanceToPieceFromMiddle = 1;
+    public static final double distanceToPieceFromSide = 1;
+    public static final double driveMargin = 0.1;
+    public static final double armMotorSpeed = 0.5;
+    public static final double kP = 1;
+    public static final double kI = 0;
+    public static final double kD = 3;
+    public static final double kFF = 0.0015;
   }
 }

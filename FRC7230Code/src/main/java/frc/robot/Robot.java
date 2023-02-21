@@ -6,25 +6,28 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.Subsystems.Autonomous;
-
 import frc.robot.Subsystems.DriveTrain;
 import frc.robot.Subsystems.RunMechanisms;
+import frc.robot.Constants.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import frc.robot.Constants;
+
+
+
 public class Robot extends TimedRobot {
 
   private DriveTrain driveTrain = new DriveTrain(Mechanisms.driveSubsystem, Mechanisms.driveJoystick);
   private Autonomous auton = new Autonomous();
-  private RunMechanisms runMechanisms = new RunMechanisms();
+  private RunMechanisms runMechanisms = Mechanisms.runMechanisms;
   private boolean midPosition;
+  
   private final SendableChooser<String> position_chooser = new SendableChooser<>();
 
   @Override
   public void robotInit() {
     position_chooser.setDefaultOption("Middle", "Middle");
     position_chooser.addOption("Side", "Side");
-    SmartDashboard.putData("Position choice", position_chooser);
+    SmartDashboard.putData("Autonomous choice", position_chooser);
   }
 
   @Override
@@ -53,15 +56,25 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     Mechanisms.gyro.calibrate();
+    Mechanisms.driveSubsystem.resetEncoders();
   }
 
   @Override
   public void teleopPeriodic() {
     driveTrain.drive(false);
-    // runmechanisms.
-
-  }
+    // System.out.println(Mechanisms.driveSubsystem.getRightDistance());
+    // System.out.println(Mechanisms.driveSubsystem.getLeftDistance());
+    // System.out.println(driveTrain.getArmMotorAngle());
+    // System.out.println(Mechanisms.driveSubsystem.getError());
+    // runMechanisms.
+    runMechanisms.rotateArmToAngle();
+    runMechanisms.toggleArmExtension(false);
+    runMechanisms.toggleClaw(false);
+    if (driveTrain.getArmMotorAngle() >= driveTrainConstants.midAngleEncoderCounts){
+      System.out.println("Past Angle");
+    }
   
+  }
   @Override
   public void disabledInit() {}
 
