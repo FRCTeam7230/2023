@@ -243,7 +243,7 @@ public class DriveTrain {
               driveModified = true;
               m_robotDrive.drive(-driveTrainConstants.smartSpeedVision, driveTrainConstants.smartSpeedVision/2);
             }
-            else (Math.abs(angle) < driveTrainConstants.smartAngleMarginVision){
+            else if (Math.abs(angle) < driveTrainConstants.smartAngleMarginVision){
               Mechanisms.armSolenoid.set(true);
             }
         }
@@ -262,7 +262,7 @@ public class DriveTrain {
               driveModified = true;
               m_robotDrive.drive(-driveTrainConstants.smartSpeedVision, driveTrainConstants.smartSpeedVision/2);
             }
-            else (Math.abs(angle) < driveTrainConstants.smartAngleMarginVision){
+            else if (Math.abs(angle) < driveTrainConstants.smartAngleMarginVision){
               Mechanisms.armSolenoid.set(true);
             }
         }

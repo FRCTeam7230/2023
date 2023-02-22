@@ -28,6 +28,10 @@ public class Robot extends TimedRobot {
     position_chooser.setDefaultOption("Middle", "Middle");
     position_chooser.addOption("Side", "Side");
     SmartDashboard.putData("Autonomous choice", position_chooser);
+    Mechanisms.armPID.setP(driveTrainConstants.kP);
+    Mechanisms.armPID.setI(driveTrainConstants.kI);
+    Mechanisms.armPID.setD(driveTrainConstants.kD);
+    Mechanisms.armPID.setFF(driveTrainConstants.kFF);
   }
 
   @Override

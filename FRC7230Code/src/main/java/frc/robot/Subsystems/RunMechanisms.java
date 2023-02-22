@@ -2,6 +2,7 @@ package frc.robot.Subsystems;
 
 import edu.wpi.first.wpilibj.Joystick;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.ControlType;
 
 import edu.wpi.first.wpilibj.Solenoid;
 
@@ -40,33 +41,36 @@ public class RunMechanisms {
     }
 
     if (buttonPressed){
-      if (armMotorEncoder.get() < encoderCounts - driveTrainConstants.armAngleMargin) {
-        armMotor.set(driveTrainConstants.armMotorSpeed);
-      }
-      else if (armMotorEncoder.get() > encoderCounts + driveTrainConstants.armAngleMargin){
-        armMotor.set(-driveTrainConstants.armMotorSpeed);
-      }
-      else {
-        armMotor.set(0);
-        buttonPressed = false;
-        //just in case
-      }
+      // if (armMotorEncoder.get() < encoderCounts - driveTrainConstants.armAngleMargin) {
+      //   armMotor.set(driveTrainConstants.armMotorSpeed);
+      // }
+      // else if (armMotorEncoder.get() > encoderCounts + driveTrainConstants.armAngleMargin){
+      //   armMotor.set(-driveTrainConstants.armMotorSpeed);
+      // }
+      // else {
+      //   armMotor.set(0);
+      //   buttonPressed = false;
+      //   //just in case
+      // }
+      Mechanisms.armPID.setReference(encoderCounts, ControlType.kPosition);
     }   
   }
   public void autonRotateArmToAngle(double autonEncoderCounts){
-    stillRotating = true;
-    while (stillRotating){
-      if (armMotorEncoder.get() < autonEncoderCounts - driveTrainConstants.armAngleMargin) {
-        armMotor.set(driveTrainConstants.armMotorSpeed);
-      }
-      else if (armMotorEncoder.get() > autonEncoderCounts + driveTrainConstants.armAngleMargin){
-        armMotor.set(-driveTrainConstants.armMotorSpeed);
-      }
-      else{
-        armMotor.set(0);
-        stillRotating = false;
-      }
-    }
+    // stillRotating = true;
+    // while (stillRotating){
+    //   if (armMotorEncoder.get() < autonEncoderCounts - driveTrainConstants.armAngleMargin) {
+    //     armMotor.set(driveTrainConstants.armMotorSpeed);
+    //   }
+    //   else if (armMotorEncoder.get() > autonEncoderCounts + driveTrainConstants.armAngleMargin){
+    //     armMotor.set(-driveTrainConstants.armMotorSpeed);
+    //   }
+    //   else{
+    //     armMotor.set(0);
+    //     stillRotating = false;
+    //   }
+    // }
+    
+    Mechanisms.armPID.setReference(autonEncoderCounts, ControlType.kPosition);
   }
 
    public void toggleArmExtension(boolean auto){
