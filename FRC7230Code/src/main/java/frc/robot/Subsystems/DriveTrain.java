@@ -38,6 +38,7 @@ public class DriveTrain {
     private boolean button7State;
     private boolean button8State;
     private boolean button9State;
+    private boolean button10State;
     private final RelativeEncoder armMotorEncoder = Mechanisms.armMotor.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42);
     
     private boolean driveModified;
@@ -244,26 +245,29 @@ public class DriveTrain {
         // else{
         //     driveModified = false;
         //   }
-        button5State = m_stick.getRawButton(robotConstants.SMART_ORIENT_TAPE);
+        button5State = m_stick.getRawButton(robotConstants.SMART_ORIENT_TAPE_HIGH);
         if (button5State) {
 
         }
-        button6State = m_stick.getRawButton(robotConstants.ARM_SCORE_HIGH);
-        if (button6State) {
+        button6State = m_stick.getRawButton(robotConstants.SMART_ORIENT_TAPE_MID);
+        if(button6State) {
+
+        }
+        button7State = m_stick.getRawButton(robotConstants.ARM_SCORE_HIGH);
+        if (button7State) {
             RunMechanisms.Arm(1);
         }
-        button7State = m_stick.getRawButton(robotConstants.ARM_SCORE_MID);
-        if (button7State) {
+        button8State = m_stick.getRawButton(robotConstants.ARM_SCORE_MID);
+        if (button8State) {
             RunMechanisms.Arm(2);
         }
-        button8State = m_stick.getRawButton(robotConstants.ARM_SCORE_LOW);
-        if (button8State) {
+        button9State = m_stick.getRawButton(robotConstants.ARM_SCORE_LOW);
+        if (button9State) {
             RunMechanisms.Arm(3);
         }
-        button9State = m_stick.getRawButton(robotConstants.ARM_PICK_UP_SHELF);
-        if (button9State) {
+        button10State = m_stick.getRawButton(robotConstants.ARM_PICK_UP_SHELF);
+        if (button10State) {
             RunMechanisms.Arm(4);
         }
-        
     }
 }

@@ -46,12 +46,13 @@ public final class Constants {
     public static final int ARM_EXTENSION_TOGGLE_BUTTON = BUTTON2;
     public static final int SMART_ORIENT_CONE = BUTTON3;
     public static final int SMART_ORIENT_CUBE = BUTTON4;
-    public static final int SMART_ORIENT_TAPE = BUTTON5;
-    public static final int ARM_SCORE_HIGH = BUTTON6;
-    public static final int ARM_SCORE_MID = BUTTON7;
-    public static final int ARM_SCORE_LOW = BUTTON8; //also pick up from ground
-    public static final int ARM_PICK_UP_SHELF = BUTTON9;
-    public static final int PID_TEST_BUTTON = BUTTON10;
+    public static final int SMART_ORIENT_TAPE_HIGH = BUTTON5;
+    public static final int SMART_ORIENT_TAPE_MID = BUTTON6;
+    public static final int ARM_SCORE_HIGH = BUTTON7;
+    public static final int ARM_SCORE_MID = BUTTON8;
+    public static final int ARM_SCORE_LOW = BUTTON9; //also pick up from ground
+    public static final int ARM_PICK_UP_SHELF = BUTTON10;
+    public static final int PID_TEST_BUTTON = BUTTON11;
   }
   
   public static final class driveTrainConstants {
