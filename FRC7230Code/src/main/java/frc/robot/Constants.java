@@ -36,7 +36,7 @@ public final class Constants {
     public static final int BUTTON11 = 11;
     public static final int BUTTON12 = 12;
 
-    
+
     public static final int REVERSE_BUTTON = BUTTON4;
     public static final int SPEED_BUTTON = BUTTON5;
     public static final int SLOW_BUTTON = BUTTON6;
@@ -44,13 +44,13 @@ public final class Constants {
 
     public static final int CLAW_TOGGLE_BUTTON = BUTTON1; 
     public static final int ARM_EXTENSION_TOGGLE_BUTTON = BUTTON2;
-    public static final int SMART_ORIENT_CONE_SHELF_PICKUP = BUTTON3;
-    public static final int SMART_ORIENT_CUBE_SHELF_PICKUP = BUTTON4;
-    public static final int SMART_ORIENT_CONE_LOW_ANGLE = BUTTON5;
-    public static final int SMART_ORIENT_CUBE_LOW_ANGLE = BUTTON6;
-    public static final int SMART_ORIENT_CONE_HIGH_ANGLE = BUTTON7;
-    public static final int SMART_ORIENT_CONE_MID_ANGLE = BUTTON8;
-    public static final int AUTO_SCORE_MID_BUTTON = BUTTON9;
+    public static final int SMART_ORIENT_CONE = BUTTON3;
+    public static final int SMART_ORIENT_CUBE = BUTTON4;
+    public static final int SMART_ORIENT_TAPE = BUTTON5;
+    public static final int ARM_SCORE_HIGH = BUTTON6;
+    public static final int ARM_SCORE_MID = BUTTON7;
+    public static final int ARM_SCORE_LOW = BUTTON8; //also pick up from ground
+    public static final int ARM_PICK_UP_SHELF = BUTTON9;
     public static final int PID_TEST_BUTTON = BUTTON10;
   }
   
