@@ -37,6 +37,7 @@ public class RunMechanisms {
     public static RelativeEncoder armEncoder = armMotor.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42);
     public static int modeVal;
     public static double armError;
+    public static boolean prevState = false;
 
 
 
@@ -49,12 +50,20 @@ public class RunMechanisms {
 
 
      
-   public void extendArm(int button){
-
+   public void extendArm(int button, Solenoid solenoid){;
+    boolean state = m_stick.getRawButton(button);
+    if (state && !prevState) {
+      solenoid.set(state);
+    }
+    
 
     }
-   public void retractArm(CANSparkMax motor, int button){
-
+   public void retractArm(CANSparkMax motor, int button, Solenoid solenoid){
+    prevState = !prevState;
+    boolean state = m_stick.getRawButton(button);
+    if (state == prevState) {
+      solenoid.close();
+    }
      
    }
  
