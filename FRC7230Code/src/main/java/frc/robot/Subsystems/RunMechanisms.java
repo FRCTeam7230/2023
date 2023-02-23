@@ -23,21 +23,25 @@ public class RunMechanisms {
   private boolean stillRotating;
 
   public void rotateArmToAngle(){
-    if (m_stick.getRawButton(robotConstants.SHELF_ANGLE_BUTTON)){
+    if (m_stick.getRawButton(robotConstants.SHELF_PICKUP_BUTTON)){
       buttonPressed = true;
       encoderCounts = driveTrainConstants.shelfAngleEncoderCounts;
     }
-    if (m_stick.getRawButton(robotConstants.HIGH_ANGLE_BUTTON)) {
+    if (m_stick.getRawButton(robotConstants.HIGH_SCORE_BUTTON)) {
       buttonPressed = true;
       encoderCounts = driveTrainConstants.highAngleEncoderCounts;
     }
-    if (m_stick.getRawButton(robotConstants.MID_ANGLE_BUTTON)) {
+    if (m_stick.getRawButton(robotConstants.MID_SCORE_BUTTON)) {
       buttonPressed = true;
       encoderCounts = driveTrainConstants.midAngleEncoderCounts;
     }
-    if (m_stick.getRawButton(robotConstants.LOW_ANGLE_BUTTON)) {
+    if (m_stick.getRawButton(robotConstants.LOW_PICKUP_BUTTON)) {
       buttonPressed = true;
-      encoderCounts = driveTrainConstants.lowAngleEncoderCounts;
+      encoderCounts = driveTrainConstants.lowPickupAngleEncoderCounts;
+    }
+    if (m_stick.getRawButton(robotConstants.LOW_SCORE_BUTTON)){
+      buttonPressed = true;
+      encoderCounts = driveTrainConstants.lowScoreAngleEncoderCounts;
     }
 
     if (buttonPressed){

@@ -41,28 +41,29 @@ public class Autonomous {
       autoState = "second";
     }
     if(autoState == "second" && midPosition){
-      m_DriveSubsystem.autonDriveSetDistance(-driveTrainConstants.distanceToPieceFromMiddle);
+      m_DriveSubsystem.autonDriveSetDistance(-driveTrainConstants.metersToPieceFromMiddle);
       if (m_DriveSubsystem.completedDrive){
         autoState = "third";
       }
     }
     if (autoState == "second" && !midPosition){
-      m_DriveSubsystem.autonDriveSetDistance(-driveTrainConstants.distanceToPieceFromSide);
+      m_DriveSubsystem.autonDriveSetDistance(-driveTrainConstants.metersToPieceFromSide);
+      //may need to turn robot towards piece before starting pickup
       if (m_DriveSubsystem.completedDrive){
         autoState = "third";
       }
     }
     if(autoState == "third"){
-      m_RunMechanisms.autonRotateArmToAngle(driveTrainConstants.lowAngleEncoderCounts);
+      m_RunMechanisms.autonRotateArmToAngle(driveTrainConstants.lowPickupAngleEncoderCounts);
       m_RunMechanisms.toggleArmExtension(true);
       m_RunMechanisms.toggleClaw(true);
       m_RunMechanisms.toggleArmExtension(true);
     }
     if(autoState == "fourth" && !midPosition){
-      m_DriveSubsystem.autonDriveSetDistance(driveTrainConstants.distanceToPieceFromSide);
+      m_DriveSubsystem.autonDriveSetDistance(driveTrainConstants.metersToPieceFromSide);
     }
     if(autoState == "fourth" && midPosition){
-      m_DriveSubsystem.autonDriveSetDistance(driveTrainConstants.distanceToPieceFromMiddle);
+      m_DriveSubsystem.autonDriveSetDistance(driveTrainConstants.metersFromPieceToBalance);
       if (m_DriveSubsystem.completedDrive){
             if (Math.abs(error)>driveTrainConstants.smartAngleMargin && !surpassedMargin){
                 surpassedMargin = true;
