@@ -36,28 +36,34 @@ public final class Constants {
     public static final int BUTTON11 = 11;
     public static final int BUTTON12 = 12;
 
+    // 1 joystick:
     //Drive Buttons:
+    public static final int SPEED_BUTTON = BUTTON1;
+    public static final int SLOW_BUTTON = BUTTON2;
     public static final int BALANCING_BUTTON = BUTTON3;
     public static final int REVERSE_BUTTON = BUTTON4;
-    public static final int SPEED_BUTTON = BUTTON5;
-    public static final int SLOW_BUTTON = BUTTON6;
-    
+
+    public static final int GAME_PIECE_TOGGLE_BUTTON = BUTTON5;
+    public static final int MANUAL_SMART_TOGGLE_BUTTON = BUTTON6; //switching from smart and manual buttons
+
+    // 2 joystick:
     //Smart Buttons:
-    public static final int GAME_PIECE_TOGGLE_BUTTON = BUTTON1;
-    public static final int MANUAL_SMART_TOGGLE_BUTTON = BUTTON2;
     public static final int ORIENT_SHELF_PICKUP_BUTTON = BUTTON3;
     public static final int ORIENT_GROUND_PICKUP_BUTTON = BUTTON4;
     public static final int ORIENT_HIGH_TARGET_BUTTON = BUTTON5;
     public static final int ORIENT_MID_TARGET_BUTTON = BUTTON6;
 
     //Manual Buttons:
-    public static final int CLAW_TOGGLE_BUTTON = BUTTON1;
+    // arm rotation with extension
+    // press the 5 buttons - 5 mode button retrackt
+    // 1 for claw - 8
+    public static final int CLAW_TOGGLE_BUTTON = BUTTON8;
     public static final int ARM_EXTENSION_TOGGLE_BUTTON = BUTTON2;
-    public static final int SHELF_PICKUP_BUTTON = BUTTON3;
-    public static final int LOW_PICKUP_BUTTON = BUTTON4;
-    public static final int HIGH_SCORE_BUTTON = BUTTON5;
-    public static final int MID_SCORE_BUTTON = BUTTON6;
-    public static final int LOW_SCORE_BUTTON = BUTTON7;
+    public static final int SHELF_PICKUP_BUTTON = BUTTON12;
+    public static final int LOW_PICKUP_BUTTON = BUTTON11;
+    public static final int HIGH_SCORE_BUTTON = BUTTON7;
+    public static final int MID_SCORE_BUTTON = BUTTON9;
+    public static final int LOW_SCORE_BUTTON = BUTTON10;
 
     //Test Buttons:
     public static final int PID_TEST_BUTTON = BUTTON10;
