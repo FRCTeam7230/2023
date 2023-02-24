@@ -10,7 +10,9 @@ public class Limelight {
     
         public static double targetX, targetY;
         public static double targetArea;
-    
+        public static boolean coneTarget = true; // true if cone is target, false if cube
+        
+        
         private static double cubeAreaPrc = 10.5; //percentage of cube on the screen to be able to get the piece 
         private static double coneAreaPrc = 10.0; //percentage of cube on the screen to be able to get the piece 
         private static double tapeAreaPrc = 0.09; //percentage of cube on the screen to be able to score game piece 
