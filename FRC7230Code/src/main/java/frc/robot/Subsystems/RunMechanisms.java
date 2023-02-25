@@ -5,7 +5,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.ControlType;
 
 import edu.wpi.first.wpilibj.Solenoid;
-
+import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Mechanisms;
 import frc.robot.Constants.driveTrainConstants;
 import frc.robot.Constants.robotConstants;
@@ -19,10 +19,23 @@ public class RunMechanisms {
     private final Encoder armMotorEncoder = new Encoder(7, 8, 9);
 
   private double encoderCounts;
-  private boolean buttonPressed = false;
+  public boolean buttonPressed = false;
   private boolean prevButton = false;
-  private boolean stillRotating;
+  private Timer armTimer = new Timer();
+  
   public boolean completedRotating = false;
+
+  public void breakInArmMotor(){
+    armTimer.reset();
+    armTimer.start();
+    if (armTimer.get() < 60){
+      armMotor.set(0.5);
+    }
+    if (armTimer.get() > 60 && armTimer.get() <120){
+      armMotor.set(-0.5);
+    }
+
+  }
 
   public void rotateArmToAngle(){
     if (m_stick.getRawButton(robotConstants.SHELF_PICKUP_BUTTON)){
@@ -62,7 +75,7 @@ public class RunMechanisms {
       //   //just in case
       // }
       Mechanisms.armPID.setReference(encoderCounts, ControlType.kPosition);
-      if (encoderCounts == armMotor.get()){
+      if (encoderCounts == armMotorEncoder.get()){
         completedRotating = true;
       }
       else{

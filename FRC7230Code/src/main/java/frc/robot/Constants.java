@@ -114,6 +114,7 @@ public final class Constants {
     public static final double smartSpeedVision = 0.55;
     public static final double[] coneScreenAreas = {4.5, 4.0}; //0 - area of cone on the screen for ground pick up, 1 - for shelf pick up
     public static final double[] cubeScreenAreas = {5.0, 4.0};
+    public static final double[] tapeScreenAreas = {0.12, 0.2}; //0 - area of tape on the screen for high target, 1 - for middle target
 
     //arm-related
     public static final double armMotorSpeed = 0.5;

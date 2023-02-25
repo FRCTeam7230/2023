@@ -6,18 +6,14 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import frc.robot.Constants.driveTrainConstants;
 import frc.robot.Constants.robotConstants;
 import frc.robot.Limelight;
 import frc.robot.Mechanisms;
-import edu.wpi.first.wpilibj.Encoder;
-
-import com.revrobotics.CANSparkMax;
 
 
 
-import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class DriveTrain {
     
@@ -201,21 +197,7 @@ public class DriveTrain {
         button5State = m_stick.getRawButtonPressed(robotConstants.GAME_PIECE_TOGGLE_BUTTON);
         if (button5State){ 
             Limelight.coneTarget = !Limelight.coneTarget;
-            // Changing targets' characteristics to cones' or cubes'
-            if (Limelight.coneTarget) { 
-                // ! check pipelines - their numbers + values + they should be upside down - both cube and cones
-                NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(2); 
-                gamePieceAreas = driveTrainConstants.coneScreenAreas;
-
-                Limelight.targetName = "cone";
-            }
-            else {
-                NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(1);
-                gamePieceAreas = driveTrainConstants.cubeScreenAreas;
-
-                Limelight.targetName = "cube";
-            }
-            SmartDashboard.updateValues();
+            gamePieceAreas = Limelight.updateTarget();
         }
         
         
@@ -223,6 +205,7 @@ public class DriveTrain {
         button6State = m_stick.getRawButtonPressed(robotConstants.MANUAL_SMART_TOGGLE_BUTTON);
         if (button6State) {
             manualLayout = !manualLayout;
+            
         }
 
         
@@ -236,7 +219,13 @@ public class DriveTrain {
             if (m_stick.getRawButton(robotConstants.ORIENT_GROUND_PICKUP_BUTTON)) {
                 continueMoving = Limelight.procedMoving(gamePieceAreas[0]);
             }
-            if (m_stick.getRawButton(robotConstants.ORIENT_SHELF_PICKUP_BUTTON) || m_stick.getRawButton(robotConstants.ORIENT_GROUND_PICKUP_BUTTON)) {
+            if (m_stick.getRawButton(robotConstants.ORIENT_HIGH_TARGET_BUTTON)) {
+                continueMoving = Limelight.updateTape(true, driveTrainConstants.tapeScreenAreas);
+            }
+            if (m_stick.getRawButton(robotConstants.ORIENT_MID_TARGET_BUTTON)) {
+                continueMoving = Limelight.updateTape(false, driveTrainConstants.tapeScreenAreas);
+            }
+            if (m_runMechanisms.buttonPressed) {
                 angleToTarget = Limelight.getTargetAngleX(); // getting angle to drive to the robot
 
                 if (continueMoving) { // checking if target is enouph close to the robot. If not, continue moving
@@ -257,7 +246,7 @@ public class DriveTrain {
                 else {
                     
                     // after robot arrive, it should rotate, extend arm and exterd+retrackt claw
-
+                    driveModified = false;
                     
                     // if (armMotorEncoder.get() < driveTrainConstants.midAngleEncoderCounts) {
                     // Mechanisms.armMotor.set(0.5);
@@ -385,6 +374,7 @@ public class DriveTrain {
           driveModified = false;
         } 
         prevButton11 = button11State;
+        
     }
 }
 }

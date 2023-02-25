@@ -28,6 +28,7 @@ public class Robot extends TimedRobot {
     position_chooser.setDefaultOption("Middle", "Middle");
     position_chooser.addOption("Side", "Side");
     SmartDashboard.putData("Autonomous choice", position_chooser);
+    SmartDashboard.putString("Selected Object", Limelight.targetName);
     Mechanisms.armPID.setP(driveTrainConstants.kP);
     Mechanisms.armPID.setI(driveTrainConstants.kI);
     Mechanisms.armPID.setD(driveTrainConstants.kD);
@@ -36,6 +37,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
+    SmartDashboard.updateValues();
     String positionSelected = position_chooser.getSelected();
     switch (positionSelected) {
       case "Middle":

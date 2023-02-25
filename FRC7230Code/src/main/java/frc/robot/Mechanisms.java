@@ -13,7 +13,7 @@ import frc.robot.Subsystems.RunMechanisms;
 
 
 public class Mechanisms {
-    public static CANSparkMax armMotor = new CANSparkMax(5, CANSparkMax.MotorType.kBrushless);
+    public static CANSparkMax armMotor = new CANSparkMax(3, CANSparkMax.MotorType.kBrushless);
     public static SparkMaxPIDController armPID = armMotor.getPIDController();
     public static Compressor pcmCompressor = new Compressor(0, PneumaticsModuleType.CTREPCM);
     public static Solenoid armSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 1);
