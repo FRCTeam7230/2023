@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.robotConstants;
 import frc.robot.Constants.driveTrainConstants;
 public class DriveSubsystem extends SubsystemBase {
-
+  
   public boolean completedDrive;
   public double initialLeft, initialRight;
   public CANSparkMax l_motor1 = new CANSparkMax(robotConstants.L1MOTOR_ID, CANSparkMax.MotorType.kBrushless);

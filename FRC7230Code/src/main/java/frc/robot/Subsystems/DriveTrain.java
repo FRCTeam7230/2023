@@ -252,7 +252,6 @@ public class DriveTrain {
         }
         button4State = m_stick.getRawButton(robotConstants.SMART_ORIENT_CONE_HIGH_ANGLE);
         if (button4State){
-            
             NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(7);
             double angle = Limelight.getTargetAngleX();
         if (armMotorEncoder.get() < driveTrainConstants.highAngleEncoderCounts) {

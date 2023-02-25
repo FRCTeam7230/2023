@@ -13,6 +13,7 @@ import edu.wpi.first.math.controller.*;
 import edu.wpi.first.wpilibj.Encoder;
 
 public class RunMechanisms {
+    public boolean rotateComplete;
     private CANSparkMax armMotor = Mechanisms.armMotor; 
     private Solenoid armSolenoid = Mechanisms.armSolenoid, clawRightSolenoid = Mechanisms.clawRightSolenoid, clawLeftSolenoid = Mechanisms.clawLeftSolenoid;
     private Joystick m_stick = Mechanisms.mechanismsJoystick;
@@ -20,7 +21,8 @@ public class RunMechanisms {
 
   private double encoderCounts;
   private boolean buttonPressed = false;
-  private boolean stillRotating;
+  
+
 
   public void rotateArmToAngle(){
     if (m_stick.getRawButton(robotConstants.SHELF_PICKUP_BUTTON)){
@@ -60,6 +62,19 @@ public class RunMechanisms {
     }   
   }
   public void autonRotateArmToAngle(double autonEncoderCounts){
+    rotateComplete = false;
+    while (rotateComplete) {
+      if (armMotorEncoder.get() < autonEncoderCounts) {
+        armMotor.set(0.5);
+      }
+      else if (armMotorEncoder.get() > autonEncoderCounts) {
+        armMotor.set(-0.5);
+      }
+      else {
+        armMotor.set(0);
+        rotateComplete = true;
+      }
+    }
     // stillRotating = true;
     // while (stillRotating){
     //   if (armMotorEncoder.get() < autonEncoderCounts - driveTrainConstants.armAngleMargin) {

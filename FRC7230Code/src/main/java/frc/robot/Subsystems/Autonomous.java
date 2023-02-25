@@ -14,6 +14,7 @@ public class Autonomous {
   private boolean surpassedMargin2 = false;
   private double gyroAngle;
   private double error;
+  boolean armExtendComplete = true;
   
   public Autonomous(){
     m_DriveSubsystem = Mechanisms.driveSubsystem;
@@ -34,11 +35,26 @@ public class Autonomous {
     
     if(autoState == "first") {
       m_RunMechanisms.autonRotateArmToAngle(driveTrainConstants.highAngleEncoderCounts);
-      m_RunMechanisms.toggleArmExtension(true);
-      m_RunMechanisms.toggleClaw(true);
-      m_RunMechanisms.toggleArmExtension(true);
-      //timer needed?
-      autoState = "second";
+      if(m_RunMechanisms.rotateComplete){
+        autonomousTimer.reset();
+        autonomousTimer.start();
+        if (autonomousTimer.get() < 0.3) {
+          m_RunMechanisms.toggleArmExtension(true);
+        }
+        if(autonomousTimer.get() > 0.3 && autonomousTimer.get() < 0.6) {
+          m_RunMechanisms.toggleClaw(true);
+        }
+        if(autonomousTimer.get() < 0.6 && autonomousTimer.get() < 0.9) {
+          m_RunMechanisms.toggleArmExtension(true);
+        }
+        if(autonomousTimer.get() > 0.9) {
+          autoState = "second";
+          autonomousTimer.reset();
+          autonomousTimer.start();
+        }
+      }
+      //timer needed? for 0.3sec-for now
+      //autoState = "second";
     }
     if(autoState == "second" && midPosition){
       m_DriveSubsystem.autonDriveSetDistance(-driveTrainConstants.metersToPieceFromMiddle);
