@@ -22,7 +22,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 public class DriveTrain {
     
     private DriveSubsystem m_robotDrive;
-
+    private RunMechanisms m_runMechanisms;
     private Joystick m_stick;
     private boolean surpassedMargin;
     private boolean surpassedMargin2;
@@ -65,7 +65,7 @@ public class DriveTrain {
 
     private final Encoder armMotorEncoder = new Encoder(7, 8, 9);
     private boolean driveModified;
-    public DriveTrain(DriveSubsystem subsystem, Joystick stick){
+    public DriveTrain(DriveSubsystem subsystem, RunMechanisms runMechanisms, Joystick stick){
         m_robotDrive = subsystem;
         m_runMechanisms = runMechanisms;
         m_stick = stick;
@@ -198,13 +198,9 @@ public class DriveTrain {
         //     m_robotDrive.drive(0, 0);
 
         //Switching target - cube, or cone 
-        button5State = m_stick.getRawButton(robotConstants.GAME_PIECE_TOGGLE_BUTTON);
-        if (button5State && !prevButton5) {
-
+        button5State = m_stick.getRawButtonPressed(robotConstants.GAME_PIECE_TOGGLE_BUTTON);
+        if (button5State){ 
             Limelight.coneTarget = !Limelight.coneTarget;
-            Limelight.moveToTarget = true;
-            prevButton5 = true;
-
             // Changing targets' characteristics to cones' or cubes'
             if (Limelight.coneTarget) { 
                 // ! check pipelines - their numbers + values + they should be upside down - both cube and cones
@@ -221,28 +217,17 @@ public class DriveTrain {
             }
             SmartDashboard.updateValues();
         }
-        else if (!button5State) {
-            prevButton5 = false;
-        }
         
         
         // Switching joystick layout from manual to smart
-        button6State = m_stick.getRawButton(robotConstants.MANUAL_SMART_TOGGLE_BUTTON);
-        if (button6State && !prevButton6) {
+        button6State = m_stick.getRawButtonPressed(robotConstants.MANUAL_SMART_TOGGLE_BUTTON);
+        if (button6State) {
             manualLayout = !manualLayout;
-            prevButton6 = true;
-        }
-        else if (!button6State) {
-            prevButton6 = false;
         }
 
-        //extending and retracting claw
-        button8State = m_stick.getRawButton(robotConstants.MANUAL_SMART_TOGGLE_BUTTON);
-        if (button8State & !prevButton8) {
-            prevButton8 = true;
-        }
+        
         // Smart control
-        else if (!manualLayout) {
+        if (!manualLayout && m_runMechanisms.completedRotating) {
             
         
             if (m_stick.getRawButton(robotConstants.ORIENT_SHELF_PICKUP_BUTTON)) {

@@ -30,15 +30,36 @@ public class Autonomous {
       // Third phase - Grab Piece
       // Fourth phase - Drive back, if middle autobalance
       
-    
+      // if (autoState == "firstDrive") {
+      //   System.out.println(autonomousTimer.get());
+      //   if (autonomousTimer.get()<2.0){ 
+          
+      //   }
+      //   else {
+      //     autoState = "secondDrive";
+      //     autonomousTimer.reset();
+      //     autonomousTimer.start();
+      //   }
+      // } 
     
     if(autoState == "first") {
       m_RunMechanisms.autonRotateArmToAngle(driveTrainConstants.highAngleEncoderCounts);
-      m_RunMechanisms.toggleArmExtension(true);
-      m_RunMechanisms.toggleClaw(true);
-      m_RunMechanisms.toggleArmExtension(true);
-      //timer needed?
-      autoState = "second";
+      if (m_RunMechanisms.completedRotating){
+        m_RunMechanisms.autonToggleArmExtension(); 
+        autonomousTimer.reset();
+        autonomousTimer.start();
+        if (autonomousTimer.get()<= 0.15){ 
+          m_RunMechanisms.toggleClaw(true);
+        }
+        else if (autonomousTimer.get()<= 0.3){ 
+            m_RunMechanisms.autonToggleArmExtension();
+        }
+        else{
+          autoState = "second";
+        }
+      }
+      
+     
     }
     if(autoState == "second" && midPosition){
       m_DriveSubsystem.autonDriveSetDistance(-driveTrainConstants.metersToPieceFromMiddle);
@@ -55,9 +76,20 @@ public class Autonomous {
     }
     if(autoState == "third"){
       m_RunMechanisms.autonRotateArmToAngle(driveTrainConstants.lowPickupAngleEncoderCounts);
-      m_RunMechanisms.toggleArmExtension(true);
-      m_RunMechanisms.toggleClaw(true);
-      m_RunMechanisms.toggleArmExtension(true);
+      if (m_RunMechanisms.completedRotating){
+        m_RunMechanisms.autonToggleArmExtension(); 
+        autonomousTimer.reset();
+        autonomousTimer.start();
+        if (autonomousTimer.get()<= 0.3){ 
+          m_RunMechanisms.toggleClaw(true);
+        }
+        else if (autonomousTimer.get()<= 0.6 && autonomousTimer.get() > 3.0){ 
+            m_RunMechanisms.autonToggleArmExtension();
+        }
+        else{
+          autoState = "fourth";
+        }
+      }
     }
     if(autoState == "fourth" && !midPosition){
       m_DriveSubsystem.autonDriveSetDistance(driveTrainConstants.metersToPieceFromSide);

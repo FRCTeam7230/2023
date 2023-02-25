@@ -16,9 +16,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
 public class Robot extends TimedRobot {
 
-  private DriveTrain driveTrain = new DriveTrain(Mechanisms.driveSubsystem, Mechanisms.driveJoystick);
-  private Autonomous auton = new Autonomous();
   private RunMechanisms runMechanisms = Mechanisms.runMechanisms;
+  private DriveTrain driveTrain = new DriveTrain(Mechanisms.driveSubsystem, runMechanisms, Mechanisms.driveJoystick);
+  private Autonomous auton = new Autonomous();
   private boolean midPosition;
   
   private final SendableChooser<String> position_chooser = new SendableChooser<>();
@@ -67,7 +67,6 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     driveTrain.drive(false);
     runMechanisms.rotateArmToAngle();
-    runMechanisms.toggleArmExtension(false);
     runMechanisms.toggleClaw(false);
     if (driveTrain.getArmMotorAngle() >= driveTrainConstants.midAngleEncoderCounts){
       System.out.println("Past Angle");

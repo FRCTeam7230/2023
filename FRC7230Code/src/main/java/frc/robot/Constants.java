@@ -49,7 +49,7 @@ public final class Constants {
     // arm rotation with extension
     // press the 5 buttons - 5 modes - rotation, extension, rectraction
     public static final int CLAW_TOGGLE_BUTTON = BUTTON8;
-    public static final int ARM_EXTENSION_TOGGLE_BUTTON = BUTTON2;
+    // public static final int ARM_EXTENSION_TOGGLE_BUTTON = BUTTON2;
     public static final int SHELF_PICKUP_BUTTON = BUTTON12;
     public static final int LOW_PICKUP_BUTTON = BUTTON11;
     public static final int HIGH_SCORE_BUTTON = BUTTON7;
@@ -112,10 +112,8 @@ public final class Constants {
     //vision
     public static final double smartAngleMarginVision = 3;
     public static final double smartSpeedVision = 0.55;
-          //chech values
-    double[] coneScreenAreas = {4.5, 4.0}; //0 - area of cone on the screen for ground pick up, 1 - for shelf pick up
-    double[] cubeScreenAreas = {5.0, 4.0};
-
+    public static final double[] coneScreenAreas = {4.5, 4.0}; //0 - area of cone on the screen for ground pick up, 1 - for shelf pick up
+    public static final double[] cubeScreenAreas = {5.0, 4.0};
 
     //arm-related
     public static final double armMotorSpeed = 0.5;
