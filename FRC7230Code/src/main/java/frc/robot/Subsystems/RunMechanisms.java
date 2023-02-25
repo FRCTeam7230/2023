@@ -22,24 +22,24 @@ public class RunMechanisms {
   private boolean buttonPressed = false;
   private boolean stillRotating;
 
-  public void rotateArmToAngle(){
-    if (m_stick.getRawButton(robotConstants.SHELF_PICKUP_BUTTON)){
+  public void rotateArmToAngle(int mode){ // mode from 1 to 5, scoring: 1-high, 2-mid, 3-low; pick up: 4-ground, 5-shelf
+    if (mode == 5) { // Pick up from Shelf
       buttonPressed = true;
       encoderCounts = driveTrainConstants.shelfAngleEncoderCounts;
     }
-    if (m_stick.getRawButton(robotConstants.HIGH_SCORE_BUTTON)) {
+    else if (mode == 1) { // Scoring High
       buttonPressed = true;
       encoderCounts = driveTrainConstants.highAngleEncoderCounts;
     }
-    if (m_stick.getRawButton(robotConstants.MID_SCORE_BUTTON)) {
+    else if (mode == 2) { // Scoring Mid
       buttonPressed = true;
       encoderCounts = driveTrainConstants.midAngleEncoderCounts;
     }
-    if (m_stick.getRawButton(robotConstants.LOW_PICKUP_BUTTON)) {
+    else if (mode == 4) { // Pick up from Ground
       buttonPressed = true;
       encoderCounts = driveTrainConstants.lowPickupAngleEncoderCounts;
     }
-    if (m_stick.getRawButton(robotConstants.LOW_SCORE_BUTTON)){
+    else { // Scoring Low
       buttonPressed = true;
       encoderCounts = driveTrainConstants.lowScoreAngleEncoderCounts;
     }
@@ -77,12 +77,12 @@ public class RunMechanisms {
     Mechanisms.armPID.setReference(autonEncoderCounts, ControlType.kPosition);
   }
 
-   public void toggleArmExtension(boolean auto){
+   public  void toggleArmExtension(boolean auto){ // auto mean autonomous
     if (m_stick.getRawButtonPressed(robotConstants.ARM_EXTENSION_TOGGLE_BUTTON) || auto){
         armSolenoid.toggle();
     }
    } 
-   public void toggleClaw(boolean auto){
+   public void toggleClaw(boolean auto){ // auto mean autonomous
     if (m_stick.getRawButtonPressed(robotConstants.CLAW_TOGGLE_BUTTON) || auto){
         clawRightSolenoid.toggle();
         clawLeftSolenoid.toggle();

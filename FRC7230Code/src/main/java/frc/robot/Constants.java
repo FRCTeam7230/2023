@@ -112,6 +112,10 @@ public final class Constants {
     //vision
     public static final double smartAngleMarginVision = 3;
     public static final double smartSpeedVision = 0.55;
+          //chech values
+    double[] coneScreenAreas = {4.5, 4.0}; //0 - area of cone on the screen for ground pick up, 1 - for shelf pick up
+    double[] cubeScreenAreas = {5.0, 4.0};
+
 
     //arm-related
     public static final double armMotorSpeed = 0.5;
