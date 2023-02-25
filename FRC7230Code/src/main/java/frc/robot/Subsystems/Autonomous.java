@@ -14,6 +14,7 @@ public class Autonomous {
   private boolean surpassedMargin2 = false;
   private double gyroAngle;
   private double error;
+  private boolean coneLoaded;
   
   public Autonomous(){
     m_DriveSubsystem = Mechanisms.driveSubsystem;
@@ -43,7 +44,12 @@ public class Autonomous {
       // } 
     
     if(autoState == "first") {
-      m_RunMechanisms.autonRotateArmToAngle(driveTrainConstants.highAngleEncoderCounts);
+      if (coneLoaded){
+        m_RunMechanisms.autonRotateArmToAngle(driveTrainConstants.coneHighAngleEncoderCounts);
+      }
+      else{
+        m_RunMechanisms.autonRotateArmToAngle(driveTrainConstants.cubeHighAngleEncoderCounts);
+      }
       if (m_RunMechanisms.completedRotating){
         m_RunMechanisms.autonToggleArmExtension(); 
         autonomousTimer.reset();

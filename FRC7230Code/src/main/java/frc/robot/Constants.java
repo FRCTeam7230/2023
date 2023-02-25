@@ -118,12 +118,21 @@ public final class Constants {
 
     //arm-related
     public static final double armMotorSpeed = 0.5;
-    public static final int degreesToArmEncoderCounts = 8192/360;
-    public static final double highAngleEncoderCounts = 16.45*degreesToArmEncoderCounts; //extended
-    public static final double midAngleEncoderCounts = 4.66*degreesToArmEncoderCounts; //unextended
-    public static final double shelfAngleEncoderCounts = 172.8*degreesToArmEncoderCounts; //extended
-    public static final double lowScoreAngleEncoderCounts = -61.24*degreesToArmEncoderCounts; //unextended
-    public static final double lowPickupAngleEncoderCounts = 230*degreesToArmEncoderCounts; //extended
+    public static final int rotationsToDegrees = 360;
+    public static final double lowScoreAngleEncoderCounts = -67; //unextended
+    public static final double shelfAngleEncoderCounts = 168; //extended
+    public static final double lowPickupAngleEncoderCounts = 215.8; //extended
     public static final double armAngleMargin = 4;
+
+    //cone
+    public static final double coneHighAngleEncoderCounts = 20.28; //extended
+    public static final double coneMidAngleEncoderCounts = 10; //unextended
+
+    //cube
+    public static final double cubeHighAngleEncoderCounts = 12; //extended
+    public static final double cubeMidAngleEncoderCounts = -9.5; //unextended
+    
+    
+    
   }
 }

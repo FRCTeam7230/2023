@@ -70,10 +70,6 @@ public class Robot extends TimedRobot {
     driveTrain.drive(false);
     runMechanisms.rotateArmToAngle();
     runMechanisms.toggleClaw(false);
-    if (driveTrain.getArmMotorAngle() >= driveTrainConstants.midAngleEncoderCounts){
-      System.out.println("Past Angle");
-    }
-  
   }
   @Override
   public void disabledInit() {}

@@ -59,7 +59,7 @@ public class DriveTrain {
     private boolean manualLayout = true; // if true - 1st layout (manual), false - 2nd (smart)
     private boolean continueMoving;
 
-    private final Encoder armMotorEncoder = new Encoder(7, 8, 9);
+    
     private boolean driveModified;
     public DriveTrain(DriveSubsystem subsystem, RunMechanisms runMechanisms, Joystick stick){
         m_robotDrive = subsystem;
@@ -69,9 +69,7 @@ public class DriveTrain {
         surpassedMargin = false;
     }
 
-    public double getArmMotorAngle(){
-        return (armMotorEncoder.get()*driveTrainConstants.degreesToArmEncoderCounts);
-    }
+    
 
     public void drive(boolean tank){
         speedLimitChangeX = 0.0;
@@ -244,13 +242,7 @@ public class DriveTrain {
                     }
                 }
                 else {
-                    
-                    // after robot arrive, it should rotate, extend arm and exterd+retrackt claw
-                    driveModified = false;
-                    
-                    // if (armMotorEncoder.get() < driveTrainConstants.midAngleEncoderCounts) {
-                    // Mechanisms.armMotor.set(0.5);
-                    // }
+                    driveModified = false;       
                 }
             }
 
