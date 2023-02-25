@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import com.kauailabs.navx.frc.AHRS;
 import frc.robot.Subsystems.DriveSubsystem;
 import frc.robot.Subsystems.RunMechanisms;
-import com.revrobotics.SparkMaxPIDController;
+
 
 public class Mechanisms {
     public static CANSparkMax armMotor = new CANSparkMax(5, CANSparkMax.MotorType.kBrushless);

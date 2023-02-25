@@ -66,11 +66,6 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     driveTrain.drive(false);
-    // System.out.println(Mechanisms.driveSubsystem.getRightDistance());
-    // System.out.println(Mechanisms.driveSubsystem.getLeftDistance());
-    // System.out.println(driveTrain.getArmMotorAngle());
-    // System.out.println(Mechanisms.driveSubsystem.getError());
-    // runMechanisms.
     runMechanisms.rotateArmToAngle();
     runMechanisms.toggleArmExtension(false);
     runMechanisms.toggleClaw(false);

@@ -11,11 +11,17 @@ import frc.robot.Constants.driveTrainConstants;
 import frc.robot.Constants.robotConstants;
 import frc.robot.Limelight;
 import frc.robot.Mechanisms;
+import edu.wpi.first.wpilibj.Encoder;
+
+import com.revrobotics.CANSparkMax;
+
+
+
+import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class DriveTrain {
     
     private DriveSubsystem m_robotDrive;
-    private RunMechanisms m_RunMechanisms;
 
     private Joystick m_stick;
     private boolean surpassedMargin;
@@ -30,7 +36,6 @@ public class DriveTrain {
     private double rateOfSpeedXChange = 0.0;
     private boolean prevDrive = false, nowDrive = false;
     private double gyroAngle;
-    private double gyroError;
     private double error;
     private double errorToTarget;
     private boolean button1State;
@@ -60,10 +65,11 @@ public class DriveTrain {
 
     private final Encoder armMotorEncoder = new Encoder(7, 8, 9);
     private boolean driveModified;
-    public DriveTrain(RunMechanisms runMechanisms, DriveSubsystem subsystem, Joystick stick){
+    public DriveTrain(DriveSubsystem subsystem, Joystick stick){
         m_robotDrive = subsystem;
+        m_runMechanisms = runMechanisms;
         m_stick = stick;
-        m_RunMechanisms = runMechanisms;
+       
         surpassedMargin = false;
     }
 
@@ -196,6 +202,7 @@ public class DriveTrain {
         if (button5State && !prevButton5) {
 
             Limelight.coneTarget = !Limelight.coneTarget;
+            Limelight.moveToTarget = true;
             prevButton5 = true;
 
             // Changing targets' characteristics to cones' or cubes'
@@ -218,6 +225,7 @@ public class DriveTrain {
             prevButton5 = false;
         }
         
+        
         // Switching joystick layout from manual to smart
         button6State = m_stick.getRawButton(robotConstants.MANUAL_SMART_TOGGLE_BUTTON);
         if (button6State && !prevButton6) {
@@ -228,20 +236,10 @@ public class DriveTrain {
             prevButton6 = false;
         }
 
-        // Extending and Retracting the claw
-        button8State = m_stick.getRawButton(robotConstants.CLAW_TOGGLE_BUTTON);
-        if (button8State && !prevButton8) {
+        //extending and retracting claw
+        button8State = m_stick.getRawButton(robotConstants.MANUAL_SMART_TOGGLE_BUTTON);
+        if (button8State & !prevButton8) {
             prevButton8 = true;
-            m_RunMechanisms.toggleClaw(false);
-        }
-        else if (!button8State) {
-            prevButton8 = false;
-        }
-
-
-        // Manual control
-        if (manualLayout) {
-            m_RunMechanisms.rotateArmToAngle(); // check if buttons are pressed, then rotate
         }
         // Smart control
         else if (!manualLayout) {
@@ -304,9 +302,6 @@ public class DriveTrain {
         }
 
 
-
-
-
         button3State = m_stick.getRawButton(robotConstants.BALANCING_BUTTON);
         if (button3State){
             if (!prevButton3){
@@ -346,46 +341,46 @@ public class DriveTrain {
                 m_robotDrive.drive(0, 0);
             }
 
-        prevButton3 = button3State;
-        button3State = m_stick.getRawButton(robotConstants.SMART_ORIENT_CONE_MID_ANGLE);
-        if (button3State){
-            NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(7);
-            double angle = Limelight.getTargetAngleX();
-            if (armMotorEncoder.get() < driveTrainConstants.midAngleEncoderCounts) {
-                Mechanisms.armMotor.set(0.5);
-            }
-            if (angle>0 && angle>driveTrainConstants.smartAngleMarginVision){
-              driveModified = true;
-              m_robotDrive.drive(driveTrainConstants.smartSpeedVision/2, -driveTrainConstants.smartSpeedVision);
-            }
-            else if (angle<0 && angle<-driveTrainConstants.smartAngleMarginVision){
-              driveModified = true;
-              m_robotDrive.drive(-driveTrainConstants.smartSpeedVision, driveTrainConstants.smartSpeedVision/2);
-            }
-            else if (Math.abs(angle) < driveTrainConstants.smartAngleMarginVision){
-              Mechanisms.armSolenoid.set(true);
-            }
-        }
-        else{
-          driveModified = false;
-        }
+        // prevButton3 = button3State;
+        // button3State = m_stick.getRawButton(robotConstants.SMART_ORIENT_CONE_MID_ANGLE);
+        // if (button3State){
+        //     NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(7);
+        //     double angle = Limelight.getTargetAngleX();
+        //     if (armMotorEncoder.get() < driveTrainConstants.midAngleEncoderCounts) {
+        //         Mechanisms.armMotor.set(0.5);
+        //     }
+        //     if (angle>0 && angle>driveTrainConstants.smartAngleMarginVision){
+        //       driveModified = true;
+        //       m_robotDrive.drive(driveTrainConstants.smartSpeedVision/2, -driveTrainConstants.smartSpeedVision);
+        //     }
+        //     else if (angle<0 && angle<-driveTrainConstants.smartAngleMarginVision){
+        //       driveModified = true;
+        //       m_robotDrive.drive(-driveTrainConstants.smartSpeedVision, driveTrainConstants.smartSpeedVision/2);
+        //     }
+        //     else if (Math.abs(angle) < driveTrainConstants.smartAngleMarginVision){
+        //       Mechanisms.armSolenoid.set(true);
+        //     }
+        // }
+        // else{
+        //   driveModified = false;
+        // }
 
-        button4State = m_stick.getRawButton(robotConstants.SMART_ORIENT_CONE_HIGH_ANGLE);
-        if (button4State){
+        // button4State = m_stick.getRawButton(robotConstants.SMART_ORIENT_CONE_HIGH_ANGLE);
+        // if (button4State){
             
-            NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(7);
-            double angle = Limelight.getTargetAngleX();
-        if (armMotorEncoder.get() < driveTrainConstants.highAngleEncoderCounts) {
-                Mechanisms.armMotor.set(0.5);
-            }
-            else if (angle<0 && angle<-driveTrainConstants.smartAngleMarginVision){
-              driveModified = true;
-              m_robotDrive.drive(-driveTrainConstants.smartSpeedVision, driveTrainConstants.smartSpeedVision/2);
-            }
-            else if (Math.abs(angle) < driveTrainConstants.smartAngleMarginVision){
-              Mechanisms.armSolenoid.set(true);
-            }
-        }
+        //     NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(7);
+        //     double angle = Limelight.getTargetAngleX();
+        // if (armMotorEncoder.get() < driveTrainConstants.highAngleEncoderCounts) {
+        //         Mechanisms.armMotor.set(0.5);
+        //     }
+        //     else if (angle<0 && angle<-driveTrainConstants.smartAngleMarginVision){
+        //       driveModified = true;
+        //       m_robotDrive.drive(-driveTrainConstants.smartSpeedVision, driveTrainConstants.smartSpeedVision/2);
+        //     }
+        //     else if (Math.abs(angle) < driveTrainConstants.smartAngleMarginVision){
+        //       Mechanisms.armSolenoid.set(true);
+        //     }
+        // }
         button11State = m_stick.getRawButton(robotConstants.ENCODER_TEST_BUTTON);
         if (button11State){
             if (!prevButton11){
@@ -406,6 +401,9 @@ public class DriveTrain {
         } 
         prevButton11 = button11State;
     }
-    }
 }
+}
+
+
+
 
