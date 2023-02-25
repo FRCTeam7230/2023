@@ -23,7 +23,7 @@ public class DriveTrain {
     private boolean surpassedMargin;
     private boolean surpassedMargin2;
     private boolean swapState = false, prevState = false;
-    private int invertAxis = 1;
+    private int invertAxis = -1;
     private double speedY = 0.0;
     private double speedX = 0.0;
     private double speedLimitChangeX = 0.0;
