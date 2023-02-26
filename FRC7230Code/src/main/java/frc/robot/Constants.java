@@ -39,19 +39,15 @@ public final class Constants {
     //Drive Buttons:
     public static final int SPEED_BUTTON = BUTTON1;
     public static final int SLOW_BUTTON = BUTTON2;
-    public static final int BALANCING_BUTTON = BUTTON3;
-    public static final int REVERSE_BUTTON = BUTTON4;
-
-    public static final int GAME_PIECE_TOGGLE_BUTTON = BUTTON5;
-    public static final int MANUAL_SMART_TOGGLE_BUTTON = BUTTON6; //switching from smart and manual buttons
+    public static final int GAME_PIECE_TOGGLE_BUTTON = BUTTON3;
+    public static final int MANUAL_SMART_TOGGLE_BUTTON = BUTTON4; //switching from smart and manual buttons
+    public static final int BALANCING_BUTTON = BUTTON5;
+    public static final int REVERSE_BUTTON = BUTTON6;
 
     //Manual Buttons:
-    // arm rotation with extension
-    // press the 5 buttons - 5 modes - rotation, extension, rectraction
     public static final int CLAW_TOGGLE_BUTTON = BUTTON8;
-    // public static final int ARM_EXTENSION_TOGGLE_BUTTON = BUTTON2;
     public static final int SHELF_PICKUP_BUTTON = BUTTON12;
-    public static final int LOW_PICKUP_BUTTON = BUTTON11;
+    public static final int GROUND_PICKUP_BUTTON = BUTTON11;
     public static final int HIGH_SCORE_BUTTON = BUTTON7;
     public static final int MID_SCORE_BUTTON = BUTTON9;
     public static final int LOW_SCORE_BUTTON = BUTTON10;
@@ -131,8 +127,5 @@ public final class Constants {
     //cube
     public static final double cubeHighAngleEncoderCounts = 12; //extended
     public static final double cubeMidAngleEncoderCounts = -9.5; //unextended
-    
-    
-    
   }
 }

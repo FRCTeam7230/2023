@@ -1,47 +1,35 @@
 package frc.robot.Subsystems;
 
-
 import edu.wpi.first.wpilibj.Timer;
+import frc.robot.Limelight;
 import frc.robot.Mechanisms;
 import frc.robot.Constants.*;
 
 public class Autonomous {
-  private Timer autonomousTimer = new Timer();
-  private String autoState;
   private DriveSubsystem m_DriveSubsystem;
   private RunMechanisms m_RunMechanisms;
+  private Timer autonomousTimer = new Timer();
+
+  private String autoState;
   private boolean surpassedMargin = false;
   private boolean surpassedMargin2 = false;
   private double gyroAngle;
-  private double error;
-  private boolean coneLoaded;
+  private double gyroError;
+  private double angleToTarget;
   
   public Autonomous(){
     m_DriveSubsystem = Mechanisms.driveSubsystem;
     m_RunMechanisms = Mechanisms.runMechanisms;
   }
   public void init(){   
-    autonomousTimer.reset();
-    autonomousTimer.start();
     autoState = "first";
   }
-  public void execute(boolean midPosition){
+
+  public void execute(boolean midPosition, boolean coneLoaded, boolean autonConePickup){
       // First phase - Score Piece High
       // Second phase - Drive forward
       // Third phase - Grab Piece
       // Fourth phase - Drive back, if middle autobalance
-      
-      // if (autoState == "firstDrive") {
-      //   System.out.println(autonomousTimer.get());
-      //   if (autonomousTimer.get()<2.0){ 
-          
-      //   }
-      //   else {
-      //     autoState = "secondDrive";
-      //     autonomousTimer.reset();
-      //     autonomousTimer.start();
-      //   }
-      // } 
     
     if(autoState == "first") {
       if (coneLoaded){
@@ -50,88 +38,104 @@ public class Autonomous {
       else{
         m_RunMechanisms.autonRotateArmToAngle(driveTrainConstants.cubeHighAngleEncoderCounts);
       }
-      if (m_RunMechanisms.completedRotating){
-        m_RunMechanisms.autonToggleArmExtension(); 
+      if (m_RunMechanisms.autonCompletedRotating){
         autonomousTimer.reset();
         autonomousTimer.start();
-        if (autonomousTimer.get()<= 0.15){ 
+        if (autonomousTimer.get()<= 0.3){ 
+        m_RunMechanisms.autonToggleArmExtension(); 
+        }
+        if (autonomousTimer.get()<= 0.6 && autonomousTimer.get() > 0.3){ 
           m_RunMechanisms.toggleClaw(true);
         }
-        else if (autonomousTimer.get()<= 0.3){ 
+        else if (autonomousTimer.get()<= 0.9 && autonomousTimer.get() > 0.6){ 
             m_RunMechanisms.autonToggleArmExtension();
         }
         else{
           autoState = "second";
         }
       }
-      
-     
     }
+
     if(autoState == "second" && midPosition){
       m_DriveSubsystem.autonDriveSetDistance(-driveTrainConstants.metersToPieceFromMiddle);
       if (m_DriveSubsystem.completedDrive){
         autoState = "third";
       }
     }
+
     if (autoState == "second" && !midPosition){
       m_DriveSubsystem.autonDriveSetDistance(-driveTrainConstants.metersToPieceFromSide);
-      //may need to turn robot towards piece before starting pickup
       if (m_DriveSubsystem.completedDrive){
         autoState = "third";
       }
     }
+
     if(autoState == "third"){
+      Limelight.updateTarget();
+      angleToTarget = Limelight.getTargetAngleX(); 
+      if (autonConePickup){
+        Limelight.coneTarget = true;
+      }       
+      else{
+        Limelight.coneTarget = false;
+      }
       m_RunMechanisms.autonRotateArmToAngle(driveTrainConstants.lowPickupAngleEncoderCounts);
-      if (m_RunMechanisms.completedRotating){
-        m_RunMechanisms.autonToggleArmExtension(); 
-        autonomousTimer.reset();
-        autonomousTimer.start();
-        if (autonomousTimer.get()<= 0.3){ 
-          m_RunMechanisms.toggleClaw(true);
+      if (m_RunMechanisms.autonCompletedRotating){
+        if (angleToTarget>0 && angleToTarget>driveTrainConstants.smartAngleMarginVision){
+          m_DriveSubsystem.drive(driveTrainConstants.smartSpeedVision/2, -driveTrainConstants.smartSpeedVision);
         }
-        else if (autonomousTimer.get()<= 0.6 && autonomousTimer.get() > 3.0){ 
-            m_RunMechanisms.autonToggleArmExtension();
+        else if (angleToTarget<0 && angleToTarget<-driveTrainConstants.smartAngleMarginVision){
+          m_DriveSubsystem.drive(-driveTrainConstants.smartSpeedVision, driveTrainConstants.smartSpeedVision/2);
         }
         else{
-          autoState = "fourth";
+          autonomousTimer.reset();
+          autonomousTimer.start();
+          if (autonomousTimer.get()<= 0.3){ 
+            m_RunMechanisms.autonToggleArmExtension(); 
+          }
+          if (autonomousTimer.get()<= 0.6 && autonomousTimer.get() > 0.3){ 
+            m_RunMechanisms.toggleClaw(true);
+          }
+          else if (autonomousTimer.get()<= 0.9 && autonomousTimer.get() > 0.6){ 
+            m_RunMechanisms.autonToggleArmExtension();
+          }
+          else{
+            autoState = "fourth";
+          }
         }
-      }
+      } 
     }
+
     if(autoState == "fourth" && !midPosition){
       m_DriveSubsystem.autonDriveSetDistance(driveTrainConstants.metersToPieceFromSide);
     }
+
     if(autoState == "fourth" && midPosition){
       m_DriveSubsystem.autonDriveSetDistance(driveTrainConstants.metersFromPieceToBalance);
       if (m_DriveSubsystem.completedDrive){
-            if (Math.abs(error)>driveTrainConstants.smartAngleMargin && !surpassedMargin){
-                surpassedMargin = true;
-            }
-            if (Math.abs(error)>driveTrainConstants.smartAngleMargin2 && surpassedMargin && !surpassedMargin2){
-                surpassedMargin2 = true;
-            }
-            gyroAngle = Mechanisms.gyro.getPitch();
-            error = driveTrainConstants.targetAngle - gyroAngle;
-            System.out.println(error);
-            
-            if (error > driveTrainConstants.smartAngleMargin || (!surpassedMargin && !surpassedMargin2 && error>0.3)){
-                m_DriveSubsystem.drive(driveTrainConstants.smartSpeed, driveTrainConstants.smartSpeed);
-                System.out.println("forward");
-            }
-            else if (error>0.3 && error > driveTrainConstants.smartAngleMargin && surpassedMargin){
-                m_DriveSubsystem.drive(-driveTrainConstants.slowSmartSpeed, -driveTrainConstants.slowSmartSpeed);
-                System.out.println("forward");
-            }
-            else if (error < - driveTrainConstants.smartAngleMargin || (!surpassedMargin&& !surpassedMargin2  && error<-0.3)){
-                m_DriveSubsystem.drive(-driveTrainConstants.smartSpeed, -driveTrainConstants.smartSpeed);
-                System.out.println("backward");
-            }
-            else if (error<-0.3 && error <- driveTrainConstants.smartAngleMargin && surpassedMargin){
-                m_DriveSubsystem.drive(driveTrainConstants.slowSmartSpeed, driveTrainConstants.slowSmartSpeed);
-                System.out.println("forward");
-            }
-            else{
-                m_DriveSubsystem.drive(0, 0);
-            }
+        if (Math.abs(gyroError)>driveTrainConstants.smartAngleMargin && !surpassedMargin){
+          surpassedMargin = true;
+        } 
+        if (Math.abs(gyroError)>driveTrainConstants.smartAngleMargin2 && surpassedMargin && !surpassedMargin2){
+          surpassedMargin2 = true;
+        }
+        gyroAngle = Mechanisms.gyro.getPitch();
+        gyroError = driveTrainConstants.targetAngle - gyroAngle;
+        if (gyroError > driveTrainConstants.smartAngleMargin || (!surpassedMargin && !surpassedMargin2 && gyroError>0.3)){
+          m_DriveSubsystem.drive(driveTrainConstants.smartSpeed, driveTrainConstants.smartSpeed);
+        }
+        else if (gyroError>0.3 && gyroError > driveTrainConstants.smartAngleMargin && surpassedMargin){
+          m_DriveSubsystem.drive(-driveTrainConstants.slowSmartSpeed, -driveTrainConstants.slowSmartSpeed);
+        }
+        else if (gyroError < - driveTrainConstants.smartAngleMargin || (!surpassedMargin&& !surpassedMargin2  && gyroError<-0.3)){
+          m_DriveSubsystem.drive(-driveTrainConstants.smartSpeed, -driveTrainConstants.smartSpeed);
+        }
+        else if (gyroError<-0.3 && gyroError <- driveTrainConstants.smartAngleMargin && surpassedMargin){
+          m_DriveSubsystem.drive(driveTrainConstants.slowSmartSpeed, driveTrainConstants.slowSmartSpeed);
+        }
+        else{
+          m_DriveSubsystem.drive(0, 0);
+        }
       }
     }
   }
