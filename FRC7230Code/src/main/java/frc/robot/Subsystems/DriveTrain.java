@@ -4,10 +4,12 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.Constants.driveTrainConstants;
 import frc.robot.Constants.robotConstants;
+import frc.robot.Limelight;
 import frc.robot.Mechanisms;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxRelativeEncoder;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.Encoder;
 
 public class DriveTrain {
 
@@ -33,8 +35,7 @@ public class DriveTrain {
     private boolean button4State;
     private boolean button5State;
     private boolean button6State;
-    private final RelativeEncoder armMotorEncoder = Mechanisms.armMotor.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42);
-    
+    public final static Encoder armMotorEncoder = new Encoder(7, 8, 9);
     private boolean driveModified;
     public DriveTrain(DriveSubsystem subsystem, Joystick stick){
         m_robotDrive = subsystem;
@@ -198,7 +199,7 @@ public class DriveTrain {
         if (button3State){
             NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(7);
             double angle = Limelight.getTargetAngleX();
-            while (armMotorEncoder.getPosition() < driveTrainConstants.midAngleEncoderCounts) {
+            while (armMotorEncoder.get() < driveTrainConstants.midAngleEncoderCounts) {
                 Mechanisms.armMotor.set(0.5);
             }
             if (angle>0 && angle>driveTrainConstants.smartAngleMarginVision){
@@ -221,7 +222,7 @@ public class DriveTrain {
             
             NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(7);
             double angle = Limelight.getTargetAngleX();
-            while (armMotorEncoder.getPosition() < driveTrainConstants.highAngleEncoderCounts) {
+            while (armMotorEncoder.get() < driveTrainConstants.highAngleEncoderCounts) {
                 Mechanisms.armMotor.set(0.5);
             }
             if (angle>0 && angle>driveTrainConstants.smartAngleMarginVision){

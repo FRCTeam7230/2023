@@ -29,14 +29,42 @@ public class Autonomous {
   public void execute(boolean midPosition){
 
     
+      // First phase - Score Piece High
+      // Second phase - Drive forward
+      // Third phase - Grab Piece
+      // Fourth phase - Drive back, if middle autobalance
+      
+      if (autoState == "firstDrive") {
+      // System.out.println(autonomousTimer.get());
+      //   if (autonomousTimer.get()<2.0){ 
+          
+      //   }
+      //   else {
+      //     autoState = "secondDrive";
+      //     autonomousTimer.reset();
+      //     autonomousTimer.start();
+      //   }
+      // } 
     
     if(autoState == "first") {
       // First phase - 
       // Second phase - 
       // Third phase - 
       // Fourth phase - 
+      RunMechanisms.rotateArmToAngle(0);
+      //Mechanisms.armMotor.set(1.0);
+      if(DriveTrain.armMotorEncoder.get() == driveTrainConstants.highAngleEncoderCounts){
+        Mechanisms.armMotor.set(0);
+      }
+      RunMechanisms.toggleArmExtension(0);
+      RunMechanisms.toggleClaw();
+      RunMechanisms.toggleArmExtension(0);
+      Mechanisms.armSolenoid.set(true);
+      Mechanisms.clawLeftSolenoid.set(true);
+      Mechanisms.clawRightSolenoid.set(true);
+      Mechanisms.armSolenoid.set(false);
     }
       
     
   }
-}
+}}

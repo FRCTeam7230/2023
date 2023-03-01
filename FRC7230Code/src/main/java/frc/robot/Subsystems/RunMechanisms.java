@@ -20,14 +20,27 @@ public class RunMechanisms {
     public double kD = 0;
     PIDController pid = new PIDController(kP,kI,kD);
     public static CANSparkMax PIDTest = new CANSparkMax(9, CANSparkMax.MotorType.kBrushless);
-    private final RelativeEncoder PIDEncoder = PIDTest.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42);
+    public final static RelativeEncoder PIDEncoder = PIDTest.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42);
     
     public void PID(int button, int setPoint) {
       // Calculates the output of the PID algorithm based on the sensor reading
       // and sends it to a motor
       PIDTest.set(pid.calculate(PIDEncoder.getPosition(), setPoint));
     }
+    public static void toggleClaw(){
+      //insert claw code
+    }
+    
 
+   
+   public static void toggleArmExtension(int button){
+    
+     
+   } 
+   public static void rotateArmToAngle(int button){
+    
+    
+   }
 
    
    public void extendArm(int button){
