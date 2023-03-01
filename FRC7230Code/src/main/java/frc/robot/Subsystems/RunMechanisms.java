@@ -13,6 +13,7 @@ import frc.robot.Constants.robotConstants;
 import frc.robot.Mechanisms;
 
 public class RunMechanisms {
+    public boolean rotateComplete;
     private CANSparkMax armMotor = Mechanisms.armMotor; 
     private Solenoid armSolenoid = Mechanisms.armSolenoid, clawRightSolenoid = Mechanisms.clawRightSolenoid, clawLeftSolenoid = Mechanisms.clawLeftSolenoid;
     private Joystick m_stick = Mechanisms.mechanismsJoystick;

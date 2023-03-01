@@ -19,7 +19,8 @@ import frc.robot.Constants.driveTrainConstants;
 import frc.robot.Constants.robotConstants;
 
 public class DriveSubsystem extends SubsystemBase {
-
+  
+  public boolean completedDrive;
   public double initialLeft, initialRight;
   public CANSparkMax l_motor1 = new CANSparkMax(robotConstants.L1MOTOR_ID, CANSparkMax.MotorType.kBrushless);
   public CANSparkMax r_motor1 = new CANSparkMax(robotConstants.R1MOTOR_ID, CANSparkMax.MotorType.kBrushless);
