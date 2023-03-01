@@ -10,9 +10,10 @@ import edu.wpi.first.wpilibj.Joystick;
 import com.kauailabs.navx.frc.AHRS;
 import frc.robot.Subsystems.DriveSubsystem;
 import frc.robot.Subsystems.RunMechanisms;
-import com.revrobotics.SparkMaxPIDController;
 
 public class Mechanisms {
+    public static Joystick driveJoystick = new Joystick(0);
+    public static Joystick mechanismsJoystick = new Joystick(1);
     public static CANSparkMax armMotor = new CANSparkMax(5, CANSparkMax.MotorType.kBrushless);
     public static SparkMaxPIDController armPID = armMotor.getPIDController();
     public static Compressor pcmCompressor = new Compressor(0, PneumaticsModuleType.CTREPCM);
@@ -20,8 +21,7 @@ public class Mechanisms {
     public static Solenoid clawLeftSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 2);
     public static Solenoid clawRightSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 3);
     public static DriveSubsystem driveSubsystem = new DriveSubsystem();
-    public static Joystick driveJoystick = new Joystick(0);
-    public static RunMechanisms runMechanisms = new RunMechanisms();
-    public static Joystick mechanismsJoystick = new Joystick(1);
+    // public static Joystick mechanismsJoystick = driveJoystick;
     public static AHRS gyro = new AHRS();
+    public static RunMechanisms runMechanisms = new RunMechanisms();
 }

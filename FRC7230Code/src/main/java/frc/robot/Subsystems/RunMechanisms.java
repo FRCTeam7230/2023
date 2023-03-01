@@ -13,10 +13,10 @@ import edu.wpi.first.math.controller.*;
 import edu.wpi.first.wpilibj.Encoder;
 
 public class RunMechanisms {
-    private CANSparkMax armMotor = Mechanisms.armMotor; 
-    private Solenoid armSolenoid = Mechanisms.armSolenoid, clawRightSolenoid = Mechanisms.clawRightSolenoid, clawLeftSolenoid = Mechanisms.clawLeftSolenoid;
-    private Joystick m_stick = Mechanisms.mechanismsJoystick;
-    private final Encoder armMotorEncoder = new Encoder(7, 8, 9);
+  private CANSparkMax armMotor = Mechanisms.armMotor; 
+  private Solenoid armSolenoid = Mechanisms.armSolenoid, clawRightSolenoid = Mechanisms.clawRightSolenoid, clawLeftSolenoid = Mechanisms.clawLeftSolenoid;
+  private Joystick m_stick = Mechanisms.mechanismsJoystick;
+  // private final Encoder armMotorEncoder = new Encoder(7, 8, 9);
 
   private double encoderCounts;
   private boolean buttonPressed = false;

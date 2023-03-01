@@ -27,19 +27,21 @@ public class DriveSubsystem extends SubsystemBase {
 
   private final MotorControllerGroup m_leftMotors = new MotorControllerGroup(l_motor1, l_motor2);
   private final MotorControllerGroup m_rightMotors = new MotorControllerGroup(r_motor1, r_motor2);
-  public final SparkMaxPIDController lController = l_motor2.getPIDController();
+  public final SparkMaxPIDController lController = l_motor1.getPIDController();
   public final SparkMaxPIDController rController = r_motor1.getPIDController();
+  public final SparkMaxPIDController lController2 = l_motor2.getPIDController();
+  public final SparkMaxPIDController rController2 = r_motor2.getPIDController();
   
   // The robot's drive
   private final DifferentialDrive m_drive = new DifferentialDrive(m_leftMotors, m_rightMotors);
 
   // The left-side drive encoder
-  public final RelativeEncoder m_leftEncoder = 
-  l_motor2.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42);
+  public final RelativeEncoder m_leftEncoder = l_motor1.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42);
+  public final RelativeEncoder m_leftEncoder2 = l_motor2.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42);
 
   // The right-side drive encoder
-  public final RelativeEncoder m_rightEncoder = 
-  r_motor1.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42);
+  public final RelativeEncoder m_rightEncoder = r_motor1.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42);
+  public final RelativeEncoder m_rightEncoder2 = r_motor2.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42);
 
   /**
    * Creates a new DriveSubsystem.
@@ -62,6 +64,14 @@ public class DriveSubsystem extends SubsystemBase {
     rController.setI(driveTrainConstants.kI);
     rController.setD(driveTrainConstants.kD);
     rController.setFF(driveTrainConstants.kFF);
+    lController2.setP(driveTrainConstants.kP);
+    lController2.setI(driveTrainConstants.kI);
+    lController2.setD(driveTrainConstants.kD);
+    lController2.setFF(driveTrainConstants.kFF);
+    rController2.setP(driveTrainConstants.kP);
+    rController2.setI(driveTrainConstants.kI);
+    rController2.setD(driveTrainConstants.kD);
+    rController2.setFF(driveTrainConstants.kFF);
   }
 
 
@@ -106,7 +116,7 @@ public class DriveSubsystem extends SubsystemBase {
    * @return the average of the two encoder readings
    */
   public double getAverageEncoderDistance() {
-    return (m_leftEncoder.getPosition()-initialLeft + m_rightEncoder.getPosition()-initialRight) / 2.0;
+    return (Math.abs(m_leftEncoder.getPosition()-initialLeft) + Math.abs(m_rightEncoder.getPosition()-initialRight)) / 2.0;
   }
 
   public double getLeftDistance(){
@@ -115,6 +125,7 @@ public class DriveSubsystem extends SubsystemBase {
   public double getRightDistance(){
     return m_rightEncoder.getPosition()-initialRight;
   }
+  
   /**
    * Gets the left drive encoder.
    *
