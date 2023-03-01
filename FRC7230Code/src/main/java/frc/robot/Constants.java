@@ -37,27 +37,27 @@ public final class Constants {
     public static final int BUTTON12 = 12;
 
     //Drive Buttons:
-    public static final int BALANCING_BUTTON = BUTTON3;
-    public static final int REVERSE_BUTTON = BUTTON4;
-    public static final int SPEED_BUTTON = BUTTON5;
-    public static final int SLOW_BUTTON = BUTTON6;
-    
-    //Smart Buttons:
-    public static final int GAME_PIECE_TOGGLE_BUTTON = BUTTON1;
-    public static final int MANUAL_SMART_TOGGLE_BUTTON = BUTTON2;
-    public static final int ORIENT_SHELF_PICKUP_BUTTON = BUTTON3;
-    public static final int ORIENT_GROUND_PICKUP_BUTTON = BUTTON4;
-    public static final int ORIENT_HIGH_TARGET_BUTTON = BUTTON5;
-    public static final int ORIENT_MID_TARGET_BUTTON = BUTTON6;
+    public static final int SPEED_BUTTON = BUTTON1;
+    public static final int SLOW_BUTTON = BUTTON2;
+    public static final int GAME_PIECE_TOGGLE_BUTTON = BUTTON3;
+    public static final int MANUAL_SMART_TOGGLE_BUTTON = BUTTON4; //switching from smart and manual buttons
+    public static final int BALANCING_BUTTON = BUTTON5;
+    public static final int REVERSE_BUTTON = BUTTON6;
 
     //Manual Buttons:
-    public static final int CLAW_TOGGLE_BUTTON = BUTTON1;
-    public static final int ARM_EXTENSION_TOGGLE_BUTTON = BUTTON2;
-    public static final int SHELF_PICKUP_BUTTON = BUTTON3;
-    public static final int LOW_PICKUP_BUTTON = BUTTON4;
-    public static final int HIGH_SCORE_BUTTON = BUTTON5;
-    public static final int MID_SCORE_BUTTON = BUTTON6;
-    public static final int LOW_SCORE_BUTTON = BUTTON7;
+    public static final int CLAW_TOGGLE_BUTTON = BUTTON8;
+    public static final int SHELF_PICKUP_BUTTON = BUTTON12;
+    public static final int GROUND_PICKUP_BUTTON = BUTTON11;
+    public static final int HIGH_SCORE_BUTTON = BUTTON7;
+    public static final int MID_SCORE_BUTTON = BUTTON9;
+    public static final int LOW_SCORE_BUTTON = BUTTON10;
+
+    //Smart Buttons:
+    public static final int ORIENT_SHELF_PICKUP_BUTTON = BUTTON12;
+    public static final int ORIENT_GROUND_PICKUP_BUTTON = BUTTON11;
+    public static final int ORIENT_HIGH_TARGET_BUTTON = BUTTON7;
+    public static final int ORIENT_MID_TARGET_BUTTON = BUTTON9;
+
 
     //Test Buttons:
     public static final int PID_TEST_BUTTON = BUTTON10;
@@ -108,15 +108,24 @@ public final class Constants {
     //vision
     public static final double smartAngleMarginVision = 3;
     public static final double smartSpeedVision = 0.55;
+    public static final double[] coneScreenAreas = {4.5, 4.0}; //0 - area of cone on the screen for ground pick up, 1 - for shelf pick up
+    public static final double[] cubeScreenAreas = {5.0, 4.0};
+    public static final double[] tapeScreenAreas = {0.12, 0.2}; //0 - area of tape on the screen for high target, 1 - for middle target
 
     //arm-related
     public static final double armMotorSpeed = 0.5;
-    public static final int degreesToArmEncoderCounts = 8192/360;
-    public static final double highAngleEncoderCounts = 16.45*degreesToArmEncoderCounts; //extended
-    public static final double midAngleEncoderCounts = 4.66*degreesToArmEncoderCounts; //unextended
-    public static final double shelfAngleEncoderCounts = 172.8*degreesToArmEncoderCounts; //extended
-    public static final double lowScoreAngleEncoderCounts = -61.24*degreesToArmEncoderCounts; //unextended
-    public static final double lowPickupAngleEncoderCounts = 230*degreesToArmEncoderCounts; //extended
+    public static final int rotationsToDegrees = 360;
+    public static final double lowScoreAngleEncoderCounts = -67; //unextended
+    public static final double shelfAngleEncoderCounts = 168; //extended
+    public static final double lowPickupAngleEncoderCounts = 215.8; //extended
     public static final double armAngleMargin = 4;
+
+    //cone
+    public static final double coneHighAngleEncoderCounts = 20.28; //extended
+    public static final double coneMidAngleEncoderCounts = 10; //unextended
+
+    //cube
+    public static final double cubeHighAngleEncoderCounts = 12; //extended
+    public static final double cubeMidAngleEncoderCounts = -9.5; //unextended
   }
 }

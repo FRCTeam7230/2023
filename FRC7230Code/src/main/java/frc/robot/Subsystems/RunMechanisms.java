@@ -1,52 +1,66 @@
 package frc.robot.Subsystems;
 
-import edu.wpi.first.wpilibj.Joystick;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMax.ControlType;
-
-import edu.wpi.first.wpilibj.Solenoid;
-
 import frc.robot.Mechanisms;
 import frc.robot.Constants.driveTrainConstants;
 import frc.robot.Constants.robotConstants;
-import edu.wpi.first.math.controller.*;
-import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Solenoid;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.ControlType;
+import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
+import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.SparkMaxAbsoluteEncoder;
 
 public class RunMechanisms {
     public boolean rotateComplete;
     private CANSparkMax armMotor = Mechanisms.armMotor; 
     private Solenoid armSolenoid = Mechanisms.armSolenoid, clawRightSolenoid = Mechanisms.clawRightSolenoid, clawLeftSolenoid = Mechanisms.clawLeftSolenoid;
     private Joystick m_stick = Mechanisms.mechanismsJoystick;
-    private final Encoder armMotorEncoder = new Encoder(7, 8, 9);
-
+    private final SparkMaxAbsoluteEncoder armMotorEncoder = armMotor.getAbsoluteEncoder(Type.kDutyCycle);
+    public final SparkMaxPIDController armController = armMotor.getPIDController();
   private double encoderCounts;
-  private boolean buttonPressed = false;
+  public boolean buttonPressed = false;
+  private boolean prevButton = false;
+  private boolean needExtend;
+  public boolean autonCompletedRotating = false;
   
+  public boolean completedRotating = false;
 
 
   public void rotateArmToAngle(){
+    armMotorEncoder.setPositionConversionFactor(driveTrainConstants.rotationsToDegrees);
+    armController.setP(driveTrainConstants.kP);
+    armController.setI(driveTrainConstants.kI);
+    armController.setD(driveTrainConstants.kD);
+    armController.setFF(driveTrainConstants.kFF);
     if (m_stick.getRawButton(robotConstants.SHELF_PICKUP_BUTTON)){
       buttonPressed = true;
+      needExtend = true;
       encoderCounts = driveTrainConstants.shelfAngleEncoderCounts;
     }
     if (m_stick.getRawButton(robotConstants.HIGH_SCORE_BUTTON)) {
       buttonPressed = true;
-      encoderCounts = driveTrainConstants.highAngleEncoderCounts;
+      needExtend = true;
+      encoderCounts = driveTrainConstants.coneHighAngleEncoderCounts;
     }
     if (m_stick.getRawButton(robotConstants.MID_SCORE_BUTTON)) {
       buttonPressed = true;
-      encoderCounts = driveTrainConstants.midAngleEncoderCounts;
+      needExtend = false;
+      encoderCounts = driveTrainConstants.coneMidAngleEncoderCounts;
     }
-    if (m_stick.getRawButton(robotConstants.LOW_PICKUP_BUTTON)) {
+    if (m_stick.getRawButton(robotConstants.GROUND_PICKUP_BUTTON)) {
       buttonPressed = true;
+      needExtend = true;
       encoderCounts = driveTrainConstants.lowPickupAngleEncoderCounts;
     }
     if (m_stick.getRawButton(robotConstants.LOW_SCORE_BUTTON)){
       buttonPressed = true;
+      needExtend = false;
       encoderCounts = driveTrainConstants.lowScoreAngleEncoderCounts;
     }
 
     if (buttonPressed){
+      
       // if (armMotorEncoder.get() < encoderCounts - driveTrainConstants.armAngleMargin) {
       //   armMotor.set(driveTrainConstants.armMotorSpeed);
       // }
@@ -56,27 +70,24 @@ public class RunMechanisms {
       // else {
       //   armMotor.set(0);
       //   buttonPressed = false;
-      //   //just in case
       // }
       Mechanisms.armPID.setReference(encoderCounts, ControlType.kPosition);
+      if (encoderCounts == armMotorEncoder.getPosition()){
+        completedRotating = true;
+        if (!prevButton && needExtend){
+          armSolenoid.toggle();
+        }
+      }
+      else{
+        completedRotating = false;
+        armSolenoid.set(false);
+      }
     }   
+    prevButton = buttonPressed;
   }
+
   public void autonRotateArmToAngle(double autonEncoderCounts){
-    rotateComplete = false;
-    while (rotateComplete) {
-      if (armMotorEncoder.get() < autonEncoderCounts) {
-        armMotor.set(0.5);
-      }
-      else if (armMotorEncoder.get() > autonEncoderCounts) {
-        armMotor.set(-0.5);
-      }
-      else {
-        armMotor.set(0);
-        rotateComplete = true;
-      }
-    }
-    // stillRotating = true;
-    // while (stillRotating){
+    autonCompletedRotating = false;
     //   if (armMotorEncoder.get() < autonEncoderCounts - driveTrainConstants.armAngleMargin) {
     //     armMotor.set(driveTrainConstants.armMotorSpeed);
     //   }
@@ -85,17 +96,19 @@ public class RunMechanisms {
     //   }
     //   else{
     //     armMotor.set(0);
-    //     stillRotating = false;
+    //     completedRotating = true;
     //   }
     // }
     
     Mechanisms.armPID.setReference(autonEncoderCounts, ControlType.kPosition);
+    if (encoderCounts == armMotorEncoder.getPosition()){
+      autonCompletedRotating = true;
+      
+    }
   }
 
-   public void toggleArmExtension(boolean auto){
-    if (m_stick.getRawButtonPressed(robotConstants.ARM_EXTENSION_TOGGLE_BUTTON) || auto){
+   public void autonToggleArmExtension(){
         armSolenoid.toggle();
-    }
    } 
    public void toggleClaw(boolean auto){
     if (m_stick.getRawButtonPressed(robotConstants.CLAW_TOGGLE_BUTTON) || auto){

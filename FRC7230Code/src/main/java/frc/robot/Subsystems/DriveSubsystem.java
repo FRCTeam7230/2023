@@ -7,6 +7,8 @@
 
 package frc.robot.Subsystems;
 
+import frc.robot.Constants.robotConstants;
+import frc.robot.Constants.driveTrainConstants;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax;
@@ -14,8 +16,7 @@ import com.revrobotics.SparkMaxRelativeEncoder;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.robotConstants;
-import frc.robot.Constants.driveTrainConstants;
+
 public class DriveSubsystem extends SubsystemBase {
   
   public boolean completedDrive;
@@ -54,14 +55,14 @@ public class DriveSubsystem extends SubsystemBase {
     
     m_drive.setSafetyEnabled(false);
 
-    lController.setP(driveTrainConstants.kP);
-    lController.setI(driveTrainConstants.kI);
-    lController.setD(driveTrainConstants.kD);
-    lController.setFF(driveTrainConstants.kFF);
-    rController.setP(driveTrainConstants.kP);
-    rController.setI(driveTrainConstants.kI);
-    rController.setD(driveTrainConstants.kD);
-    rController.setFF(driveTrainConstants.kFF);
+    // lController.setP(driveTrainConstants.kP);
+    // lController.setI(driveTrainConstants.kI);
+    // lController.setD(driveTrainConstants.kD);
+    // lController.setFF(driveTrainConstants.kFF);
+    // rController.setP(driveTrainConstants.kP);
+    // rController.setI(driveTrainConstants.kI);
+    // rController.setD(driveTrainConstants.kD);
+    // rController.setFF(driveTrainConstants.kFF);
   }
 
 
@@ -159,11 +160,5 @@ public class DriveSubsystem extends SubsystemBase {
       drive(0,0);
       completedDrive = true;
     }
-  // System.out.println("LEFT: " + m_robotDrive.getLeftDistance());
-  // System.out.println("RIGHT: " + m_robotDrive.getRightDistance());
-  // m_robotDrive.lController.setReference(m_robotDrive.m_leftEncoder.getPosition()+ driveTrainConstants.midScoreMeters * driveTrainConstants.kEncoderMetersPerMotorRev, CANSparkMax.ControlType.kPosition);
-  // m_robotDrive.rController.setReference(m_robotDrive.m_rightEncoder.getPosition()+driveTrainConstants.midScoreMeters * driveTrainConstants.kEncoderMetersPerMotorRev, CANSparkMax.ControlType.kPosition);
-}   
-  
-
+  } 
 }
