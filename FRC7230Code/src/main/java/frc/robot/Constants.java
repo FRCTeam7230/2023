@@ -127,5 +127,7 @@ public final class Constants {
     //cube
     public static final double cubeHighAngleEncoderCounts = 12; //extended
     public static final double cubeMidAngleEncoderCounts = -9.5; //unextended
+    
+    public static final double cubeShelfRetreatEncoderCounts = 0.25;
   }
 }

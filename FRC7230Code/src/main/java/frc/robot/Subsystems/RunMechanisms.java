@@ -1,15 +1,16 @@
 package frc.robot.Subsystems;
 
-import frc.robot.Mechanisms;
-import frc.robot.Constants.driveTrainConstants;
-import frc.robot.Constants.robotConstants;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Solenoid;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.ControlType;
+import com.revrobotics.SparkMaxAbsoluteEncoder;
 import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
 import com.revrobotics.SparkMaxPIDController;
-import com.revrobotics.SparkMaxAbsoluteEncoder;
+
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Solenoid;
+import frc.robot.Constants.driveTrainConstants;
+import frc.robot.Constants.robotConstants;
+import frc.robot.Mechanisms;
 
 public class RunMechanisms {
     private CANSparkMax armMotor = Mechanisms.armMotor; 
@@ -17,6 +18,8 @@ public class RunMechanisms {
     private Joystick m_stick = Mechanisms.mechanismsJoystick;
     private final SparkMaxAbsoluteEncoder armMotorEncoder = armMotor.getAbsoluteEncoder(Type.kDutyCycle);
     public final SparkMaxPIDController armController = armMotor.getPIDController();
+    private static DriveSubsystem m_DriveSubsystem = Mechanisms.driveSubsystem;
+    
   private double encoderCounts;
   public boolean buttonPressed = false;
   private boolean prevButton = false;
@@ -24,7 +27,6 @@ public class RunMechanisms {
   public boolean autonCompletedRotating = false;
   
   public boolean completedRotating = false;
-
 
   public void rotateArmToAngle(){
     armMotorEncoder.setPositionConversionFactor(driveTrainConstants.rotationsToDegrees);

@@ -7,19 +7,19 @@
 
 package frc.robot.Subsystems;
 
-import frc.robot.Constants.robotConstants;
-import frc.robot.Constants.driveTrainConstants;
+import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
-import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkMaxRelativeEncoder;
-import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.driveTrainConstants;
+import frc.robot.Constants.robotConstants;
 
 public class DriveSubsystem extends SubsystemBase {
 
-  public boolean completedDrive;
   public double initialLeft, initialRight;
   public CANSparkMax l_motor1 = new CANSparkMax(robotConstants.L1MOTOR_ID, CANSparkMax.MotorType.kBrushless);
   public CANSparkMax r_motor1 = new CANSparkMax(robotConstants.R1MOTOR_ID, CANSparkMax.MotorType.kBrushless);
@@ -30,6 +30,8 @@ public class DriveSubsystem extends SubsystemBase {
   private final MotorControllerGroup m_rightMotors = new MotorControllerGroup(r_motor1, r_motor2);
   public final SparkMaxPIDController lController = l_motor2.getPIDController();
   public final SparkMaxPIDController rController = r_motor1.getPIDController();
+
+  public static boolean prevAuto = false;
   
   // The robot's drive
   private final DifferentialDrive m_drive = new DifferentialDrive(m_leftMotors, m_rightMotors);
@@ -147,18 +149,22 @@ public class DriveSubsystem extends SubsystemBase {
     m_drive.setMaxOutput(maxOutput);
   }
 
-  public void autonDriveSetDistance(double distance){
-    resetEncoders();
-    completedDrive = false;
+  public void autonDriveSetDistance(double distance){ 
+    if  (!prevAuto) {
+      resetEncoders();
+      Autonomous.completedDrive = false;
+    }
+      // distance may be positive and negative, so we need to take the absolute values 
     if (getAverageEncoderDistance() < distance - driveTrainConstants.driveMargin) {
-      drive(-driveTrainConstants.slowSmartSpeed, -driveTrainConstants.slowSmartSpeed);
-    } 
-    else if (getAverageEncoderDistance() > distance + driveTrainConstants.driveMargin) {
       drive(driveTrainConstants.slowSmartSpeed, driveTrainConstants.slowSmartSpeed);
+    }
+    else if (getAverageEncoderDistance() > distance + driveTrainConstants.driveMargin) {
+      drive(-driveTrainConstants.slowSmartSpeed, -driveTrainConstants.slowSmartSpeed);
     }
     else {
       drive(0,0);
-      completedDrive = true;
+      prevAuto = true;
+      Autonomous.completedDrive = true;
     }
   } 
 }

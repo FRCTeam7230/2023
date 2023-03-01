@@ -1,9 +1,9 @@
 package frc.robot.Subsystems;
 
 import edu.wpi.first.wpilibj.Timer;
+import frc.robot.Constants.driveTrainConstants;
 import frc.robot.Limelight;
 import frc.robot.Mechanisms;
-import frc.robot.Constants.*;
 
 public class Autonomous {
   private DriveSubsystem m_DriveSubsystem;
@@ -16,6 +16,9 @@ public class Autonomous {
   private double gyroAngle;
   private double gyroError;
   private double angleToTarget;
+  public static boolean completedDrive = false;
+  private boolean driveLeftMotor, driveRightMotor;
+
   
   public Autonomous(){
     m_DriveSubsystem = Mechanisms.driveSubsystem;
@@ -29,7 +32,8 @@ public class Autonomous {
       // First phase - Score Piece High
       // Second phase - Drive forward
       // Third phase - Grab Piece
-      // Fourth phase - Drive back, if middle autobalance
+      // Fourth phase - level off robot
+      // Fifth phase - Drive back, if middle autobalance
     
     if(autoState == "first") {
       if (coneLoaded){
@@ -57,28 +61,23 @@ public class Autonomous {
     }
 
     if(autoState == "second" && midPosition){
-      m_DriveSubsystem.autonDriveSetDistance(-driveTrainConstants.metersToPieceFromMiddle);
-      if (m_DriveSubsystem.completedDrive){
+      m_DriveSubsystem.autonDriveSetDistance(driveTrainConstants.metersToPieceFromMiddle);
+      if (completedDrive){
         autoState = "third";
       }
     }
 
     if (autoState == "second" && !midPosition){
-      m_DriveSubsystem.autonDriveSetDistance(-driveTrainConstants.metersToPieceFromSide);
-      if (m_DriveSubsystem.completedDrive){
+      m_DriveSubsystem.autonDriveSetDistance(driveTrainConstants.metersToPieceFromSide);
+      if (completedDrive){
         autoState = "third";
+        m_DriveSubsystem.resetEncoders();
       }
     }
-
     if(autoState == "third"){
-      Limelight.updateTarget();
+      
       angleToTarget = Limelight.getTargetAngleX(); 
-      if (autonConePickup){
-        Limelight.coneTarget = true;
-      }       
-      else{
-        Limelight.coneTarget = false;
-      }
+      
       m_RunMechanisms.autonRotateArmToAngle(driveTrainConstants.lowPickupAngleEncoderCounts);
       if (m_RunMechanisms.autonCompletedRotating){
         if (angleToTarget>0 && angleToTarget>driveTrainConstants.smartAngleMarginVision){
@@ -106,35 +105,51 @@ public class Autonomous {
       } 
     }
 
-    if(autoState == "fourth" && !midPosition){
-      m_DriveSubsystem.autonDriveSetDistance(driveTrainConstants.metersToPieceFromSide);
+    if(autoState == "fourth") {
+
+      if (m_DriveSubsystem.getLeftDistance() < driveTrainConstants.driveMargin) {
+        m_DriveSubsystem.drive(driveTrainConstants.slowSmartSpeed, 0);
+      }
+      else if (m_DriveSubsystem.getRightDistance() > - driveTrainConstants.driveMargin) {
+        m_DriveSubsystem.drive(0, -driveTrainConstants.slowSmartSpeed);
+      }
+      else {
+        m_DriveSubsystem.drive(0, 0);
+        autoState = "fifth";
+        DriveSubsystem.prevAuto = false;
+      }
     }
 
-    if(autoState == "fourth" && midPosition){
-      m_DriveSubsystem.autonDriveSetDistance(driveTrainConstants.metersFromPieceToBalance);
-      if (m_DriveSubsystem.completedDrive){
-        if (Math.abs(gyroError)>driveTrainConstants.smartAngleMargin && !surpassedMargin){
-          surpassedMargin = true;
-        } 
-        if (Math.abs(gyroError)>driveTrainConstants.smartAngleMargin2 && surpassedMargin && !surpassedMargin2){
-          surpassedMargin2 = true;
-        }
-        gyroAngle = Mechanisms.gyro.getPitch();
-        gyroError = driveTrainConstants.targetAngle - gyroAngle;
-        if (gyroError > driveTrainConstants.smartAngleMargin || (!surpassedMargin && !surpassedMargin2 && gyroError>0.3)){
-          m_DriveSubsystem.drive(driveTrainConstants.smartSpeed, driveTrainConstants.smartSpeed);
-        }
-        else if (gyroError>0.3 && gyroError > driveTrainConstants.smartAngleMargin && surpassedMargin){
-          m_DriveSubsystem.drive(-driveTrainConstants.slowSmartSpeed, -driveTrainConstants.slowSmartSpeed);
-        }
-        else if (gyroError < - driveTrainConstants.smartAngleMargin || (!surpassedMargin&& !surpassedMargin2  && gyroError<-0.3)){
-          m_DriveSubsystem.drive(-driveTrainConstants.smartSpeed, -driveTrainConstants.smartSpeed);
-        }
-        else if (gyroError<-0.3 && gyroError <- driveTrainConstants.smartAngleMargin && surpassedMargin){
-          m_DriveSubsystem.drive(driveTrainConstants.slowSmartSpeed, driveTrainConstants.slowSmartSpeed);
-        }
-        else{
-          m_DriveSubsystem.drive(0, 0);
+    if(autoState == "fifth") {
+
+      DriveTrain.invertAxis = 1;
+      m_DriveSubsystem.autonDriveSetDistance(driveTrainConstants.metersToPieceFromSide);
+      
+      if(midPosition){
+        if (completedDrive){
+          if (Math.abs(gyroError)>driveTrainConstants.smartAngleMargin && !surpassedMargin){
+            surpassedMargin = true;
+          } 
+          if (Math.abs(gyroError)>driveTrainConstants.smartAngleMargin2 && surpassedMargin && !surpassedMargin2){
+            surpassedMargin2 = true;
+          }
+          gyroAngle = Mechanisms.gyro.getPitch();
+          gyroError = driveTrainConstants.targetAngle - gyroAngle;
+          if (gyroError > driveTrainConstants.smartAngleMargin || (!surpassedMargin && !surpassedMargin2 && gyroError>0.3)){
+            m_DriveSubsystem.drive(driveTrainConstants.smartSpeed, driveTrainConstants.smartSpeed);
+          }
+          else if (gyroError>0.3 && gyroError > driveTrainConstants.smartAngleMargin && surpassedMargin){
+            m_DriveSubsystem.drive(-driveTrainConstants.slowSmartSpeed, -driveTrainConstants.slowSmartSpeed);
+          }
+          else if (gyroError < - driveTrainConstants.smartAngleMargin || (!surpassedMargin&& !surpassedMargin2  && gyroError<-0.3)){
+            m_DriveSubsystem.drive(-driveTrainConstants.smartSpeed, -driveTrainConstants.smartSpeed);
+          }
+          else if (gyroError<-0.3 && gyroError <- driveTrainConstants.smartAngleMargin && surpassedMargin){
+            m_DriveSubsystem.drive(driveTrainConstants.slowSmartSpeed, driveTrainConstants.slowSmartSpeed);
+          }
+          else{
+            m_DriveSubsystem.drive(0, 0);
+          }
         }
       }
     }

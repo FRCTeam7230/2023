@@ -4,13 +4,13 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants.driveTrainConstants;
 import frc.robot.Subsystems.Autonomous;
 import frc.robot.Subsystems.DriveTrain;
 import frc.robot.Subsystems.RunMechanisms;
-import frc.robot.Constants.*;
-import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
 public class Robot extends TimedRobot {
 
@@ -77,6 +77,13 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
+    if (autonConePickup){
+        Limelight.coneTarget = true;
+      }       
+      else{
+        Limelight.coneTarget = false;
+      }
+    Limelight.updateTarget();
     auton.init();
   }
 
@@ -89,6 +96,7 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
     Mechanisms.gyro.calibrate();
     Mechanisms.driveSubsystem.resetEncoders();
+    DriveTrain.invertAxis = -1; // Inverted axis in Autonomous, swapping front and back. Swapping them for the driver.
   }
 
   @Override
