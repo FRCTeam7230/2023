@@ -15,7 +15,7 @@ import frc.robot.Mechanisms;
 public class RunMechanisms {
     public boolean rotateComplete;
     private CANSparkMax armMotor = Mechanisms.armMotor; 
-    private Solenoid armSolenoid = Mechanisms.armSolenoid, clawRightSolenoid = Mechanisms.clawRightSolenoid, clawLeftSolenoid = Mechanisms.clawLeftSolenoid;
+    private Solenoid armSolenoid = Mechanisms.armSolenoid, clawSolenoid = Mechanisms.clawSolenoid;
     private Joystick m_stick = Mechanisms.mechanismsJoystick;
     private final SparkMaxAbsoluteEncoder armMotorEncoder = armMotor.getAbsoluteEncoder(Type.kDutyCycle);
     public final SparkMaxPIDController armController = armMotor.getPIDController();
@@ -114,8 +114,7 @@ public class RunMechanisms {
    } 
    public void toggleClaw(boolean auto){
     if (m_stick.getRawButtonPressed(robotConstants.CLAW_TOGGLE_BUTTON) || auto){
-        clawRightSolenoid.toggle();
-        clawLeftSolenoid.toggle();
+        clawSolenoid.toggle();
     }
   } 
 }
