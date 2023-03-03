@@ -17,10 +17,10 @@ public class DriveTrain {
     private boolean surpassedMargin2;
     private boolean swapState = false, prevState = false;
     public static int invertAxis = -1;
-    private double speedY = 0.0;
-    private double speedX = 0.0;
-    private double speedLimitChangeX = 0.0;
-    private double speedLimitChangeY = 0.0;
+    public double speedY = 0.0;
+    public double speedX = 0.0;
+    public double speedLimitChangeX = 0.0;
+    public double speedLimitChangeY = 0.0;
     private double rateOfSpeedYChange = 0.0;
     private double rateOfSpeedXChange = 0.0;
     private boolean prevDrive = false, nowDrive = false;
@@ -33,7 +33,7 @@ public class DriveTrain {
     
     
     private boolean prevButton3 = false;
-    private boolean manualLayout = true; 
+    public boolean manualLayout = true; 
     private boolean driveModified;
     private boolean pickup;
 
@@ -53,8 +53,8 @@ public class DriveTrain {
     
 
     public void drive(boolean tank){
-        speedLimitChangeX = 0.0;
-        speedLimitChangeY = 0.0;
+        // speedLimitChangeX = Robot.speedLimitChangeX;
+        // speedLimitChangeY = Robot.speedLimitChangeY;
         double y = Math.pow(d_stick.getRawAxis(0),1);
         double x = Math.pow(d_stick.getRawAxis(1),1);
         y *= Math.abs(y);
@@ -170,6 +170,7 @@ public class DriveTrain {
         if (button5State){ 
             Limelight.coneTarget = !Limelight.coneTarget;
             gamePieceAreas = Limelight.updateTarget();
+
         }
         
         
