@@ -33,7 +33,7 @@ public class DriveTrain {
     
     
     private boolean prevButton3 = false;
-    private boolean manualLayout = true; // layout of the joystick - manual or smart
+    public boolean manualLayout = true; // layout of the joystick - manual or smart
     private boolean driveModified;
     private boolean pickup;
 
