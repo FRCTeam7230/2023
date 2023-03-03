@@ -62,17 +62,6 @@ public class RunMechanisms {
     }
 
     if (buttonPressed){
-      
-      // if (armMotorEncoder.get() < encoderCounts - driveTrainConstants.armAngleMargin) {
-      //   armMotor.set(driveTrainConstants.armMotorSpeed);
-      // }
-      // else if (armMotorEncoder.get() > encoderCounts + driveTrainConstants.armAngleMargin){
-      //   armMotor.set(-driveTrainConstants.armMotorSpeed);
-      // }
-      // else {
-      //   armMotor.set(0);
-      //   buttonPressed = false;
-      // }
       Mechanisms.armPID.setReference(encoderCounts, ControlType.kPosition);
       if (encoderCounts == armMotorEncoder.getPosition()){
         completedRotating = true;
@@ -105,7 +94,6 @@ public class RunMechanisms {
     Mechanisms.armPID.setReference(autonEncoderCounts, ControlType.kPosition);
     if (encoderCounts == armMotorEncoder.getPosition()){
       autonCompletedRotating = true;
-      
     }
   }
 

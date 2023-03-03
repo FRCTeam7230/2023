@@ -14,12 +14,11 @@ public class Mechanisms {
     public static CANSparkMax armMotor = new CANSparkMax(3, CANSparkMax.MotorType.kBrushless);
     public static SparkMaxPIDController armPID = armMotor.getPIDController();
     public static Compressor pcmCompressor = new Compressor(0, PneumaticsModuleType.CTREPCM);
-    public static Solenoid armSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 1);
+    public static Solenoid armSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 7);
     public static Solenoid clawSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 6);
     public static DriveSubsystem driveSubsystem = new DriveSubsystem();
     public static Joystick driveJoystick = new Joystick(0);
     public static Joystick mechanismsJoystick = new Joystick(1);
     public static RunMechanisms runMechanisms = new RunMechanisms();
     public static AHRS gyro = new AHRS();
-    
 }

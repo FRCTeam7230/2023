@@ -108,9 +108,9 @@ public class Autonomous {
     if(autoState == "fourth") {
 
       if (m_DriveSubsystem.getLeftDistance() < driveTrainConstants.driveMargin) {
-        m_DriveSubsystem.drive(driveTrainConstants.slowSmartSpeed, 0);
+        m_DriveSubsystem.drive(-driveTrainConstants.slowSmartSpeed, 0);
       }
-      else if (m_DriveSubsystem.getRightDistance() > - driveTrainConstants.driveMargin) {
+      else if (m_DriveSubsystem.getRightDistance() < driveTrainConstants.driveMargin) {
         m_DriveSubsystem.drive(0, -driveTrainConstants.slowSmartSpeed);
       }
       else {

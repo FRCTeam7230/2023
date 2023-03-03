@@ -33,7 +33,7 @@ public class DriveTrain {
     
     
     private boolean prevButton3 = false;
-    private boolean manualLayout = true; 
+    private boolean manualLayout = true; // layout of the joystick - manual or smart
     private boolean driveModified;
     private boolean pickup;
 
@@ -164,14 +164,12 @@ public class DriveTrain {
             m_robotDrive.arcadeDrive(invertAxis * (speedY), invertAxis *(speedX));
         }
 
-
         //Switching target - cube, or cone 
         button5State = d_stick.getRawButtonPressed(robotConstants.GAME_PIECE_TOGGLE_BUTTON);
         if (button5State){ 
             Limelight.coneTarget = !Limelight.coneTarget;
             gamePieceAreas = Limelight.updateTarget();
-        }
-        
+        }        
         
         // Switching joystick layout from manual to smart
         button6State = d_stick.getRawButtonPressed(robotConstants.MANUAL_SMART_TOGGLE_BUTTON);
@@ -179,7 +177,6 @@ public class DriveTrain {
             manualLayout = !manualLayout;
         }
 
-        
         // Smart control
         if (!manualLayout && m_runMechanisms.completedRotating) {
             if (m_stick.getRawButton(robotConstants.ORIENT_SHELF_PICKUP_BUTTON)) {

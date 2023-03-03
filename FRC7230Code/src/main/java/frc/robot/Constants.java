@@ -58,7 +58,6 @@ public final class Constants {
     public static final int ORIENT_HIGH_TARGET_BUTTON = BUTTON7;
     public static final int ORIENT_MID_TARGET_BUTTON = BUTTON9;
 
-
     //Test Buttons:
     public static final int PID_TEST_BUTTON = BUTTON10;
     public static final int ENCODER_TEST_BUTTON = BUTTON11;
@@ -108,9 +107,9 @@ public final class Constants {
     //vision
     public static final double smartAngleMarginVision = 3;
     public static final double smartSpeedVision = 0.55;
-    public static final double[] coneScreenAreas = {4.5, 4.0}; //0 - area of cone on the screen for ground pick up, 1 - for shelf pick up
-    public static final double[] cubeScreenAreas = {5.0, 4.0};
-    public static final double[] tapeScreenAreas = {0.12, 0.2}; //0 - area of tape on the screen for high target, 1 - for middle target
+    public static final double[] coneScreenAreas = {4.5, 4.0}; // 0 - area of cone on the screen for ground pick up, 1 - for shelf pick up
+    public static final double[] cubeScreenAreas = {5.0, 4.0}; // 0 for ground pick up, 1 for shelf pick up
+    public static final double[] tapeScreenAreas = {0.12, 0.2}; // 0 - area of tape on the screen for high target, 1 - for middle target
 
     //arm-related
     public static final double armMotorSpeed = 0.5;
