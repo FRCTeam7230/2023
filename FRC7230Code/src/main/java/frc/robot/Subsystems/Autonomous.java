@@ -28,7 +28,7 @@ public class Autonomous {
     autoState = "first";
   }
 
-  public void execute(boolean midPosition, boolean coneLoaded, boolean autonConePickup){
+  public void execute(boolean midPosition, boolean coneLoaded){
       // First phase - Score Piece High
       // Second phase - Drive forward
       // Third phase - Grab Piece
@@ -77,7 +77,6 @@ public class Autonomous {
     if(autoState == "third"){
       
       angleToTarget = Limelight.getTargetAngleX(); 
-      
       m_RunMechanisms.autonRotateArmToAngle(driveTrainConstants.lowPickupAngleEncoderCounts);
       if (m_RunMechanisms.autonCompletedRotating){
         if (angleToTarget>0 && angleToTarget>driveTrainConstants.smartAngleMarginVision){
