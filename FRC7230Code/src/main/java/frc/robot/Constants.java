@@ -61,6 +61,9 @@ public final class Constants {
     //Test Buttons:
     public static final int PID_TEST_BUTTON = BUTTON10;
     public static final int ENCODER_TEST_BUTTON = BUTTON11;
+    public static final int EXTEND_TEST_BUTTON = BUTTON6;
+    public static final int ARM_TEST_BUTTON_UP = BUTTON11;
+    public static final int ARM_TEST_BUTTON_DOWN = BUTTON12;
   }
   
   public static final class driveTrainConstants {
@@ -114,18 +117,18 @@ public final class Constants {
     //arm-related
     public static final double armMotorSpeed = 0.5;
     public static final int rotationsToDegrees = 360;
-    public static final double lowScoreAngleEncoderCounts = -67; //unextended
-    public static final double shelfAngleEncoderCounts = 168; //extended
-    public static final double lowPickupAngleEncoderCounts = 215.8; //extended
+    public static final double lowScoreAngleEncoderCounts = 152; //unextended
+    public static final double shelfAngleEncoderCounts = 77; //extended
+    public static final double lowPickupAngleEncoderCounts = -110; //extended
     public static final double armAngleMargin = 4;
 
     //cone
-    public static final double coneHighAngleEncoderCounts = 20.28; //extended
-    public static final double coneMidAngleEncoderCounts = 10; //unextended
+    public static final double coneHighAngleEncoderCounts = 83; //extended
+    public static final double coneMidAngleEncoderCounts = 94; //unextended
 
     //cube
-    public static final double cubeHighAngleEncoderCounts = 12; //extended
-    public static final double cubeMidAngleEncoderCounts = -9.5; //unextended
+    public static final double cubeHighAngleEncoderCounts = 83; //extended
+    public static final double cubeMidAngleEncoderCounts = 94; //unextended
     
     public static final double cubeShelfRetreatEncoderCounts = 0.25;
   }

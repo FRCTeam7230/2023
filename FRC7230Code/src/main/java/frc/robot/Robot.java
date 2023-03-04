@@ -149,9 +149,11 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     driveTrain.drive(false);
-    runMechanisms.rotateArmToAngle();
+    // runMechanisms.rotateArmToAngle();
     runMechanisms.toggleClaw(false);
-    
+    runMechanisms.testArm(false);
+    runMechanisms.testExtension();
+
   }
   
   @Override
