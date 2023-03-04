@@ -44,13 +44,13 @@ public class Limelight {
             NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(2); 
             gamePieceAreas = driveTrainConstants.coneScreenAreas;
 
-            targetName = "cone";
+            targetName = "Cone";
         }
         else {
             NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(1);
             gamePieceAreas = driveTrainConstants.cubeScreenAreas;
 
-            targetName = "cube";
+            targetName = "Cube";
         }
         return gamePieceAreas;
     }

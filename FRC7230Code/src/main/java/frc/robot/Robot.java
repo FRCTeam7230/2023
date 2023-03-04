@@ -51,10 +51,7 @@ public class Robot extends TimedRobot {
     joystick_chooser.addOption("One Joystick", "One Joystick");
     SmartDashboard.putData("Joystick choice", joystick_chooser);
     
-    Mechanisms.armPID.setP(driveTrainConstants.kP);
-    Mechanisms.armPID.setI(driveTrainConstants.kI);
-    Mechanisms.armPID.setD(driveTrainConstants.kD);
-    Mechanisms.armPID.setFF(driveTrainConstants.kFF);
+    Mechanisms.armMotorEncoder.setPositionConversionFactor(driveTrainConstants.rotationsToDegrees);
   }
 
   @Override

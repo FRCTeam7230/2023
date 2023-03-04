@@ -121,6 +121,7 @@ public final class Constants {
     public static final double shelfAngleEncoderCounts = 77; //extended
     public static final double lowPickupAngleEncoderCounts = -110; //extended
     public static final double armAngleMargin = 4;
+    public static final double groundPickupAngleMargin = 15;
 
     //cone
     public static final double coneHighAngleEncoderCounts = 83; //extended
@@ -129,7 +130,5 @@ public final class Constants {
     //cube
     public static final double cubeHighAngleEncoderCounts = 83; //extended
     public static final double cubeMidAngleEncoderCounts = 94; //unextended
-    
-    public static final double cubeShelfRetreatEncoderCounts = 0.25;
   }
 }

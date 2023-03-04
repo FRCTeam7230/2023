@@ -10,19 +10,16 @@ import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.SparkMaxAbsoluteEncoder;
-import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
-import com.revrobotics.SparkMaxPIDController;
 
 public class RunMechanisms {
     public boolean rotateComplete;
     private CANSparkMax armMotor = Mechanisms.armMotor; 
     private Solenoid armSolenoid = Mechanisms.armSolenoid, clawSolenoid = Mechanisms.clawSolenoid;
     private Joystick m_stick = Mechanisms.mechanismsJoystick;
-    public final SparkMaxAbsoluteEncoder armMotorEncoder = armMotor.getAbsoluteEncoder(Type.kDutyCycle);
-    // public final SparkMaxPIDController armController = armMotor.getPIDController();armMotor.getAbsoluteEncoder(SparkMaxAbsoluteEncoder.Type.kDutyCycle);
-    public final PIDController armController = new PIDController(driveTrainConstants.kP, driveTrainConstants.kI, driveTrainConstants.kD);
+    private final SparkMaxAbsoluteEncoder armMotorEncoder = Mechanisms.armMotorEncoder;
+    private final PIDController armController = Mechanisms.armController;
+    
   private double neededEncoderCounts;
   public boolean buttonPressed = false;
   private boolean prevButton = false;
@@ -41,11 +38,6 @@ public class RunMechanisms {
     }
   }
   public void rotateArmToAngle(){
-    armMotorEncoder.setPositionConversionFactor(driveTrainConstants.rotationsToDegrees);  
-    // armController.setP(driveTrainConstants.kP);
-    // armController.setI(driveTrainConstants.kI);
-    // armController.setD(driveTrainConstants.kD);
-    // armController.setFF(driveTrainConstants.kFF);
     if (m_stick.getRawButton(robotConstants.SHELF_PICKUP_BUTTON)){
       buttonPressed = true;
       needExtend = true;
@@ -104,15 +96,31 @@ public class RunMechanisms {
       }
       // armController.setSetpoint(neededEncoderCounts);
       // armMotor.set(armController.calculate(getEncoderPosition(),neededEncoderCounts));
+      // if (armMotorEncoder.get() < neededEncoderCounts - driveTrainConstants.armAngleMargin) {
+      //   armMotor.set(driveTrainConstants.armMotorSpeed);
+      // }
+      // else if (armMotorEncoder.get() > neededEncoderCounts + driveTrainConstants.armAngleMargin){
+      //   armMotor.set(-driveTrainConstants.armMotorSpeed);
+      // }
+      // else {
+      //   armMotor.set(0);
+      //   buttonPressed = false;
+      // }
+      armMotor.set(armController.calculate(armMotorEncoder.getPosition(), neededEncoderCounts));
       if (neededEncoderCounts == armMotorEncoder.getPosition()){
         completedRotating = true;
-        if (!prevButton && needExtend){
+        if (!prevButton && needExtend && neededEncoderCounts != driveTrainConstants.lowPickupAngleEncoderCounts){
           armSolenoid.toggle();
         }
       }
+      else if (neededEncoderCounts == driveTrainConstants.lowPickupAngleEncoderCounts && armMotorEncoder.getPosition() == driveTrainConstants.lowPickupAngleEncoderCounts + driveTrainConstants.groundPickupAngleMargin){
+        armSolenoid.set(true);
+      }
       else{
         completedRotating = false;
-        armSolenoid.set(false);
+        if (armMotorEncoder.getPosition() > driveTrainConstants.lowPickupAngleEncoderCounts + driveTrainConstants.groundPickupAngleMargin){
+          armSolenoid.set(false);
+        }
       }
     }   
     prevButton = buttonPressed;
@@ -132,7 +140,7 @@ public class RunMechanisms {
     //   }
     // }
     
-    Mechanisms.armPID.setReference(autonEncoderCounts, ControlType.kPosition);
+    armMotor.set(armController.calculate(armMotorEncoder.getPosition(), neededEncoderCounts));
     if (neededEncoderCounts == armMotorEncoder.getPosition()){
       autonCompletedRotating = true;
     }
@@ -141,6 +149,7 @@ public class RunMechanisms {
    public void autonToggleArmExtension(){
         armSolenoid.toggle();
    } 
+   
    public void toggleClaw(boolean auto){
     if (m_stick.getRawButtonPressed(robotConstants.CLAW_TOGGLE_BUTTON) || auto){
         clawSolenoid.toggle();
