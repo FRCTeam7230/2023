@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
 public class Robot extends TimedRobot {
   private double angleDeviation = Limelight.targetX;
-  public double distance = 0;
+  private String driveAxisIndicator;
 
   private String armState;
 
@@ -56,7 +56,7 @@ public class Robot extends TimedRobot {
     
     
    
-    // SmartDashboard.putNumber("Distance: ", distance);
+    
     
    
   }
@@ -81,7 +81,14 @@ public class Robot extends TimedRobot {
     else{
       clawState = "Closed";
     }
+    if (DriveTrain.invertAxis == 1){
+      driveAxisIndicator = "Normal";
+    }
+    else{
+      driveAxisIndicator = "Inverted";
+    }
 
+    SmartDashboard.putString("Drive Axis Mode", driveAxisIndicator);
     SmartDashboard.putString("Claw Extension State", clawState);
     SmartDashboard.putString("Arm Extension State", armState);
     SmartDashboard.putString("Selected Object", Limelight.targetName);

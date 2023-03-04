@@ -17,7 +17,6 @@ public class Autonomous {
   private double gyroError;
   private double angleToTarget;
   public static boolean completedDrive = false;
-  private boolean driveLeftMotor, driveRightMotor;
 
   
   public Autonomous(){
