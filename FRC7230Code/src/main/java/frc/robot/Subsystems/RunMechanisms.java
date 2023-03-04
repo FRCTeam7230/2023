@@ -14,7 +14,6 @@ import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.SparkMaxAbsoluteEncoder;
 import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
 import com.revrobotics.SparkMaxPIDController;
-import com.revrobotics.SparkMaxAbsoluteEncoder;
 
 public class RunMechanisms {
     public boolean rotateComplete;
@@ -53,7 +52,7 @@ public class RunMechanisms {
       armAngle = "Shelf";
       neededEncoderCounts = driveTrainConstants.shelfAngleEncoderCounts;
     }
-    if (m_stick.getRawButton(robotConstants.HIGH_SCORE_BUTTON)) {
+    else if (m_stick.getRawButton(robotConstants.HIGH_SCORE_BUTTON)) {
       buttonPressed = true;
       needExtend = true;
       armAngle = "High Scoring";
@@ -63,9 +62,8 @@ public class RunMechanisms {
      else{
        neededEncoderCounts = driveTrainConstants.cubeHighAngleEncoderCounts;
      }
-      
     }
-    if (m_stick.getRawButton(robotConstants.MID_SCORE_BUTTON)) {
+    else if (m_stick.getRawButton(robotConstants.MID_SCORE_BUTTON)) {
       buttonPressed = true;
       needExtend = false;
       armAngle = "Middle Scoring";
@@ -76,17 +74,20 @@ public class RunMechanisms {
        neededEncoderCounts = driveTrainConstants.cubeMidAngleEncoderCounts;
      }
     }
-    if (m_stick.getRawButton(robotConstants.GROUND_PICKUP_BUTTON)) {
+    else if (m_stick.getRawButton(robotConstants.GROUND_PICKUP_BUTTON)) {
       buttonPressed = true;
       needExtend = true;
       armAngle = "Ground Pickup";
       neededEncoderCounts = driveTrainConstants.lowPickupAngleEncoderCounts;
     }
-    if (m_stick.getRawButton(robotConstants.LOW_SCORE_BUTTON)){
+    else if (m_stick.getRawButton(robotConstants.LOW_SCORE_BUTTON)){
       buttonPressed = true;
       needExtend = false;
       armAngle = "Low Scoring";
       neededEncoderCounts = driveTrainConstants.lowScoreAngleEncoderCounts;
+    }
+    else{
+      buttonPressed = false;
     }
 
     if (buttonPressed){
