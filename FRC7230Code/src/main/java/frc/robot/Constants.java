@@ -65,7 +65,7 @@ public final class Constants {
   
   public static final class driveTrainConstants {
     //drive related
-    public static final double deadZone=0.2;
+    public static final double deadZone = 0.2;
     public static final double zoomFactor = 2.0;
     public static final double slowFactor = 0.45;
     public static final double speedFactor = 0.775;

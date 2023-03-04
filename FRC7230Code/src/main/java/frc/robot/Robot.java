@@ -8,19 +8,17 @@ import frc.robot.Subsystems.Autonomous;
 import frc.robot.Subsystems.DriveTrain;
 import frc.robot.Subsystems.RunMechanisms;
 import frc.robot.Constants.*;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
 public class Robot extends TimedRobot {
-  private double angleDeviation = Limelight.targetX;
+  private double angleDeviation;
   private String driveAxisIndicator;
-
   private String armState;
-
   private String armMode;
   private String clawState;
-  
   private boolean midPosition;
   private boolean coneLoaded;
   private boolean autonConePickup;
@@ -28,16 +26,17 @@ public class Robot extends TimedRobot {
   private RunMechanisms runMechanisms = Mechanisms.runMechanisms;
   private DriveTrain driveTrain = new DriveTrain(Mechanisms.driveSubsystem, runMechanisms, Mechanisms.mechanismsJoystick, Mechanisms.driveJoystick);
   private Autonomous auton = new Autonomous();
+
   private final SendableChooser<String> position_chooser = new SendableChooser<>();
   private final SendableChooser<String> preload_chooser = new SendableChooser<>();
   private final SendableChooser<String> autonPickup_chooser = new SendableChooser<>();
+  private final SendableChooser<String> joystick_chooser = new SendableChooser<>();
 
 
   @Override
   public void robotInit() {
     SmartDashboard.putNumber("Drive Speed Limit", driveTrainConstants.limitX);
     SmartDashboard.putNumber("Turn Speed Limit", driveTrainConstants.limitY);
-
 
     position_chooser.setDefaultOption("Middle", "Middle");
     position_chooser.addOption("Side", "Side");
@@ -48,17 +47,14 @@ public class Robot extends TimedRobot {
     autonPickup_chooser.setDefaultOption("Cone", "Cone");
     autonPickup_chooser.addOption("Cube", "Cube");
     SmartDashboard.putData("Auton Pickup choice", autonPickup_chooser);
+    joystick_chooser.setDefaultOption("Two Joysticks", "Two Joysticks");
+    joystick_chooser.addOption("One Joystick", "One Joystick");
+    SmartDashboard.putData("Joystick choice", joystick_chooser);
     
     Mechanisms.armPID.setP(driveTrainConstants.kP);
     Mechanisms.armPID.setI(driveTrainConstants.kI);
     Mechanisms.armPID.setD(driveTrainConstants.kD);
     Mechanisms.armPID.setFF(driveTrainConstants.kFF);
-    
-    
-   
-    
-    
-   
   }
 
   @Override
@@ -87,6 +83,10 @@ public class Robot extends TimedRobot {
     else{
       driveAxisIndicator = "Inverted";
     }
+    
+    driveTrain.speedLimitChangeX = SmartDashboard.getNumber("Drive Speed Limit", driveTrainConstants.limitX);
+    driveTrain.speedLimitChangeY = SmartDashboard.getNumber("Turn Speed Limit", driveTrainConstants.limitY);
+    angleDeviation = Limelight.targetX;
 
     SmartDashboard.putString("Drive Axis Mode", driveAxisIndicator);
     SmartDashboard.putString("Claw Extension State", clawState);
@@ -96,8 +96,8 @@ public class Robot extends TimedRobot {
     SmartDashboard.putString("Arm Angle", runMechanisms.armAngle);
     SmartDashboard.putNumber("Driving Speed", driveTrain.speedX);
     SmartDashboard.putNumber("Angle to Target: ", angleDeviation);
-    driveTrain.speedLimitChangeX = SmartDashboard.getNumber("Drive Speed Limit", driveTrainConstants.limitX);
-    driveTrain.speedLimitChangeY = SmartDashboard.getNumber("Turn Speed Limit", driveTrainConstants.limitY);
+   
+
     String positionSelected = position_chooser.getSelected();
     switch (positionSelected) {
       case "Middle":
@@ -125,6 +125,16 @@ public class Robot extends TimedRobot {
         break;
       case "Cube":
         autonConePickup = false;
+        break;
+    }
+
+    String joystickOptionSelected = joystick_chooser.getSelected();
+    switch (joystickOptionSelected) {
+      case "Two Joysticks":
+        Mechanisms.mechanismsJoystick = Mechanisms.driveJoystick;
+        break;
+      case "One Joystick":
+        Mechanisms.mechanismsJoystick = new Joystick(1);
         break;
     }
   }
@@ -158,7 +168,6 @@ public class Robot extends TimedRobot {
     driveTrain.drive(false);
     runMechanisms.rotateArmToAngle();
     runMechanisms.toggleClaw(false);
-    
   }
   
   @Override
