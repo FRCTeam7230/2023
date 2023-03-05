@@ -20,9 +20,9 @@ public class Mechanisms {
     public static Solenoid clawSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 7);
     public static DriveSubsystem driveSubsystem = new DriveSubsystem();
     public static Joystick driveJoystick = new Joystick(0);
-    public static Joystick mechanismsJoystick = new Joystick(1);
+    public static Joystick mechanismsJoystick = driveJoystick;
     public static RunMechanisms runMechanisms = new RunMechanisms();
     public static AHRS gyro = new AHRS();
     public static final SparkMaxAbsoluteEncoder armMotorEncoder = armMotor.getAbsoluteEncoder(Type.kDutyCycle);
-    public static final PIDController armController = new PIDController(driveTrainConstants.kP, driveTrainConstants.kI , driveTrainConstants.kD, driveTrainConstants.kFF);
+    public static final PIDController armController = new PIDController(driveTrainConstants.kP, driveTrainConstants.kI , driveTrainConstants.kD);
 }

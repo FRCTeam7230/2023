@@ -7,8 +7,6 @@ import frc.robot.Constants.robotConstants;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj2.command.PIDCommand;
-
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkMaxAbsoluteEncoder;
 
@@ -84,6 +82,7 @@ public class RunMechanisms {
 
     if (buttonPressed){
       
+      /* 
       if (getEncoderPosition() < neededEncoderCounts - driveTrainConstants.armAngleMargin) {
         armMotor.set(driveTrainConstants.armMotorSpeed);
       }
@@ -94,6 +93,7 @@ public class RunMechanisms {
         armMotor.set(0);
         buttonPressed = false;
       }
+      */
       // armController.setSetpoint(neededEncoderCounts);
       // armMotor.set(armController.calculate(getEncoderPosition(),neededEncoderCounts));
       // if (armMotorEncoder.get() < neededEncoderCounts - driveTrainConstants.armAngleMargin) {
@@ -162,10 +162,10 @@ public class RunMechanisms {
   }
   public void testArm(boolean auto){
     if (m_stick.getRawButton(robotConstants.ARM_TEST_BUTTON_DOWN)){
-        armMotor.set(-0.9);
+        armMotor.set(-0.25);
     }
     else if (m_stick.getRawButton(robotConstants.ARM_TEST_BUTTON_UP)){
-        armMotor.set(0.90);
+        armMotor.set(0.25);
     }
     else{
       armMotor.set(0);

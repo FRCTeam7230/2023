@@ -61,7 +61,7 @@ public final class Constants {
     //Test Buttons:
     public static final int PID_TEST_BUTTON = BUTTON10;
     public static final int ENCODER_TEST_BUTTON = BUTTON11;
-    public static final int EXTEND_TEST_BUTTON = BUTTON6;
+    public static final int EXTEND_TEST_BUTTON = BUTTON10;
     public static final int ARM_TEST_BUTTON_UP = BUTTON11;
     public static final int ARM_TEST_BUTTON_DOWN = BUTTON12;
   }
@@ -77,20 +77,20 @@ public final class Constants {
     public static final double accelX = 0.001;
     public static final double decelY = 0.075;
     public static final double decelX = 0.075;
-    public static final double limitX = 0.8;
-    public static final double limitY = 0.6;
+    public static final double limitX = 0.7;
+    public static final double limitY = 0.4;
     public static final double initSpeed = 0.2;
     public static final double dropOff = 0.4; //drop off point when speed is able to drop to 0
-    public static final double kP = 1;
+    public static final double kP = .001;
     public static final double kI = 0;
-    public static final double kD = 3;
+    public static final double kD = 0;
     public static final double kFF = 0.0015;
 
     //driveSetDistance/encoders
     public static final int kEncoderCPR = 4096;
     public static final double kWheelDiameterMeters = 0.15;
-    public static final double motorRevsToWheelRevs = 1/10.71; //last year's
-    // public static final double motorRevsToWheelRevs = 1/8.45; //this year's
+    // public static final double motorRevsToWheelRevs = 1/10.71; //last year's
+    public static final double motorRevsToWheelRevs = 1/8.45; //this year's
     public static final double kEncoderMetersPerMotorRev = motorRevsToWheelRevs*kWheelDiameterMeters * Math.PI;
     public static final double driveMargin = 0.1;
 
@@ -101,11 +101,11 @@ public final class Constants {
     public static final double testDistance = 1;
 
     //autobalance
-    public static final double smartAngleMargin = 10;
-    public static final double smartAngleMargin2 = 5;
-    public static final double targetAngle = -67.33;
-    public static final double smartSpeed = 0.55;
-    public static final double slowSmartSpeed = 0.475;
+    public static final double smartAngleMargin = 14;
+    public static final double smartAngleMargin2 = 8;
+    public static final double targetAngle = 4;
+    public static final double smartSpeed = 0.25;
+    public static final double slowSmartSpeed = 0.20;
 
     //vision
     public static final double smartAngleMarginVision = 3;

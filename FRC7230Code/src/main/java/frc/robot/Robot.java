@@ -167,7 +167,6 @@ public class Robot extends TimedRobot {
     runMechanisms.toggleClaw(false);
     runMechanisms.testArm(false);
     runMechanisms.testExtension();
-
   }
   
   @Override

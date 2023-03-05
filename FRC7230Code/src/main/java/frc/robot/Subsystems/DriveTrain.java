@@ -158,10 +158,10 @@ public class DriveTrain {
         prevDrive = nowDrive;
 
         if (!tank && !driveModified){
-            DriverStation.reportWarning(Double.toString(invertAxis * speedX), false);
-            DriverStation.reportWarning(Double.toString(invertAxis * speedY), false);
-            DriverStation.reportWarning("\n", false);
-            m_robotDrive.arcadeDrive(invertAxis * (speedY), invertAxis *(speedX));
+            // DriverStation.reportWarning(Double.toString(invertAxis * speedX), false);
+            // DriverStation.reportWarning(Double.toString(invertAxis * speedY), false);
+            // DriverStation.reportWarning("\n", false);
+            m_robotDrive.arcadeDrive(-invertAxis * (speedY), invertAxis *(speedX));
         }
 
         //Switching target - cube, or cone 
@@ -225,38 +225,50 @@ public class DriveTrain {
                 surpassedMargin = false;
                 surpassedMargin2 = false;
             }
+            gyroAngle = Mechanisms.gyro.getRoll();
+            // System.out.println("Roll" + gyroAngle);
+            // System.out.println("Pitch" + Mechanisms.gyro.getPitch());
+            // System.out.println("Yaw" + Mechanisms.gyro.getYaw());
+            gyroError = driveTrainConstants.targetAngle - gyroAngle;
             if (Math.abs(gyroError)>driveTrainConstants.smartAngleMargin && !surpassedMargin){
                 surpassedMargin = true;
                 DriverStation.reportWarning("MARGIN PASSED", false);
             }
-            if (Math.abs(gyroError)>driveTrainConstants.smartAngleMargin2 && surpassedMargin && !surpassedMargin2){
+            if (Math.abs(gyroError)>driveTrainConstants.smartAngleMargin2 && Math.abs(gyroError)< driveTrainConstants.smartAngleMargin && surpassedMargin && !surpassedMargin2){
                 surpassedMargin2 = true;
                 DriverStation.reportWarning("MARGIN 2 PASSED", false);
             }
-            gyroAngle = Mechanisms.gyro.getPitch();
-            gyroError = driveTrainConstants.targetAngle - gyroAngle;
-            // System.out.println(gyroAngle);
-            System.out.println(gyroError);
             
             if (gyroError > driveTrainConstants.smartAngleMargin || (!surpassedMargin && !surpassedMargin2 && gyroError>0.3)){
-                m_robotDrive.drive(driveTrainConstants.smartSpeed, driveTrainConstants.smartSpeed);
+                
+            }
+            // System.out.println(gyroAngle);
+
+            // drive forward
+            //when angle hit
+            System.out.println("Error" + gyroError);
+            
+            if (gyroError > driveTrainConstants.smartAngleMargin || (!surpassedMargin && !surpassedMargin2 && gyroError>0.3)){
+                m_robotDrive.drive(-driveTrainConstants.smartSpeed, -driveTrainConstants.smartSpeed);
                 System.out.println("forward");
             }
-            else if (gyroError>0.3 && gyroError > driveTrainConstants.smartAngleMargin && surpassedMargin){
-                m_robotDrive.drive(-driveTrainConstants.slowSmartSpeed, -driveTrainConstants.slowSmartSpeed);
-                System.out.println("forward");
+            else if (gyroError>0.3 && gyroError < driveTrainConstants.smartAngleMargin && surpassedMargin){
+                m_robotDrive.drive(driveTrainConstants.slowSmartSpeed, driveTrainConstants.slowSmartSpeed);
+                System.out.println("backward123");
             }
             else if (gyroError < - driveTrainConstants.smartAngleMargin || (!surpassedMargin&& !surpassedMargin2  && gyroError<-0.3)){
-                m_robotDrive.drive(-driveTrainConstants.smartSpeed, -driveTrainConstants.smartSpeed);
+                m_robotDrive.drive(driveTrainConstants.smartSpeed, driveTrainConstants.smartSpeed);
                 System.out.println("backward");
             }
-            else if (gyroError<-0.3 && gyroError <- driveTrainConstants.smartAngleMargin && surpassedMargin){
-                m_robotDrive.drive(driveTrainConstants.slowSmartSpeed, driveTrainConstants.slowSmartSpeed);
-                System.out.println("forward");
+            else if (gyroError<-0.3 && gyroError >- driveTrainConstants.smartAngleMargin && surpassedMargin){
+                m_robotDrive.drive(-driveTrainConstants.slowSmartSpeed, -driveTrainConstants.slowSmartSpeed);
+                System.out.println("forward123");
             }
             else{
                 m_robotDrive.drive(0, 0);
             }
+
+
         }
     }
 }
