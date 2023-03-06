@@ -165,9 +165,9 @@ public class Robot extends TimedRobot {
     driveTrain.drive(false);
     // runMechanisms.rotateArmToAngle();
     runMechanisms.toggleClaw(false);
-    runMechanisms.testArm(false);
+    runMechanisms.testArm();
     runMechanisms.testExtension();
-
+    runMechanisms.checkArm();
   }
   
   @Override

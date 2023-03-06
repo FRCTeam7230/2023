@@ -37,6 +37,30 @@ public class RunMechanisms {
       return armMotorEncoder.getPosition();
     }
   }
+
+  public void toggleArm(){
+    if ((getEncoderPosition()>driveTrainConstants.armLowerLimit && getEncoderPosition() < driveTrainConstants.armLowerExtension) || (getEncoderPosition()<driveTrainConstants.armUpperLimit && getEncoderPosition()>driveTrainConstants.armUpperRetraction)){
+      armSolenoid.toggle();
+    }
+    else{
+      armSolenoid.set(false);
+    }
+  }
+  // overloaded
+  public void toggleArm(boolean value){
+    if ((getEncoderPosition()>driveTrainConstants.armLowerLimit && getEncoderPosition() < driveTrainConstants.armLowerExtension) || (getEncoderPosition()<driveTrainConstants.armUpperLimit && getEncoderPosition()>driveTrainConstants.armUpperRetraction)){
+      armSolenoid.set(value);
+    }
+    else{
+      armSolenoid.set(false);
+    }
+  }
+  public void checkArm(){
+    if (!(getEncoderPosition()>driveTrainConstants.armLowerLimit && getEncoderPosition() < driveTrainConstants.armLowerExtension) && !(getEncoderPosition()<driveTrainConstants.armUpperLimit && getEncoderPosition()>driveTrainConstants.armUpperRetraction)){
+      armSolenoid.set(false);
+    }
+
+  }
   public void rotateArmToAngle(){
     if (m_stick.getRawButton(robotConstants.SHELF_PICKUP_BUTTON)){
       buttonPressed = true;
@@ -83,8 +107,10 @@ public class RunMechanisms {
     }
 
     if (buttonPressed){
-      
-      if (getEncoderPosition() < neededEncoderCounts - driveTrainConstants.armAngleMargin) {
+      if (!(getEncoderPosition()>driveTrainConstants.armLowerLimit+driveTrainConstants.armAngleMargin && getEncoderPosition()<driveTrainConstants.armUpperLimit-driveTrainConstants.armAngleMargin)){
+        armMotor.set(0);
+      }
+      else if (getEncoderPosition() < neededEncoderCounts - driveTrainConstants.armAngleMargin) {
         armMotor.set(driveTrainConstants.armMotorSpeed);
       }
       else if (getEncoderPosition() > neededEncoderCounts + driveTrainConstants.armAngleMargin){
@@ -106,20 +132,20 @@ public class RunMechanisms {
       //   armMotor.set(0);
       //   buttonPressed = false;
       // }
-      armMotor.set(armController.calculate(armMotorEncoder.getPosition(), neededEncoderCounts));
+      // armMotor.set(armController.calculate(armMotorEncoder.getPosition(), neededEncoderCounts));
       if (neededEncoderCounts == armMotorEncoder.getPosition()){
         completedRotating = true;
         if (!prevButton && needExtend && neededEncoderCounts != driveTrainConstants.lowPickupAngleEncoderCounts){
-          armSolenoid.toggle();
+          toggleArm();
         }
       }
       else if (neededEncoderCounts == driveTrainConstants.lowPickupAngleEncoderCounts && armMotorEncoder.getPosition() == driveTrainConstants.lowPickupAngleEncoderCounts + driveTrainConstants.groundPickupAngleMargin){
-        armSolenoid.set(true);
+        toggleArm(true);
       }
       else{
         completedRotating = false;
         if (armMotorEncoder.getPosition() > driveTrainConstants.lowPickupAngleEncoderCounts + driveTrainConstants.groundPickupAngleMargin){
-          armSolenoid.set(false);
+          toggleArm(false);
         }
       }
     }   
@@ -140,14 +166,26 @@ public class RunMechanisms {
     //   }
     // }
     
-    armMotor.set(armController.calculate(armMotorEncoder.getPosition(), neededEncoderCounts));
-    if (neededEncoderCounts == armMotorEncoder.getPosition()){
+    if (!(getEncoderPosition()>driveTrainConstants.armLowerLimit+driveTrainConstants.armAngleMargin && getEncoderPosition()<driveTrainConstants.armUpperLimit-driveTrainConstants.armAngleMargin)){
+      armMotor.set(0);
+    }
+    else if (getEncoderPosition() < neededEncoderCounts - driveTrainConstants.armAngleMargin) {
+      armMotor.set(driveTrainConstants.armMotorSpeed);
+    }
+    else if (getEncoderPosition() > neededEncoderCounts + driveTrainConstants.armAngleMargin){
+      armMotor.set(-driveTrainConstants.armMotorSpeed);
+    }
+    else {
+      armMotor.set(0);
+    }
+    // armMotor.set(armController.calculate(armMotorEncoder.getPosition(), neededEncoderCounts));
+    if (Math.abs(neededEncoderCounts -armMotorEncoder.getPosition()) < driveTrainConstants.armAngleMargin){
       autonCompletedRotating = true;
     }
   }
 
    public void autonToggleArmExtension(){
-        armSolenoid.toggle();
+    toggleArm();
    } 
    
    public void toggleClaw(boolean auto){
@@ -157,18 +195,20 @@ public class RunMechanisms {
   } 
   public void testExtension(){
     if(m_stick.getRawButtonPressed(robotConstants.EXTEND_TEST_BUTTON)){
-      armSolenoid.toggle();
+      toggleArm();
     }
   }
-  public void testArm(boolean auto){
-    if (m_stick.getRawButton(robotConstants.ARM_TEST_BUTTON_DOWN)){
-        armMotor.set(-0.9);
-    }
-    else if (m_stick.getRawButton(robotConstants.ARM_TEST_BUTTON_UP)){
-        armMotor.set(0.90);
-    }
-    else{
-      armMotor.set(0);
-    }
- } 
+  public void testArm(){
+    if (getEncoderPosition()>driveTrainConstants.armLowerLimit+driveTrainConstants.armAngleMargin && getEncoderPosition()<driveTrainConstants.armUpperLimit-driveTrainConstants.armAngleMargin){
+      if (m_stick.getRawButton(robotConstants.ARM_TEST_BUTTON_DOWN)){
+          armMotor.set(-0.9);
+      }
+      else if (m_stick.getRawButton(robotConstants.ARM_TEST_BUTTON_UP)){
+          armMotor.set(0.90);
+      }
+      else{
+        armMotor.set(0);
+      }
+  } 
+  }
 }
