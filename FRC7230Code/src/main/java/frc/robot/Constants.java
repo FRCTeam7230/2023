@@ -101,9 +101,9 @@ public final class Constants {
     public static final double testDistance = 1;
 
     //autobalance
-    public static final double smartAngleMargin = 14;
-    public static final double smartAngleMargin2 = 10;
-    public static final double targetAngle = 5.5;
+    public static final double smartAngleMargin = 10;
+    public static final double smartAngleMargin2 = 4;
+    public static final double targetAngle = 3;
     public static final double smartSpeed = 0.3;
     public static final double slowSmartSpeed = 0.15;
 

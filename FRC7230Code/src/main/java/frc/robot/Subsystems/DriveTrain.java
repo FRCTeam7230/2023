@@ -36,12 +36,12 @@ public class DriveTrain {
     public boolean manualLayout = true; // layout of the joystick - manual or smart
     private boolean driveModified;
     private boolean pickup;
+    private double balanceSpeed;
 
     //Vision:
     private double[] gamePieceAreas;
     private double angleToTarget;
     private boolean continueMoving;
-
    
     public DriveTrain(DriveSubsystem subsystem, RunMechanisms runMechanisms, Joystick stick1, Joystick stick2){
         m_robotDrive = subsystem;
@@ -226,49 +226,36 @@ public class DriveTrain {
                 surpassedMargin2 = false;
             }
             gyroAngle = Mechanisms.gyro.getRoll();
+            gyroError = driveTrainConstants.targetAngle - gyroAngle;
+
             // System.out.println("Roll" + gyroAngle);
             // System.out.println("Pitch" + Mechanisms.gyro.getPitch());
             // System.out.println("Yaw" + Mechanisms.gyro.getYaw());
-            gyroError = driveTrainConstants.targetAngle - gyroAngle;
+            
             if (Math.abs(gyroError)>driveTrainConstants.smartAngleMargin && !surpassedMargin){
                 surpassedMargin = true;
+                balanceSpeed = driveTrainConstants.smartSpeed;
                 DriverStation.reportWarning("MARGIN PASSED", false);
             }
             if (Math.abs(gyroError)>driveTrainConstants.smartAngleMargin2 && Math.abs(gyroError)< driveTrainConstants.smartAngleMargin && surpassedMargin && !surpassedMargin2){
                 surpassedMargin2 = true;
+                balanceSpeed = driveTrainConstants.slowSmartSpeed;
                 DriverStation.reportWarning("MARGIN 2 PASSED", false);
             }
             
-            if (gyroError > driveTrainConstants.smartAngleMargin || (!surpassedMargin && !surpassedMargin2 && gyroError>0.3)){
-                
-            }
-            // System.out.println(gyroAngle);
-
-            // drive forward
-            //when angle hit
-            System.out.println("Error" + gyroError);
+            // System.out.println("Error" + gyroError);
             
-            if (gyroError > driveTrainConstants.smartAngleMargin || (!surpassedMargin && !surpassedMargin2 && gyroError>0.3)){
-                m_robotDrive.drive(-driveTrainConstants.smartSpeed, -driveTrainConstants.smartSpeed);
-                System.out.println("forward");
-            }
-            else if (gyroError>0.3 && gyroError < driveTrainConstants.smartAngleMargin && surpassedMargin){
-                m_robotDrive.drive(driveTrainConstants.slowSmartSpeed, driveTrainConstants.slowSmartSpeed);
-                System.out.println("backward123");
-            }
-            else if (gyroError < - driveTrainConstants.smartAngleMargin || (!surpassedMargin&& !surpassedMargin2  && gyroError<-0.3)){
-                m_robotDrive.drive(driveTrainConstants.smartSpeed, driveTrainConstants.smartSpeed);
+            if (gyroError > 0.5){
+                m_robotDrive.drive(-balanceSpeed, -balanceSpeed);
                 System.out.println("backward");
             }
-            else if (gyroError<-0.3 && gyroError >- driveTrainConstants.smartAngleMargin && surpassedMargin){
-                m_robotDrive.drive(-driveTrainConstants.slowSmartSpeed, -driveTrainConstants.slowSmartSpeed);
-                System.out.println("forward123");
+            else if (gyroError < - 0.5){
+                m_robotDrive.drive(balanceSpeed, balanceSpeed);
+                System.out.println("forward");
             }
             else{
                 m_robotDrive.drive(0, 0);
             }
-
-
         }
     }
 }
