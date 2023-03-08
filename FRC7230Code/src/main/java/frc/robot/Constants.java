@@ -102,17 +102,17 @@ public final class Constants {
 
     //autobalance
     public static final double smartAngleMargin = 14;
-    public static final double smartAngleMargin2 = 8;
-    public static final double targetAngle = 4;
-    public static final double smartSpeed = 0.25;
-    public static final double slowSmartSpeed = 0.20;
+    public static final double smartAngleMargin2 = 10;
+    public static final double targetAngle = 5.5;
+    public static final double smartSpeed = 0.3;
+    public static final double slowSmartSpeed = 0.15;
 
     //vision
     public static final double smartAngleMarginVision = 3;
     public static final double smartSpeedVision = 0.55;
     public static final double[] coneScreenAreas = {4.5, 4.0}; // 0 - area of cone on the screen for ground pick up, 1 - for shelf pick up
     public static final double[] cubeScreenAreas = {5.0, 4.0}; // 0 for ground pick up, 1 for shelf pick up
-    public static final double[] tapeScreenAreas = {0.12, 0.2}; // 0 - area of tape on the screen for high target, 1 - for middle target
+    public static final double[] tapeScreenAreas = {0.19, 0.3}; // 0 - area of tape on the screen for high target, 1 - for middle target
 
     //arm-related
     public static final double armMotorSpeed = 0.5;
