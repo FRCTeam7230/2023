@@ -57,7 +57,7 @@ public class RunMechanisms {
   }
   public void checkArm(){
     if (!(getEncoderPosition()>driveTrainConstants.armLowerLimit && getEncoderPosition() < driveTrainConstants.armLowerExtension) && !(getEncoderPosition()<driveTrainConstants.armUpperLimit && getEncoderPosition()>driveTrainConstants.armUpperRetraction)){
-      armSolenoid.set(false);
+      toggleArm(false);
     }
 
   }
