@@ -50,8 +50,9 @@ public class Robot extends TimedRobot {
     joystick_chooser.setDefaultOption("Two Joysticks", "Two Joysticks");
     joystick_chooser.addOption("One Joystick", "One Joystick");
     SmartDashboard.putData("Joystick choice", joystick_chooser);
-    
-    Mechanisms.armMotorEncoder.setPositionConversionFactor(driveTrainConstants.rotationsToDegrees);
+    // CHECK THIS
+    Mechanisms.armMotorEncoder.setDistancePerRotation(360);
+    // Mechanisms.armMotorEncoder.setPositionConversionFactor(driveTrainConstants.rotationsToDegrees);
   }
 
   @Override
@@ -163,11 +164,12 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     driveTrain.drive(false);
-    // runMechanisms.rotateArmToAngle();
+    runMechanisms.rotateArmToAngle();
     runMechanisms.toggleClaw(false);
-    runMechanisms.testArm();
-    runMechanisms.testExtension();
+    // runMechanisms.testArm();
+    // runMechanisms.testExtension();
     runMechanisms.checkArm();
+
   }
   
   @Override

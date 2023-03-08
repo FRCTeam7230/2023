@@ -121,10 +121,10 @@ public final class Constants {
     public static final double shelfAngleEncoderCounts = 77; //extended
     public static final double lowPickupAngleEncoderCounts = -110; //extended
     public static final double armAngleMargin = 4;
-    public static final double groundPickupAngleMargin = 15;
-    public static final double armLowerLimit = -110;
+    public static final double groundPickupAngleMargin = 10;
+    public static final double armLowerLimit = -120;
     public static final double armLowerExtension = -60;
-    public static final double armUpperLimit = 100;
+    public static final double armUpperLimit = 180;
     public static final double armUpperRetraction = 60;
     //cone
     public static final double coneHighAngleEncoderCounts = 83; //extended
