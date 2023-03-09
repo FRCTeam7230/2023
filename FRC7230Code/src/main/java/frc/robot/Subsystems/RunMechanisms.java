@@ -63,7 +63,7 @@ public class RunMechanisms {
     if (!(getEncoderPosition()>driveTrainConstants.armLowerLimit && getEncoderPosition() < driveTrainConstants.armLowerExtension) && !(getEncoderPosition()<driveTrainConstants.armUpperLimit && getEncoderPosition()>driveTrainConstants.armUpperRetraction)){
       toggleArm(false);
     }
-    // System.out.println(getEncoderPosition());
+    System.out.println(getEncoderPosition());
   }
   public void rotateArmToAngle(){
     if (m_stick.getRawButton(robotConstants.SHELF_PICKUP_BUTTON)){
@@ -146,18 +146,40 @@ public class RunMechanisms {
       // }
       // armMotor.set(armController.calculate(armMotorEncoder.getPosition(), neededEncoderCounts));
       if (Math.abs(neededEncoderCounts - getEncoderPosition()) < driveTrainConstants.armAngleMargin){
-        if (!completedRotating){
+        if (needExtend && !completedRotating){
           toggleArm(true);
           System.out.println("sending");
           System.out.println(getEncoderPosition());
         }
-        else if (!prevButton && needExtend){
+        else if (needExtend && !prevButton){
           toggleArm(false);
         }
         completedRotating = true;
         
       }
-      else if (neededEncoderCounts == driveTrainConstants.lowPickupAngleEncoderCounts && Math.abs(getEncoderPosition() - driveTrainConstants.lowPickupAngleEncoderCounts + driveTrainConstants.groundPickupAngleMargin)<driveTrainConstants.armAngleMargin){
+      // else if (completedRotating && Math.abs(neededEncoderCounts - getEncoderPosition()) > driveTrainConstants.armAngleMargin){
+      //   if ((!Mechanisms.upperLimitSwitch.get() && getEncoderPosition() < neededEncoderCounts) || (!Mechanisms.lowerLimitSwitch.get() && getEncoderPosition() > neededEncoderCounts)){
+      //     armMotor.set(0);
+      //     System.out.println("limit kill");
+      //   }
+      //   else if (!(getEncoderPosition()>driveTrainConstants.armLowerLimit && getEncoderPosition()<driveTrainConstants.armUpperLimit)){
+      //     armMotor.set(0);
+      //     System.out.println("oob kill");
+      //   }
+      //   else if (getEncoderPosition() < neededEncoderCounts - driveTrainConstants.armAngleMargin) {
+      //     armMotor.set(-driveTrainConstants.armMotorSpeed);
+      //     System.out.println("up");
+      //   }
+      //   else if (getEncoderPosition() > neededEncoderCounts + driveTrainConstants.armAngleMargin){
+      //     armMotor.set(driveTrainConstants.armMotorSpeed);
+      //     System.out.println("down");
+      //   }
+      //   else {
+      //     armMotor.set(0);
+      //     System.out.println("other kill");
+      //   }
+      // }
+      else if (needExtend && neededEncoderCounts == driveTrainConstants.lowPickupAngleEncoderCounts && Math.abs(getEncoderPosition() - driveTrainConstants.lowPickupAngleEncoderCounts + driveTrainConstants.groundPickupAngleMargin)<driveTrainConstants.armAngleMargin){
         toggleArm(true);
         System.out.println("firing");
       }
@@ -165,6 +187,8 @@ public class RunMechanisms {
         completedRotating = false;
         if (getEncoderPosition() > driveTrainConstants.lowPickupAngleEncoderCounts + driveTrainConstants.groundPickupAngleMargin){
           toggleArm(false);
+          // if (getEncoderPosition() < driveTrainConstants.lowPickupAngleEncoderCounts -)
+          // armMotor.set(-driveTrainConstants.armMotorSpeed);
           System.out.println("out of position");
         }
       }
