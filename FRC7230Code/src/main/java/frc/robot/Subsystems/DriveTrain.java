@@ -37,11 +37,13 @@ public class DriveTrain {
     private boolean driveModified;
     private boolean pickup;
     private double balanceSpeed;
+    private double protoBalanceSpeed;
 
     //Vision:
     private double[] gamePieceAreas;
     private double angleToTarget;
     private boolean continueMoving;
+
    
     public DriveTrain(DriveSubsystem subsystem, RunMechanisms runMechanisms, Joystick stick1, Joystick stick2){
         m_robotDrive = subsystem;
@@ -226,12 +228,10 @@ public class DriveTrain {
                 surpassedMargin2 = false;
             }
             gyroAngle = Mechanisms.gyro.getRoll();
-            gyroError = driveTrainConstants.targetAngle - gyroAngle;
-
             // System.out.println("Roll" + gyroAngle);
             // System.out.println("Pitch" + Mechanisms.gyro.getPitch());
             // System.out.println("Yaw" + Mechanisms.gyro.getYaw());
-            
+            gyroError = driveTrainConstants.targetAngle - gyroAngle;
             if (Math.abs(gyroError)>driveTrainConstants.smartAngleMargin && !surpassedMargin){
                 surpassedMargin = true;
                 balanceSpeed = driveTrainConstants.smartSpeed;
@@ -243,19 +243,75 @@ public class DriveTrain {
                 DriverStation.reportWarning("MARGIN 2 PASSED", false);
             }
             
+           
+            // System.out.println(gyroAngle);
+
+            // drive forward
+            //when angle hit
             // System.out.println("Error" + gyroError);
             
-            if (gyroError > 0.5){
-                m_robotDrive.drive(-balanceSpeed, -balanceSpeed);
-                System.out.println("backward");
+            //speed zones version
+            if (surpassedMargin){
+                if (gyroError > driveTrainConstants.smartAngleMargin) {
+                    m_robotDrive.drive(driveTrainConstants.smartSpeed, driveTrainConstants.smartSpeed);
+                }
+                else if (gyroError < driveTrainConstants.smartAngleMargin && gyroError > driveTrainConstants.smartAngleMargin2) {
+                    m_robotDrive.drive(driveTrainConstants.slowSmartSpeed, driveTrainConstants.slowSmartSpeed);
+                }
+                else if (gyroError < -driveTrainConstants.smartAngleMargin) {
+                    m_robotDrive.drive(-driveTrainConstants.smartSpeed, -driveTrainConstants.smartSpeed);
+                }
+                else if (gyroError > -driveTrainConstants.smartAngleMargin && gyroError < -driveTrainConstants.smartAngleMargin2) {
+                    m_robotDrive.drive(-driveTrainConstants.slowSmartSpeed, -driveTrainConstants.slowSmartSpeed);
+                }
+                else { //between margin 3 and -margin 3 or outside of the charge station
+                    m_robotDrive.drive(0, 0);
+                }
             }
-            else if (gyroError < - 0.5){
-                m_robotDrive.drive(balanceSpeed, balanceSpeed);
-                System.out.println("forward");
+            else {
+                if ( (invertAxis == 1 )){
+                    m_robotDrive.drive(balanceSpeed, balanceSpeed);
+                }
+                else if (invertAxis == -1 ){
+                    m_robotDrive.drive(-balanceSpeed, -balanceSpeed);
+                }
+            }
+            //changing speed based on a constant multiplied by the angle received (spd at is 0.3 at error =4, and 0.5 at error = 20)
+            if (gyroError > driveTrainConstants.smartAngleMargin2) {
+                protoBalanceSpeed = 0.0125 * gyroError + 0.25; //linear speed control
+                // protoBalanceSpeed = ((Math.pow(gyroError - 4, 1.5)) / 280) + 0.3; //exponential speed control
+            }
+            else if (gyroError < -driveTrainConstants.smartAngleMargin2) {
+                protoBalanceSpeed = 0.0125 * gyroError - 0.25; //linear speed control
+                // protoBalanceSpeed = (-(Math.pow(Math.abs(gyroError) - 4, 1.5)) / 280) - 0.3; //exponential speed control
             }
             else{
-                m_robotDrive.drive(0, 0);
+                protoBalanceSpeed = 0;
             }
+
+            m_robotDrive.drive(protoBalanceSpeed, protoBalanceSpeed);
+
+            // if (gyroError > driveTrainConstants.smartAngleMargin || (!surpassedMargin && !surpassedMargin2 && gyroError>0.3)){
+            //     m_robotDrive.drive(-driveTrainConstants.smartSpeed, -driveTrainConstants.smartSpeed);
+            //     System.out.println("forward");
+            // }
+            // else if (gyroError>0.3 && gyroError < driveTrainConstants.smartAngleMargin && surpassedMargin){
+            //     m_robotDrive.drive(driveTrainConstants.slowSmartSpeed, driveTrainConstants.slowSmartSpeed);
+            //     System.out.println("backward123");
+            // }
+            // else if (gyroError < - driveTrainConstants.smartAngleMargin || (!surpassedMargin&& !surpassedMargin2  && gyroError<-0.3)){
+            //     m_robotDrive.drive(driveTrainConstants.smartSpeed, driveTrainConstants.smartSpeed);
+            //     System.out.println("backward");
+            // }
+            // else if (gyroError<-0.3 && gyroError >- driveTrainConstants.smartAngleMargin && surpassedMargin){
+            //     m_robotDrive.drive(-driveTrainConstants.slowSmartSpeed, -driveTrainConstants.slowSmartSpeed);
+            //     System.out.println("forward123");
+            // }
+            // else{
+            //     m_robotDrive.drive(0, 0);
+            // }
+
+
         }
     }
 }

@@ -102,7 +102,7 @@ public final class Constants {
 
     //autobalance
     public static final double smartAngleMargin = 10;
-    public static final double smartAngleMargin2 = 4;
+    public static final double smartAngleMargin2 = 5;
     public static final double targetAngle = 3;
     public static final double smartSpeed = 0.3;
     public static final double slowSmartSpeed = 0.15;
