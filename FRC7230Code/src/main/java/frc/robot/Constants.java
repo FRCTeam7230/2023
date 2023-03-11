@@ -71,14 +71,14 @@ public final class Constants {
     public static final double deadZone = 0.2;
     public static final double zoomFactor = 2.0;
     public static final double slowFactor = 0.45;
-    public static final double speedFactor = 0.775;
+    public static final double speedFactor = 0.575;
     public static final double turnFactor = 0.725;
     public static final double accelY = 0.005;
     public static final double accelX = 0.001;
     public static final double decelY = 0.075;
     public static final double decelX = 0.075;
-    public static final double limitX = 0.8;
-    public static final double limitY = 0.6;
+    public static final double limitX = 0.6;
+    public static final double limitY = 0.4;
     public static final double initSpeed = 0.2;
     public static final double dropOff = 0.4; //drop off point when speed is able to drop to 0
     public static final double kP = 1;
@@ -115,25 +115,26 @@ public final class Constants {
     public static final double[] tapeScreenAreas = {0.12, 0.2}; // 0 - area of tape on the screen for high target, 1 - for middle target
 
     //arm-related
+    public static final double drift = 20;
     public static final double armMotorSpeed = 0.5;
     public static final int rotationsToDegrees = 360;
-    public static final double lowScoreAngleEncoderCounts = 150; //unextended
-    public static final double shelfAngleEncoderCounts = -65; //extended
-    public static final double lowPickupAngleEncoderCounts = -99; //extended
-    public static final double armAngleMargin = 4;
-    public static final double groundPickupAngleMargin = 10;
-    public static final double armLowerLimit = -112;
-    public static final double armLowerExtension = -60;
-    public static final double armUpperLimit = 180;
-    public static final double armUpperRetraction = 60;
+    public static final double lowScoreAngleEncoderCounts = 200+drift; //unextended
+    public static final double shelfAngleEncoderCounts = -15+drift; //extended
+    public static final double lowPickupAngleEncoderCounts = -50+drift; //extended
+    public static final double armAngleMargin = 3.5;
+    public static final double groundPickupAngleMargin = 7;
+    public static final double armLowerLimit = -53+drift;
+    public static final double armLowerExtension = 20+drift;
+    public static final double armUpperLimit = 240+drift;
+    public static final double armUpperRetraction = 60+drift;
 
 
     //cone
-    public static final double coneHighAngleEncoderCounts = 71; //extended
-    public static final double coneMidAngleEncoderCounts = 80; //unextended
+    public static final double coneHighAngleEncoderCounts = 140+drift; //extended
+    public static final double coneMidAngleEncoderCounts = 151+drift; //unextended
 
     //cube
-    public static final double cubeHighAngleEncoderCounts = 77; //extended
-    public static final double cubeMidAngleEncoderCounts = 90; //unextended
+    public static final double cubeHighAngleEncoderCounts = 160+drift; //extended
+    public static final double cubeMidAngleEncoderCounts = 170+drift; //unextended
   }
 }

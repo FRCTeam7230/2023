@@ -38,7 +38,7 @@ public class DriveTrain {
     private boolean pickup;
 
     //Vision:
-    private double[] gamePieceAreas;
+    private double[] gamePieceAreas = driveTrainConstants.coneScreenAreas;
     private double angleToTarget;
     private boolean continueMoving;
 
@@ -161,7 +161,7 @@ public class DriveTrain {
             DriverStation.reportWarning(Double.toString(invertAxis * speedX), false);
             DriverStation.reportWarning(Double.toString(invertAxis * speedY), false);
             DriverStation.reportWarning("\n", false);
-            m_robotDrive.arcadeDrive(invertAxis * (speedY), invertAxis *(speedX));
+            m_robotDrive.arcadeDrive(-1*invertAxis * (speedY), invertAxis *(speedX));
         }
 
         //Switching target - cube, or cone 
@@ -180,9 +180,11 @@ public class DriveTrain {
         // Smart control
         if (!manualLayout && m_runMechanisms.completedRotating) {
             if (m_stick.getRawButton(robotConstants.ORIENT_SHELF_PICKUP_BUTTON)) {
+                Limelight.updateTarget();
                 continueMoving = Limelight.proceedMoving(gamePieceAreas[1]);
             }
             if (m_stick.getRawButton(robotConstants.ORIENT_GROUND_PICKUP_BUTTON)) {
+                Limelight.updateTarget();
                 continueMoving = Limelight.proceedMoving(gamePieceAreas[0]);
             }
             if (m_stick.getRawButton(robotConstants.ORIENT_HIGH_TARGET_BUTTON)) {

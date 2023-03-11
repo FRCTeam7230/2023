@@ -17,11 +17,12 @@ public class Autonomous {
   private double gyroError;
   private double angleToTarget;
   public static boolean completedDrive = false;
-
-  
+  private boolean done;
+  private boolean prevDone;
   public Autonomous(){
     m_DriveSubsystem = Mechanisms.driveSubsystem;
     m_RunMechanisms = Mechanisms.runMechanisms;
+    done = false;
   }
   public void init(){   
     autoState = "first";
@@ -36,27 +37,32 @@ public class Autonomous {
     
     if(autoState == "first") {
       if (coneLoaded){
-        m_RunMechanisms.autonRotateArmToAngle(driveTrainConstants.coneHighAngleEncoderCounts);
+        done = m_RunMechanisms.autonRotateArmToAngle(driveTrainConstants.coneHighAngleEncoderCounts);
       }
       else{
-        m_RunMechanisms.autonRotateArmToAngle(driveTrainConstants.cubeHighAngleEncoderCounts);
+        done = m_RunMechanisms.autonRotateArmToAngle(driveTrainConstants.cubeHighAngleEncoderCounts);
       }
-      if (m_RunMechanisms.autonCompletedRotating){
+      if (done){
+        if (!prevDone){
         autonomousTimer.reset();
         autonomousTimer.start();
-        if (autonomousTimer.get()<= 0.3){ 
-        m_RunMechanisms.autonToggleArmExtension(); 
         }
-        if (autonomousTimer.get()<= 0.6 && autonomousTimer.get() > 0.3){ 
-          m_RunMechanisms.toggleClaw(true);
+
+        if (autonomousTimer.get()<= 1.5){ 
+        m_RunMechanisms.autonToggleArmExtension(true); 
         }
-        else if (autonomousTimer.get()<= 0.9 && autonomousTimer.get() > 0.6){ 
-            m_RunMechanisms.autonToggleArmExtension();
+        else if (autonomousTimer.get()<= 2){ 
+          m_RunMechanisms.toggleClaw(true, true);
+        }
+        else if (autonomousTimer.get()<=2.5){ 
+            m_RunMechanisms.autonToggleArmExtension(false);
         }
         else{
           autoState = "second";
+          m_DriveSubsystem.resetAuton();
         }
       }
+      prevDone = done;
     }
 
     if(autoState == "second" && midPosition){

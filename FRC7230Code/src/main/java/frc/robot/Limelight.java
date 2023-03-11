@@ -13,7 +13,7 @@ public class Limelight {
     public static double targetArea;
     public static boolean coneTarget = true; // true if cone is target, false if cube
     public static String targetName = "cone";
-    public static double[] gamePieceAreas;
+    public static double[] gamePieceAreas = driveTrainConstants.coneScreenAreas;
     public static double tapeScreenArea;
     
     // private static double cubeAreaPrc = 10.5; //percentage of cube on the screen to be able to get the piece 

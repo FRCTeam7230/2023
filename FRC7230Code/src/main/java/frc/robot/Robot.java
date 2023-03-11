@@ -8,6 +8,7 @@ import frc.robot.Subsystems.Autonomous;
 import frc.robot.Subsystems.DriveTrain;
 import frc.robot.Subsystems.RunMechanisms;
 import frc.robot.Constants.*;
+import frc.robot.Subsystems.CameraStarter;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -37,7 +38,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     SmartDashboard.putNumber("Drive Speed Limit", driveTrainConstants.limitX);
     SmartDashboard.putNumber("Turn Speed Limit", driveTrainConstants.limitY);
-
+    CameraStarter.runCamera(160, 120);
     position_chooser.setDefaultOption("Middle", "Middle");
     position_chooser.addOption("Side", "Side");
     SmartDashboard.putData("Autonomous choice", position_chooser);
@@ -167,7 +168,7 @@ public class Robot extends TimedRobot {
     runMechanisms.rotateArmToAngle();
     runMechanisms.toggleClaw(false);
     // runMechanisms.testArm();
-    // runMechanisms.testExtension();
+    runMechanisms.testExtension();
     runMechanisms.checkArm();
 
   }

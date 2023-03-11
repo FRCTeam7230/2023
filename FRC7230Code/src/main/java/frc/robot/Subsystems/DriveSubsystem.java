@@ -110,7 +110,7 @@ public class DriveSubsystem extends SubsystemBase {
    * @return the average of the two encoder readings
    */
   public double getAverageEncoderDistance() {
-    return (m_leftEncoder.getPosition()-initialLeft + m_rightEncoder.getPosition()-initialRight) / 2.0;
+    return (Math.abs(m_leftEncoder.getPosition()-initialLeft) + Math.abs(m_rightEncoder.getPosition()-initialRight)) / 2.0;
   }
 
   public double getLeftDistance(){
@@ -149,12 +149,17 @@ public class DriveSubsystem extends SubsystemBase {
   public void setMaxOutput(double maxOutput) {
     m_drive.setMaxOutput(maxOutput);
   }
-
-  public void autonDriveSetDistance(double distance){ 
+  public void resetAuton(){
     if  (!prevAuto) {
       resetEncoders();
       Autonomous.completedDrive = false;
     }
+  }
+  public void autonDriveSetDistance(double distance){ 
+    
+    prevAuto = true;
+    // System.out.println(getAverageEncoderDistance());
+    // System.out.println(distance);
       // distance may be positive and negative, so we need to take the absolute values 
     if (getAverageEncoderDistance() < distance - driveTrainConstants.driveMargin) {
       drive(driveTrainConstants.slowSmartSpeed, driveTrainConstants.slowSmartSpeed);
@@ -164,7 +169,6 @@ public class DriveSubsystem extends SubsystemBase {
     }
     else {
       drive(0,0);
-      prevAuto = true;
       Autonomous.completedDrive = true;
     }
   } 
