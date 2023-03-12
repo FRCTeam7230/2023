@@ -60,23 +60,35 @@ public class Autonomous {
         else{
           autoState = "second";
           m_DriveSubsystem.resetAuton();
+          autonomousTimer.reset();
+          autonomousTimer.start();
         }
       }
       prevDone = done;
     }
 
     if(autoState == "second" && midPosition){
-      m_DriveSubsystem.autonDriveSetDistance(driveTrainConstants.metersToPieceFromMiddle);
+      if (autonomousTimer.get() < 4.25){
+        // System.out.println(autonomousTimer.get());
+        m_DriveSubsystem.autonDriveSetDistance(-driveTrainConstants.metersToPieceFromMiddle);
+      }
+      else {
+        m_DriveSubsystem.drive(0,0);
+      }
       if (completedDrive){
-        autoState = "third";
+        autoState = "thirdNO";
       }
     }
-
-    if (autoState == "second" && !midPosition){
-      m_DriveSubsystem.autonDriveSetDistance(driveTrainConstants.metersToPieceFromSide);
+    if(autoState == "second" && !midPosition){
+      if (autonomousTimer.get() < 6){
+        // System.out.println(autonomousTimer.get());
+        m_DriveSubsystem.autonDriveSetDistance(-driveTrainConstants.metersToPieceFromMiddle);
+      }
+      else {
+        m_DriveSubsystem.drive(0,0); //safety
+      }
       if (completedDrive){
-        autoState = "third";
-        m_DriveSubsystem.resetEncoders();
+        autoState = "thirdNO";
       }
     }
     if(autoState == "third"){
@@ -85,26 +97,27 @@ public class Autonomous {
       m_RunMechanisms.autonRotateArmToAngle(driveTrainConstants.lowPickupAngleEncoderCounts);
       if (m_RunMechanisms.autonCompletedRotating){
         if (angleToTarget>0 && angleToTarget>driveTrainConstants.smartAngleMarginVision){
-          m_DriveSubsystem.drive(driveTrainConstants.smartSpeedVision/2, -driveTrainConstants.smartSpeedVision);
+          // m_DriveSubsystem.drive(driveTrainConstants.smartSpeedVision/2, -driveTrainConstants.smartSpeedVision);
         }
         else if (angleToTarget<0 && angleToTarget<-driveTrainConstants.smartAngleMarginVision){
-          m_DriveSubsystem.drive(-driveTrainConstants.smartSpeedVision, driveTrainConstants.smartSpeedVision/2);
+          // m_DriveSubsystem.drive(-driveTrainConstants.smartSpeedVision, driveTrainConstants.smartSpeedVision/2);
         }
         else{
           autonomousTimer.reset();
           autonomousTimer.start();
           if (autonomousTimer.get()<= 0.3){ 
-            m_RunMechanisms.autonToggleArmExtension(); 
+            m_RunMechanisms.autonToggleArmExtension(true); 
           }
-          if (autonomousTimer.get()<= 0.6 && autonomousTimer.get() > 0.3){ 
-            m_RunMechanisms.toggleClaw(true);
-          }
-          else if (autonomousTimer.get()<= 0.9 && autonomousTimer.get() > 0.6){ 
-            m_RunMechanisms.autonToggleArmExtension();
-          }
-          else{
-            autoState = "fourth";
-          }
+          Mechanisms.armMotor.set(0.0125);
+          // if (autonomousTimer.get()<= 0.6 && autonomousTimer.get() > 0.3){ 
+          //   m_RunMechanisms.toggleClaw(true);
+          // }
+          // else if (autonomousTimer.get()<= 0.9 && autonomousTimer.get() > 0.6){ 
+          //   m_RunMechanisms.autonToggleArmExtension();
+          // }
+          // else{
+          //   // autoState = "fourth";
+          // }
         }
       } 
     }

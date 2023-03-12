@@ -4,13 +4,13 @@ import frc.robot.Limelight;
 import frc.robot.Mechanisms;
 import frc.robot.Constants.driveTrainConstants;
 import frc.robot.Constants.robotConstants;
-import edu.wpi.first.math.controller.PIDController;
+// import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj2.command.PIDCommand;
+// import edu.wpi.first.wpilibj2.command.PIDCommand;
 import edu.wpi.first.wpilibj.Timer;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.SparkMaxAbsoluteEncoder;
+// import com.revrobotics.SparkMaxAbsoluteEncoder;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 public class RunMechanisms {
     public boolean rotateComplete;
@@ -18,7 +18,7 @@ public class RunMechanisms {
     private Solenoid armSolenoid = Mechanisms.armSolenoid, clawSolenoid = Mechanisms.clawSolenoid;
     private Joystick m_stick = Mechanisms.mechanismsJoystick;
     private final DutyCycleEncoder armMotorEncoder = Mechanisms.armMotorEncoder;
-    private final PIDController armController = Mechanisms.armController;
+    // private final PIDController armController = Mechanisms.armController;
   private boolean inTimer = false;
     private Timer upTimer = new Timer();
   private double neededEncoderCounts;
@@ -30,7 +30,7 @@ public class RunMechanisms {
   public boolean completedRotating = false;
 
   public double getEncoderPosition(){
-    double pos = armMotorEncoder.getAbsolutePosition()*360+100;
+    double pos = armMotorEncoder.getAbsolutePosition()*360-50;
     if (pos > 300){
       return pos-360;
     }
@@ -61,7 +61,7 @@ public class RunMechanisms {
     }
   }
   public void checkArm(){
-    if (!(getEncoderPosition()>driveTrainConstants.armLowerLimit && getEncoderPosition() < driveTrainConstants.armLowerExtension) && !(getEncoderPosition()<driveTrainConstants.armUpperLimit && getEncoderPosition()>driveTrainConstants.armUpperRetraction)){
+    if (!(getEncoderPosition() < driveTrainConstants.armLowerExtension) && !(getEncoderPosition()<driveTrainConstants.armUpperLimit && getEncoderPosition()>driveTrainConstants.armUpperRetraction)){
       toggleArm(false);
     }
     System.out.println(getEncoderPosition());
@@ -222,17 +222,28 @@ public class RunMechanisms {
       if (upTimer.get()<0.75 && inTimer){
         armMotor.set(-driveTrainConstants.armMotorSpeed);
         }
-        else if (inTimer && upTimer.get()<1){
+        else if (inTimer && upTimer.get()<1.0){
+        armMotor.set(-driveTrainConstants.armMotorSpeed/2);
+        }
+        else if (inTimer && upTimer.get()<1.25){
         armMotor.set(0);
         }
-        else if (inTimer){
+        else if (inTimer && upTimer.get()<1.75){
           toggleArm(false);
+        }
+        else if (inTimer){
+          
           inTimer = false;
         }
+
     }   
-    else {
+    else if (!Mechanisms.driveJoystick.getRawButton(robotConstants.ARM_TEST_BUTTON_DOWN) && !Mechanisms.driveJoystick.getRawButton(robotConstants.ARM_TEST_BUTTON_UP)){
       armMotor.set(0);
     }
+    // else if (inTimer){
+      
+    //   inTimer = false;
+    // }
 // passive rotation option and active extension
     // if (buttonPressed && completedRotating && !prevButton){
     //   toggleArm(true);
@@ -306,7 +317,7 @@ public class RunMechanisms {
       armMotor.set(0);
       System.out.println("limit kill");
     }
-    else if (!(getEncoderPosition()>driveTrainConstants.armLowerLimit && getEncoderPosition()<driveTrainConstants.armUpperLimit)){
+    else if ((getEncoderPosition()<driveTrainConstants.armLowerLimit && neededEncoderCounts<getEncoderPosition()) || (getEncoderPosition()>driveTrainConstants.armUpperLimit && neededEncoderCounts>getEncoderPosition())){
       armMotor.set(0);
       System.out.println("oob kill");
     }
@@ -351,31 +362,31 @@ public class RunMechanisms {
        clawSolenoid.set(state);
    }
  } 
-  public void testExtension(){
-    if(m_stick.getRawButtonPressed(robotConstants.EXTEND_TEST_BUTTON)){
+  public void testExtension(Joystick stick){
+    if(stick.getRawButtonPressed(robotConstants.EXTEND_TEST_BUTTON)){
       toggleArm();
     }
   }
-  public void testArm(){
+  public void testArm(Joystick stick){
     
-    if ( (!Mechanisms.upperLimitSwitch.get() && m_stick.getRawButton(robotConstants.ARM_TEST_BUTTON_UP)) || (!Mechanisms.lowerLimitSwitch.get()&& m_stick.getRawButton(robotConstants.ARM_TEST_BUTTON_DOWN))){
+    if ( (!Mechanisms.upperLimitSwitch.get() && stick.getRawButton(robotConstants.ARM_TEST_BUTTON_UP)) || (!Mechanisms.lowerLimitSwitch.get()&& stick.getRawButton(robotConstants.ARM_TEST_BUTTON_DOWN))){
       armMotor.set(0);
       System.out.println("limit kill");
       System.out.println("upper: "+Mechanisms.upperLimitSwitch.get());
       System.out.println("lower: "+Mechanisms.lowerLimitSwitch.get());
     }
-    else if (getEncoderPosition()>driveTrainConstants.armLowerLimit && getEncoderPosition()<driveTrainConstants.armUpperLimit){
-      if (m_stick.getRawButton(robotConstants.ARM_TEST_BUTTON_DOWN)){
-          armMotor.set(0.9);
+    else if ( !(getEncoderPosition()<driveTrainConstants.armLowerLimit && stick.getRawButton(robotConstants.ARM_TEST_BUTTON_DOWN)) && !(getEncoderPosition()>driveTrainConstants.armUpperLimit && stick.getRawButton(robotConstants.ARM_TEST_BUTTON_UP))){
+      if (stick.getRawButton(robotConstants.ARM_TEST_BUTTON_DOWN)){
+          armMotor.set(driveTrainConstants.armMotorSpeed);
           System.out.println("down");
       }
-      else if (m_stick.getRawButton(robotConstants.ARM_TEST_BUTTON_UP)){
-          armMotor.set(-0.90);
+      else if (stick.getRawButton(robotConstants.ARM_TEST_BUTTON_UP)){
+          armMotor.set(-driveTrainConstants.armMotorSpeed);
           System.out.println("up");
       }
-      else{
+      else if (!m_stick.getRawButton(robotConstants.SHELF_PICKUP_BUTTON) && !m_stick.getRawButton(robotConstants.GROUND_PICKUP_BUTTON) && !m_stick.getRawButton(robotConstants.HIGH_SCORE_BUTTON) && !m_stick.getRawButton(robotConstants.MID_SCORE_BUTTON) && !m_stick.getRawButton(robotConstants.LOW_SCORE_BUTTON)){
         armMotor.set(0);
-        // System.out.println("no button kill");
+        System.out.println("no button kill");
       }
     } 
     else {

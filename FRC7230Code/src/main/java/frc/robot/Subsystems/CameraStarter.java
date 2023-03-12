@@ -6,7 +6,7 @@ import edu.wpi.first.cscore.CvSink;
 import edu.wpi.first.cscore.CvSource;
 import org.opencv.core.Mat;
 import edu.wpi.first.cscore.VideoMode.PixelFormat;
-import frc.robot.Mechanisms;
+
 public class CameraStarter {
     public static void runCamera(int width, int height){
         new Thread(() -> {
@@ -15,7 +15,7 @@ public class CameraStarter {
             camera.setVideoMode(PixelFormat.kYUYV, width, height, 10);
             CvSink cvSink = CameraServer.getVideo();
             CvSource outputStream = CameraServer.putVideo("Blur", width, height);
-            CvSource outputStream2 = CameraServer.putVideo("Target", width, height);
+            // CvSource outputStream2 = CameraServer.putVideo("Target", width, height);
             Mat source = new Mat();
             while(!Thread.interrupted()) {
               if (cvSink.grabFrame(source) == 0) {

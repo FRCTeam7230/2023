@@ -59,9 +59,9 @@ public final class Constants {
     public static final int ORIENT_MID_TARGET_BUTTON = BUTTON9;
 
     //Test Buttons:
-    public static final int PID_TEST_BUTTON = BUTTON10;
-    public static final int ENCODER_TEST_BUTTON = BUTTON11;
-    public static final int EXTEND_TEST_BUTTON = BUTTON6;
+    // public static final int PID_TEST_BUTTON = BUTTON10;
+    // public static final int ENCODER_TEST_BUTTON = BUTTON11;
+    public static final int EXTEND_TEST_BUTTON = BUTTON10;
     public static final int ARM_TEST_BUTTON_UP = BUTTON11;
     public static final int ARM_TEST_BUTTON_DOWN = BUTTON12;
   }
@@ -94,8 +94,8 @@ public final class Constants {
     public static final double kEncoderMetersPerMotorRev = motorRevsToWheelRevs*kWheelDiameterMeters * Math.PI;
     public static final double driveMargin = 0.1;
 
-    public static final double metersToPieceFromMiddle = 7.69;
-    public static final double metersToPieceFromSide = 5.69;
+    public static final double metersToPieceFromMiddle = 4.0;
+    public static final double metersToPieceFromSide = 4.0;
     public static final double metersFromPieceToBalance = 1.25;
   
     public static final double testDistance = 1;
@@ -115,26 +115,26 @@ public final class Constants {
     public static final double[] tapeScreenAreas = {0.12, 0.2}; // 0 - area of tape on the screen for high target, 1 - for middle target
 
     //arm-related
-    public static final double drift = 20;
-    public static final double armMotorSpeed = 0.5;
-    public static final int rotationsToDegrees = 360;
-    public static final double lowScoreAngleEncoderCounts = 200+drift; //unextended
-    public static final double shelfAngleEncoderCounts = -15+drift; //extended
-    public static final double lowPickupAngleEncoderCounts = -50+drift; //extended
-    public static final double armAngleMargin = 3.5;
-    public static final double groundPickupAngleMargin = 7;
-    public static final double armLowerLimit = -53+drift;
+    public static final double drift = 69;
+    public static final double armLowerLimit = -67+drift;
     public static final double armLowerExtension = 20+drift;
     public static final double armUpperLimit = 240+drift;
     public static final double armUpperRetraction = 60+drift;
+    public static final double armMotorSpeed = 0.55;
+    public static final int rotationsToDegrees = 360;
+    public static final double lowScoreAngleEncoderCounts = 210+drift; //unextended
+    public static final double shelfAngleEncoderCounts = -12  +drift; //extended
+    public static final double lowPickupAngleEncoderCounts = armLowerLimit+7; //extended
+    public static final double armAngleMargin = 3.5;
+    public static final double groundPickupAngleMargin = 5;
 
 
     //cone
-    public static final double coneHighAngleEncoderCounts = 140+drift; //extended
-    public static final double coneMidAngleEncoderCounts = 151+drift; //unextended
+    public static final double coneHighAngleEncoderCounts = 125+drift; //extended
+    public static final double coneMidAngleEncoderCounts = 130+drift; //unextended
 
     //cube
-    public static final double cubeHighAngleEncoderCounts = 160+drift; //extended
-    public static final double cubeMidAngleEncoderCounts = 170+drift; //unextended
+    public static final double cubeHighAngleEncoderCounts = coneHighAngleEncoderCounts; //extended
+    public static final double cubeMidAngleEncoderCounts = coneMidAngleEncoderCounts; //unextended
   }
 }

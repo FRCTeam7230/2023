@@ -76,6 +76,7 @@ public class Limelight {
     public static boolean proceedMoving(double objAreaRequired) {
         updateData();
         objAreaError = objAreaRequired - targetArea;
+        // System.out.println(targetArea);
         if (Math.abs(objAreaError) <= objAreaMargin) {
             continueMoving = false;
         }
