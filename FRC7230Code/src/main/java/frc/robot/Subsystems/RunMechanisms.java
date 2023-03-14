@@ -64,7 +64,7 @@ public class RunMechanisms {
     if (!(getEncoderPosition() < driveTrainConstants.armLowerExtension) && !(getEncoderPosition()<driveTrainConstants.armUpperLimit && getEncoderPosition()>driveTrainConstants.armUpperRetraction)){
       toggleArm(false);
     }
-    System.out.println(getEncoderPosition());
+    // System.out.println(getEncoderPosition());
   }
   public void rotateArmToAngle(){
     if (m_stick.getRawButton(robotConstants.SHELF_PICKUP_BUTTON)){
@@ -153,6 +153,7 @@ public class RunMechanisms {
       if (Math.abs(neededEncoderCounts - getEncoderPosition()) < driveTrainConstants.armAngleMargin){
         // System.out.println(completedRotating);
         // System.out.println(needExtend);
+        boolean cpltRotUpd = true;
         if (neededEncoderCounts < 100){
           armMotor.set(-0.0125);
         }
@@ -168,6 +169,7 @@ public class RunMechanisms {
           if (neededEncoderCounts != driveTrainConstants.lowPickupAngleEncoderCounts){
             toggleArm(false);
             inTimer=false;
+            cpltRotUpd = false;
           }
           else {
             upTimer.reset();
@@ -180,7 +182,12 @@ public class RunMechanisms {
         else {
           // inTimer=false;
         }
-        completedRotating = true;
+        completedRotating = cpltRotUpd;
+        // if (!armSolenoid.get()){
+        // }
+        // else{
+        //   completedRotating = false;
+        // }
         
       }
       // else if (completedRotating && Math.abs(neededEncoderCounts - getEncoderPosition()) > driveTrainConstants.armAngleMargin){
@@ -371,27 +378,27 @@ public class RunMechanisms {
     
     if ( (!Mechanisms.upperLimitSwitch.get() && stick.getRawButton(robotConstants.ARM_TEST_BUTTON_UP)) || (!Mechanisms.lowerLimitSwitch.get()&& stick.getRawButton(robotConstants.ARM_TEST_BUTTON_DOWN))){
       armMotor.set(0);
-      System.out.println("limit kill");
-      System.out.println("upper: "+Mechanisms.upperLimitSwitch.get());
-      System.out.println("lower: "+Mechanisms.lowerLimitSwitch.get());
+      // System.out.println("limit kill");
+      // System.out.println("upper: "+Mechanisms.upperLimitSwitch.get());
+      // System.out.println("lower: "+Mechanisms.lowerLimitSwitch.get());
     }
     else if ( !(getEncoderPosition()<driveTrainConstants.armLowerLimit && stick.getRawButton(robotConstants.ARM_TEST_BUTTON_DOWN)) && !(getEncoderPosition()>driveTrainConstants.armUpperLimit && stick.getRawButton(robotConstants.ARM_TEST_BUTTON_UP))){
       if (stick.getRawButton(robotConstants.ARM_TEST_BUTTON_DOWN)){
           armMotor.set(driveTrainConstants.armMotorSpeed);
-          System.out.println("down");
+          // System.out.println("down");
       }
       else if (stick.getRawButton(robotConstants.ARM_TEST_BUTTON_UP)){
           armMotor.set(-driveTrainConstants.armMotorSpeed);
-          System.out.println("up");
+          // System.out.println("up");
       }
       else if (!m_stick.getRawButton(robotConstants.SHELF_PICKUP_BUTTON) && !m_stick.getRawButton(robotConstants.GROUND_PICKUP_BUTTON) && !m_stick.getRawButton(robotConstants.HIGH_SCORE_BUTTON) && !m_stick.getRawButton(robotConstants.MID_SCORE_BUTTON) && !m_stick.getRawButton(robotConstants.LOW_SCORE_BUTTON)){
         armMotor.set(0);
-        System.out.println("no button kill");
+        // System.out.println("no button kill");
       }
     } 
     else {
       armMotor.set(0);
-      System.out.println("oob kill");
+      // System.out.println("oob kill");
     }
   }
 }

@@ -30,13 +30,14 @@ public class DriveTrain {
     
     private boolean button5State;
     private boolean button6State;
-    
+    private boolean buttonPressed;
     
     private boolean prevButton3 = false;
-    public boolean manualLayout = true; // layout of the joystick - manual or smart
+    public boolean manualLayout = false; // layout of the joystick - manual or smart
     private boolean driveModified;
     private boolean pickup;
-
+    private double protoBalanceSpeed;
+    private double balanceSpeed = driveTrainConstants.smartSpeed;
     //Vision:
     private double[] gamePieceAreas = driveTrainConstants.coneScreenAreas;
     private double angleToTarget;
@@ -177,25 +178,38 @@ public class DriveTrain {
             manualLayout = !manualLayout;
         }
 
+        
+        Limelight.manualLimelightOff(manualLayout);
+        
+
+
         // Smart control
         if (!manualLayout && m_runMechanisms.completedRotating) {
             if (m_stick.getRawButton(robotConstants.ORIENT_SHELF_PICKUP_BUTTON)) {
                 Limelight.updateTarget();
                 continueMoving = Limelight.proceedMoving(gamePieceAreas[1]);
+                buttonPressed = true;
             }
-            if (m_stick.getRawButton(robotConstants.ORIENT_GROUND_PICKUP_BUTTON)) {
+            else if (m_stick.getRawButton(robotConstants.ORIENT_GROUND_PICKUP_BUTTON)) {
                 Limelight.updateTarget();
                 continueMoving = Limelight.proceedMoving(gamePieceAreas[0]);
+                buttonPressed = true;
             }
-            if (m_stick.getRawButton(robotConstants.ORIENT_HIGH_TARGET_BUTTON)) {
+            else if (m_stick.getRawButton(robotConstants.ORIENT_HIGH_TARGET_BUTTON)) {
                 continueMoving = Limelight.updateTape(true, driveTrainConstants.tapeScreenAreas);
+                buttonPressed = true;
             }
-            if (m_stick.getRawButton(robotConstants.ORIENT_MID_TARGET_BUTTON)) {
+            else if (m_stick.getRawButton(robotConstants.ORIENT_MID_TARGET_BUTTON)) {
                 continueMoving = Limelight.updateTape(false, driveTrainConstants.tapeScreenAreas);
+                buttonPressed = true;
             }
-            if (m_runMechanisms.buttonPressed) {
+            else {
+                buttonPressed = false;
+            }
+            if (buttonPressed) {
                 angleToTarget = Limelight.getTargetAngleX(); // getting angle to drive to the robot
-                if (continueMoving) { // checking if target is enouph close to the robot. If not, continue moving
+                System.out.println(angleToTarget);
+                // if (continueMoving) { // checking if target is enouph close to the robot. If not, continue moving
                     if (angleToTarget>0 && angleToTarget>driveTrainConstants.smartAngleMarginVision){
                         driveModified = true;
                         m_robotDrive.drive(driveTrainConstants.smartSpeedVision/2, -driveTrainConstants.smartSpeedVision);
@@ -204,62 +218,110 @@ public class DriveTrain {
                         driveModified = true;
                         m_robotDrive.drive(-driveTrainConstants.smartSpeedVision, driveTrainConstants.smartSpeedVision/2);
                     }
-                    else if (Math.abs(angleToTarget) < driveTrainConstants.smartAngleMarginVision){
-                        driveModified = true;
-                        if (pickup){
-                            m_robotDrive.drive(-driveTrainConstants.smartSpeedVision, -driveTrainConstants.smartSpeedVision);
-                        }    
-                        else{
-                            m_robotDrive.drive(driveTrainConstants.smartSpeedVision, driveTrainConstants.smartSpeedVision);
-                        }   
-                    }
-                }
-                else {
-                    driveModified = false;       
-                }
+                    // else if (Math.abs(angleToTarget) < driveTrainConstants.smartAngleMarginVision){
+                        // driveModified = true;
+                        // if (pickup){
+                        //     m_robotDrive.drive(-driveTrainConstants.smartSpeedVision, -driveTrainConstants.smartSpeedVision);
+                        // }    
+                        // else{
+                            // m_robotDrive.drive(driveTrainConstants.smartSpeedVision, driveTrainConstants.smartSpeedVision);
+                        // }   
+                    // }
+                // }
+                // else {
+                    // driveModified = false;       
+                // }
             }
+        }
+        else {
+            driveModified = false;
         }
 
 
         button3State = d_stick.getRawButton(robotConstants.BALANCING_BUTTON);
         if (button3State){
+            driveModified = true;
             if (!prevButton3){
                 surpassedMargin = false;
                 surpassedMargin2 = false;
             }
+            gyroAngle = Mechanisms.gyro.getRoll();
+            System.out.println("Roll" + gyroAngle);
+            // System.out.println("Pitch" + Mechanisms.gyro.getPitch());
+            // System.out.println("Yaw" + Mechanisms.gyro.getYaw());
+
+            gyroError = driveTrainConstants.targetAngle - gyroAngle;
             if (Math.abs(gyroError)>driveTrainConstants.smartAngleMargin && !surpassedMargin){
                 surpassedMargin = true;
+                balanceSpeed = driveTrainConstants.smartSpeed;
                 DriverStation.reportWarning("MARGIN PASSED", false);
             }
-            if (Math.abs(gyroError)>driveTrainConstants.smartAngleMargin2 && surpassedMargin && !surpassedMargin2){
+            if (Math.abs(gyroError)>driveTrainConstants.smartAngleMargin2 && Math.abs(gyroError)< driveTrainConstants.smartAngleMargin && !surpassedMargin2){
                 surpassedMargin2 = true;
+                balanceSpeed = driveTrainConstants.slowSmartSpeed;
                 DriverStation.reportWarning("MARGIN 2 PASSED", false);
             }
-            gyroAngle = Mechanisms.gyro.getPitch();
-            gyroError = driveTrainConstants.targetAngle - gyroAngle;
-            // System.out.println(gyroAngle);
-            System.out.println(gyroError);
             
-            if (gyroError > driveTrainConstants.smartAngleMargin || (!surpassedMargin && !surpassedMargin2 && gyroError>0.3)){
-                m_robotDrive.drive(driveTrainConstants.smartSpeed, driveTrainConstants.smartSpeed);
-                System.out.println("forward");
+           
+            System.out.println(gyroAngle);
+
+            // drive forward
+            //when angle hit
+            // System.out.println("Error" + gyroError);
+            
+            //speed zones version
+            /*
+            if (surpassedMargin){
+                System.out.println(gyroError);
+                if (gyroError > driveTrainConstants.smartAngleMargin) {
+                    m_robotDrive.drive(-driveTrainConstants.smartSpeed, -driveTrainConstants.smartSpeed);
+                }
+                else if (gyroError > driveTrainConstants.smartAngleMargin2) {
+                    m_robotDrive.drive(-driveTrainConstants.slowSmartSpeed, -driveTrainConstants.slowSmartSpeed);
+                }
+                else if (gyroError > driveTrainConstants.smartAngleMargin3) {
+                    m_robotDrive.drive(-driveTrainConstants.slowerSmartSpeed, -driveTrainConstants.slowerSmartSpeed);
+                }
+                else if (gyroError < -driveTrainConstants.smartAngleMargin) {
+                    m_robotDrive.drive(driveTrainConstants.smartSpeed, driveTrainConstants.smartSpeed);
+                }
+                else if (gyroError < -driveTrainConstants.smartAngleMargin2) {
+                    m_robotDrive.drive(driveTrainConstants.slowSmartSpeed, driveTrainConstants.slowSmartSpeed);
+                }
+                else if (gyroError < -driveTrainConstants.smartAngleMargin3) {
+                    m_robotDrive.drive(driveTrainConstants.slowerSmartSpeed, driveTrainConstants.slowerSmartSpeed);
+                }
+                else { //between margin 3 and -margin 3 or outside of the charge station
+                    m_robotDrive.drive(0, 0);
+                }
             }
-            else if (gyroError>0.3 && gyroError > driveTrainConstants.smartAngleMargin && surpassedMargin){
-                m_robotDrive.drive(-driveTrainConstants.slowSmartSpeed, -driveTrainConstants.slowSmartSpeed);
-                System.out.println("forward");
+            else {
+                m_robotDrive.drive(balanceSpeed*invertAxis, balanceSpeed*invertAxis);
+                
             }
-            else if (gyroError < - driveTrainConstants.smartAngleMargin || (!surpassedMargin&& !surpassedMargin2  && gyroError<-0.3)){
-                m_robotDrive.drive(-driveTrainConstants.smartSpeed, -driveTrainConstants.smartSpeed);
-                System.out.println("backward");
+            */
+            //changing speed based on a constant multiplied by the angle received (spd at is 0.3 at error =4, and 0.5 at error = 20)
+            if (gyroError > driveTrainConstants.smartAngleMargin3/2) {
+                protoBalanceSpeed = 0.0125 * gyroError + 0.25; //linear speed control
+                // protoBalanceSpeed = ((Math.pow(gyroError - 4, 1.5)) / 280) + 0.3; //exponential speed control
             }
-            else if (gyroError<-0.3 && gyroError <- driveTrainConstants.smartAngleMargin && surpassedMargin){
-                m_robotDrive.drive(driveTrainConstants.slowSmartSpeed, driveTrainConstants.slowSmartSpeed);
-                System.out.println("forward");
+            else if (gyroError < -driveTrainConstants.smartAngleMargin3/2) {
+                protoBalanceSpeed = 0.0125 * gyroError - 0.25; //linear speed control
+                // protoBalanceSpeed = (-(Math.pow(Math.abs(gyroError) - 4, 1.5)) / 280) - 0.3; //exponential speed control
             }
             else{
-                m_robotDrive.drive(0, 0);
+                protoBalanceSpeed = 0;
             }
+
+            m_robotDrive.drive(-protoBalanceSpeed, -protoBalanceSpeed);
+
+
+
         }
+        else {
+            driveModified = false;
+        }
+        prevButton3 = button3State;
     }
 }
 

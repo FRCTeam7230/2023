@@ -26,6 +26,8 @@ public class Autonomous {
   }
   public void init(){   
     autoState = "first";
+    m_RunMechanisms.toggleClaw(true, false);
+    
   }
 
   public void execute(boolean midPosition, boolean coneLoaded){
@@ -58,7 +60,7 @@ public class Autonomous {
             m_RunMechanisms.autonToggleArmExtension(false);
         }
         else{
-          autoState = "second";
+          autoState = "secondNO";
           m_DriveSubsystem.resetAuton();
           autonomousTimer.reset();
           autonomousTimer.start();

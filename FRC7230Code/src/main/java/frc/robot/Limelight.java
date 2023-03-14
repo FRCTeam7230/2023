@@ -55,6 +55,14 @@ public class Limelight {
         return gamePieceAreas;
     }
 
+    public static void manualLimelightOff(boolean manualLayout){
+        if (manualLayout){
+            NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(3);
+        }
+            
+    }
+
+
     public static boolean updateTape(boolean highTarget, double[]tapeScreenAreas){
         if(highTarget) {
             NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(7); 
