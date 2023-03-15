@@ -27,6 +27,7 @@ public class DriveTrain {
     private double gyroAngle;
     private double gyroError;
     private boolean button3State;
+    public boolean insideVisionMargin;
     
     private boolean button5State;
     private boolean button6State;
@@ -35,9 +36,7 @@ public class DriveTrain {
     private boolean prevButton3 = false;
     public boolean manualLayout = false; // layout of the joystick - manual or smart
     private boolean driveModified;
-    private boolean pickup;
     private double protoBalanceSpeed;
-    private double balanceSpeed = driveTrainConstants.smartSpeed;
     //Vision:
     private double[] gamePieceAreas = driveTrainConstants.coneScreenAreas;
     private double angleToTarget;
@@ -210,14 +209,22 @@ public class DriveTrain {
                 angleToTarget = Limelight.getTargetAngleX(); // getting angle to drive to the robot
                 System.out.println(angleToTarget);
                 // if (continueMoving) { // checking if target is enouph close to the robot. If not, continue moving
-                    if (angleToTarget>0 && angleToTarget>driveTrainConstants.smartAngleMarginVision){
-                        driveModified = true;
-                        m_robotDrive.drive(driveTrainConstants.smartSpeedVision/2, -driveTrainConstants.smartSpeedVision);
+                    if (angleToTarget == 0 && Limelight.targetArea == 0){
+                        if (angleToTarget>driveTrainConstants.smartAngleMarginVision){
+                            driveModified = true;
+                            insideVisionMargin = false;
+                            m_robotDrive.drive(driveTrainConstants.smartSpeedVision/2, -driveTrainConstants.smartSpeedVision);
+                        }
+                        else if (angleToTarget<-driveTrainConstants.smartAngleMarginVision){
+                            driveModified = true;
+                            insideVisionMargin = false;
+                            m_robotDrive.drive(-driveTrainConstants.smartSpeedVision, driveTrainConstants.smartSpeedVision/2);
+                        }
+                        else {
+                            insideVisionMargin = true;
+                        }
                     }
-                    else if (angleToTarget<0 && angleToTarget<-driveTrainConstants.smartAngleMarginVision){
-                        driveModified = true;
-                        m_robotDrive.drive(-driveTrainConstants.smartSpeedVision, driveTrainConstants.smartSpeedVision/2);
-                    }
+                    
                     // else if (Math.abs(angleToTarget) < driveTrainConstants.smartAngleMarginVision){
                         // driveModified = true;
                         // if (pickup){
@@ -253,12 +260,10 @@ public class DriveTrain {
             gyroError = driveTrainConstants.targetAngle - gyroAngle;
             if (Math.abs(gyroError)>driveTrainConstants.smartAngleMargin && !surpassedMargin){
                 surpassedMargin = true;
-                balanceSpeed = driveTrainConstants.smartSpeed;
                 DriverStation.reportWarning("MARGIN PASSED", false);
             }
             if (Math.abs(gyroError)>driveTrainConstants.smartAngleMargin2 && Math.abs(gyroError)< driveTrainConstants.smartAngleMargin && !surpassedMargin2){
                 surpassedMargin2 = true;
-                balanceSpeed = driveTrainConstants.slowSmartSpeed;
                 DriverStation.reportWarning("MARGIN 2 PASSED", false);
             }
             

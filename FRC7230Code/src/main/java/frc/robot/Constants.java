@@ -61,6 +61,7 @@ public final class Constants {
     //Test Buttons:
     // public static final int PID_TEST_BUTTON = BUTTON10;
     // public static final int ENCODER_TEST_BUTTON = BUTTON11;
+    // drive stick
     public static final int EXTEND_TEST_BUTTON = BUTTON10;
     public static final int ARM_TEST_BUTTON_UP = BUTTON11;
     public static final int ARM_TEST_BUTTON_DOWN = BUTTON12;

@@ -385,10 +385,12 @@ public class RunMechanisms {
     else if ( !(getEncoderPosition()<driveTrainConstants.armLowerLimit && stick.getRawButton(robotConstants.ARM_TEST_BUTTON_DOWN)) && !(getEncoderPosition()>driveTrainConstants.armUpperLimit && stick.getRawButton(robotConstants.ARM_TEST_BUTTON_UP))){
       if (stick.getRawButton(robotConstants.ARM_TEST_BUTTON_DOWN)){
           armMotor.set(driveTrainConstants.armMotorSpeed);
+          // neededEncoderCounts -= 1;
           // System.out.println("down");
       }
       else if (stick.getRawButton(robotConstants.ARM_TEST_BUTTON_UP)){
           armMotor.set(-driveTrainConstants.armMotorSpeed);
+          // neededEncoderCounts += 1;
           // System.out.println("up");
       }
       else if (!m_stick.getRawButton(robotConstants.SHELF_PICKUP_BUTTON) && !m_stick.getRawButton(robotConstants.GROUND_PICKUP_BUTTON) && !m_stick.getRawButton(robotConstants.HIGH_SCORE_BUTTON) && !m_stick.getRawButton(robotConstants.MID_SCORE_BUTTON) && !m_stick.getRawButton(robotConstants.LOW_SCORE_BUTTON)){

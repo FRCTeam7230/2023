@@ -9,13 +9,12 @@ import frc.robot.Subsystems.DriveTrain;
 import frc.robot.Subsystems.RunMechanisms;
 import frc.robot.Constants.*;
 import frc.robot.Subsystems.CameraStarter;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
 public class Robot extends TimedRobot {
-  private double angleDeviation;
+  private String insideVisionMargin;
   private String driveAxisIndicator;
   private String armState;
   private String armMode;
@@ -31,7 +30,6 @@ public class Robot extends TimedRobot {
   private final SendableChooser<String> position_chooser = new SendableChooser<>();
   private final SendableChooser<String> preload_chooser = new SendableChooser<>();
   private final SendableChooser<String> autonPickup_chooser = new SendableChooser<>();
-  private final SendableChooser<String> joystick_chooser = new SendableChooser<>();
 
 
   @Override
@@ -48,9 +46,7 @@ public class Robot extends TimedRobot {
     autonPickup_chooser.setDefaultOption("Cone", "Cone");
     autonPickup_chooser.addOption("Cube", "Cube");
     SmartDashboard.putData("Auton Pickup choice", autonPickup_chooser);
-    joystick_chooser.setDefaultOption("Two Joysticks", "Two Joysticks");
-    joystick_chooser.addOption("One Joystick", "One Joystick");
-    SmartDashboard.putData("Joystick choice", joystick_chooser);
+
     // CHECK THIS
     Mechanisms.armMotorEncoder.setDistancePerRotation(360);
     // Mechanisms.armMotorEncoder.setPositionConversionFactor(driveTrainConstants.rotationsToDegrees);
@@ -82,10 +78,16 @@ public class Robot extends TimedRobot {
     else{
       driveAxisIndicator = "Inverted";
     }
+    if (driveTrain.insideVisionMargin){
+      insideVisionMargin = "Centered";
+    }
+    else{
+      insideVisionMargin = "Not Centered";
+    }
     
     driveTrain.speedLimitChangeX = SmartDashboard.getNumber("Drive Speed Limit", driveTrainConstants.limitX);
     driveTrain.speedLimitChangeY = SmartDashboard.getNumber("Turn Speed Limit", driveTrainConstants.limitY);
-    angleDeviation = Limelight.targetX;
+    
 
     SmartDashboard.putString("Drive Axis Mode", driveAxisIndicator);
     SmartDashboard.putString("Claw Extension State", clawState);
@@ -94,7 +96,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putString("Arm Mode", armMode);
     SmartDashboard.putString("Arm Angle", runMechanisms.armAngle);
     SmartDashboard.putNumber("Driving Speed", driveTrain.speedX);
-    SmartDashboard.putNumber("Angle to Target: ", angleDeviation);
+    SmartDashboard.putString("Centered Indicator", insideVisionMargin);
    
 
     String positionSelected = position_chooser.getSelected();
@@ -127,15 +129,6 @@ public class Robot extends TimedRobot {
         break;
     }
 
-    String joystickOptionSelected = joystick_chooser.getSelected();
-    switch (joystickOptionSelected) {
-      case "Two Joysticks":
-        Mechanisms.mechanismsJoystick = Mechanisms.driveJoystick;
-        break;
-      case "One Joystick":
-        Mechanisms.mechanismsJoystick = new Joystick(1);
-        break;
-    }
   }
 
   @Override

@@ -78,7 +78,7 @@ public class Autonomous {
         m_DriveSubsystem.drive(0,0);
       }
       if (completedDrive){
-        autoState = "thirdNO";
+        autoState = "third";
       }
     }
     if(autoState == "second" && !midPosition){
@@ -90,7 +90,7 @@ public class Autonomous {
         m_DriveSubsystem.drive(0,0); //safety
       }
       if (completedDrive){
-        autoState = "thirdNO";
+        autoState = "third";
       }
     }
     if(autoState == "third"){

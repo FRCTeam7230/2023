@@ -9,7 +9,8 @@ public class Limelight {
 
     public static double targetAngleX;
     
-    public static double targetX, targetY;
+    public static double targetX, targetY, targetPresent;
+
     public static double targetArea;
     public static boolean coneTarget = true; // true if cone is target, false if cube
     public static String targetName = "cone";
@@ -30,8 +31,10 @@ public class Limelight {
         NetworkTableEntry tx = table.getEntry("tx");
         NetworkTableEntry ty = table.getEntry("ty");
         NetworkTableEntry ta = table.getEntry("ta");
+        NetworkTableEntry tv = table.getEntry("tv");
         
         //read values periodically
+        targetPresent = tv.getDouble(0.0);
         targetX = tx.getDouble(0.0);
         targetY = ty.getDouble(0.0);
         targetArea = ta.getDouble(0.0);
@@ -59,19 +62,22 @@ public class Limelight {
         if (manualLayout){
             NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(3);
         }
-            
+
     }
 
 
     public static boolean updateTape(boolean highTarget, double[]tapeScreenAreas){
-        if(highTarget) {
+        if(highTarget && coneTarget) {
             NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(7); 
             tapeScreenArea = driveTrainConstants.tapeScreenAreas[0];
         }
-        else{
+        else if(!highTarget && coneTarget){
             NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(6); 
             //create pipeline 6 for middle target
             tapeScreenArea = driveTrainConstants.tapeScreenAreas[1];
+        }
+        else {
+            NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(3);
         }
         return proceedMoving(tapeScreenArea);
     }
