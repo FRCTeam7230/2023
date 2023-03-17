@@ -62,6 +62,17 @@ public final class Constants {
     // public static final int PID_TEST_BUTTON = BUTTON10;
     // public static final int ENCODER_TEST_BUTTON = BUTTON11;
     // drive stick
+
+
+
+
+
+
+
+
+
+
+
     public static final int EXTEND_TEST_BUTTON = BUTTON10;
     public static final int ARM_TEST_BUTTON_UP = BUTTON11;
     public static final int ARM_TEST_BUTTON_DOWN = BUTTON12;
@@ -79,7 +90,7 @@ public final class Constants {
     public static final double decelY = 0.075;
     public static final double decelX = 0.075;
     public static final double limitX = 0.6;
-    public static final double limitY = 0.4;
+    public static final double limitY = 0.45;
     public static final double initSpeed = 0.2;
     public static final double dropOff = 0.4; //drop off point when speed is able to drop to 0
     public static final double kP = 1;

@@ -115,7 +115,7 @@ public class DriveTrain {
         speedX=x;
         speedY=y;
 
-        if(d_stick.getRawButton(robotConstants.SPEED_BUTTON)){
+        if(true){
             speedY *= driveTrainConstants.zoomFactor;
             speedX *= driveTrainConstants.zoomFactor;
             speedLimitChangeX = 0.1;
@@ -125,24 +125,24 @@ public class DriveTrain {
         if(d_stick.getRawButton(robotConstants.SLOW_BUTTON)){
             speedX=x;
             speedY=y;
-            speedLimitChangeX = -0.2;
-            speedLimitChangeY = -0.2;
+            speedLimitChangeX = -0.1;
+            speedLimitChangeY = -0.1;
             speedY*=driveTrainConstants.slowFactor;
             speedX*=driveTrainConstants.slowFactor; 
         }
         // IMPORTANT
         // I DONT KNOW WHY BUT X AND Y LIMITS HERE ARE SWITCHED
         if (speedX > 0){
-            speedX = Math.min(speedX, driveTrainConstants.limitX + speedLimitChangeX);
+            speedX = Math.max(0,Math.min(speedX, driveTrainConstants.limitX + speedLimitChangeX));
         }
         else {
-            speedX = Math.max(speedX, -driveTrainConstants.limitX - speedLimitChangeX);
+            speedX = Math.min(0,Math.max(speedX, -driveTrainConstants.limitX - speedLimitChangeX));
         }
         if (speedY > 0){
-            speedY = Math.min(speedY, driveTrainConstants.limitY + speedLimitChangeY);
+            speedY = Math.max(0,Math.min(speedY, driveTrainConstants.limitY + speedLimitChangeY));
         }
         else {
-            speedY = Math.max(speedY, -driveTrainConstants.limitY - speedLimitChangeY);
+            speedY = Math.min(0,Math.max(speedY, -driveTrainConstants.limitY - speedLimitChangeY));
         }
         
         // inverting
@@ -161,7 +161,7 @@ public class DriveTrain {
             DriverStation.reportWarning(Double.toString(invertAxis * speedX), false);
             DriverStation.reportWarning(Double.toString(invertAxis * speedY), false);
             DriverStation.reportWarning("\n", false);
-            m_robotDrive.arcadeDrive(-1*invertAxis * (speedY), invertAxis *(speedX));
+            m_robotDrive.arcadeDrive( (speedY), invertAxis *(speedX));
         }
 
         //Switching target - cube, or cone 
