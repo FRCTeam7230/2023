@@ -60,7 +60,7 @@ public class Autonomous {
             m_RunMechanisms.autonToggleArmExtension(false);
         }
         else{
-          autoState = "secondNO";
+          autoState = "second";
           m_DriveSubsystem.resetAuton();
           autonomousTimer.reset();
           autonomousTimer.start();
@@ -78,7 +78,7 @@ public class Autonomous {
         m_DriveSubsystem.drive(0,0);
       }
       if (completedDrive){
-        autoState = "third";
+        autoState = "thirdno";
       }
     }
     if(autoState == "second" && !midPosition){

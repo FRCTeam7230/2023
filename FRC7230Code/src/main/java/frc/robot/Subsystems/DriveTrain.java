@@ -37,10 +37,14 @@ public class DriveTrain {
     public boolean manualLayout = false; // layout of the joystick - manual or smart
     private boolean driveModified;
     private double protoBalanceSpeed;
+
+
     //Vision:
     private double[] gamePieceAreas = driveTrainConstants.coneScreenAreas;
-    private double angleToTarget;
+    private double angleXToTarget;
+    private double angleYToTarget;
     private boolean continueMoving;
+    private double vertOffset;
 
    
     public DriveTrain(DriveSubsystem subsystem, RunMechanisms runMechanisms, Joystick stick1, Joystick stick2){
@@ -180,10 +184,11 @@ public class DriveTrain {
         
         Limelight.manualLimelightOff(manualLayout);
         
-
+        
 
         // Smart control
         if (!manualLayout && m_runMechanisms.completedRotating) {
+            angleYToTarget = Limelight.getTargetAngleY();
             if (m_stick.getRawButton(robotConstants.ORIENT_SHELF_PICKUP_BUTTON)) {
                 Limelight.updateTarget();
                 continueMoving = Limelight.proceedMoving(gamePieceAreas[1]);
@@ -196,32 +201,38 @@ public class DriveTrain {
             }
             else if (m_stick.getRawButton(robotConstants.ORIENT_HIGH_TARGET_BUTTON)) {
                 continueMoving = Limelight.updateTape(true, driveTrainConstants.tapeScreenAreas);
+
                 buttonPressed = true;
             }
             else if (m_stick.getRawButton(robotConstants.ORIENT_MID_TARGET_BUTTON)) {
                 continueMoving = Limelight.updateTape(false, driveTrainConstants.tapeScreenAreas);
                 buttonPressed = true;
             }
+            else if (d_stick.getRawButton(robotConstants.ORIENT_BUTTON)) {
+                buttonPressed = true;
+            }
             else {
                 buttonPressed = false;
             }
             if (buttonPressed) {
-                angleToTarget = Limelight.getTargetAngleX(); // getting angle to drive to the robot
-                System.out.println(angleToTarget);
+                angleXToTarget = Limelight.getTargetAngleX(); // getting angle to drive to the robot
+                System.out.println(angleXToTarget);
                 // if (continueMoving) { // checking if target is enouph close to the robot. If not, continue moving
-                    if (angleToTarget == 0 && Limelight.targetArea == 0){
-                        if (angleToTarget>driveTrainConstants.smartAngleMarginVision){
+                    if (Limelight.visionTargets == 1){
+                        m_runMechanisms.smartRotate(vertOffset);
+                        if (angleXToTarget>driveTrainConstants.smartAngleMarginVision){
                             driveModified = true;
                             insideVisionMargin = false;
                             m_robotDrive.drive(driveTrainConstants.smartSpeedVision/2, -driveTrainConstants.smartSpeedVision);
                         }
-                        else if (angleToTarget<-driveTrainConstants.smartAngleMarginVision){
+                        else if (angleXToTarget<-driveTrainConstants.smartAngleMarginVision){
                             driveModified = true;
                             insideVisionMargin = false;
                             m_robotDrive.drive(-driveTrainConstants.smartSpeedVision, driveTrainConstants.smartSpeedVision/2);
                         }
                         else {
                             insideVisionMargin = true;
+                            
                         }
                     }
                     

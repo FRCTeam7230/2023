@@ -57,6 +57,7 @@ public final class Constants {
     public static final int ORIENT_GROUND_PICKUP_BUTTON = BUTTON12;
     public static final int ORIENT_HIGH_TARGET_BUTTON = BUTTON7;
     public static final int ORIENT_MID_TARGET_BUTTON = BUTTON9;
+    public static final int ORIENT_BUTTON = BUTTON9;
 
     //Test Buttons:
     // public static final int PID_TEST_BUTTON = BUTTON10;
@@ -89,7 +90,7 @@ public final class Constants {
     public static final double accelX = 0.001;
     public static final double decelY = 0.075;
     public static final double decelX = 0.075;
-    public static final double limitX = 0.6;
+    public static final double limitX = 0.7;
     public static final double limitY = 0.45;
     public static final double initSpeed = 0.2;
     public static final double dropOff = 0.4; //drop off point when speed is able to drop to 0
@@ -106,8 +107,8 @@ public final class Constants {
     public static final double kEncoderMetersPerMotorRev = motorRevsToWheelRevs*kWheelDiameterMeters * Math.PI;
     public static final double driveMargin = 0.1;
 
-    public static final double metersToPieceFromMiddle = 4.0;
-    public static final double metersToPieceFromSide = 4.0;
+    public static final double metersToPieceFromMiddle = 4.5;
+    public static final double metersToPieceFromSide = 4.5;
     public static final double metersFromPieceToBalance = 1.25;
   
     public static final double testDistance = 1;
@@ -122,14 +123,20 @@ public final class Constants {
     public static final double slowerSmartSpeed = 0.3;
 
     //vision
-    public static final double smartAngleMarginVision = 3;
+    public static final double smartAngleMarginVision = 8;
+    public static final double smartAngleMarginVisionArm = 3;
     public static final double smartSpeedVision = 0.55;
     public static final double[] coneScreenAreas = {4.5, 4.0}; // 0 - area of cone on the screen for ground pick up, 1 - for shelf pick up
     public static final double[] cubeScreenAreas = {5.0, 4.0}; // 0 for ground pick up, 1 for shelf pick up
     public static final double[] tapeScreenAreas = {0.12, 0.2}; // 0 - area of tape on the screen for high target, 1 - for middle target
+    public static final double[] aprilTagScreenAreas = {1,1};
+    public static final double coneVertOffsetAngle = 0;
+    public static final double cubeVertOffsetAngle = 0;
+    public static final double tapeOffsetAngle = 0;
+    public static final double tagOffsetAngle = 0;
 
     //arm-related
-    public static final double drift = 69;
+    public static final double drift = 115;
     public static final double armLowerLimit = -67+drift;
     public static final double armLowerExtension = 20+drift;
     public static final double armUpperLimit = 240+drift;
@@ -137,18 +144,18 @@ public final class Constants {
     public static final double armMotorSpeed = 0.55;
     public static final int rotationsToDegrees = 360;
     public static final double lowScoreAngleEncoderCounts = 200+drift; //unextended
-    public static final double shelfAngleEncoderCounts = -12  +drift; //extended
+    public static final double shelfAngleEncoderCounts = -20  +drift; //extended
     public static final double lowPickupAngleEncoderCounts = armLowerLimit+7; //extended
     public static final double armAngleMargin = 3.5;
     public static final double groundPickupAngleMargin = 5;
 
 
     //cone
-    public static final double coneHighAngleEncoderCounts = 125+drift; //extended
-    public static final double coneMidAngleEncoderCounts = 130+drift; //unextended
+    public static final double coneHighAngleEncoderCounts = 115+drift; //extended
+    public static final double coneMidAngleEncoderCounts = 123+drift; //unextended
 
     //cube
-    public static final double cubeHighAngleEncoderCounts = coneHighAngleEncoderCounts; //extended
-    public static final double cubeMidAngleEncoderCounts = coneMidAngleEncoderCounts; //unextended
+    public static final double cubeHighAngleEncoderCounts = coneHighAngleEncoderCounts+10; //extended
+    public static final double cubeMidAngleEncoderCounts = coneMidAngleEncoderCounts+10; //unextended
   }
 }

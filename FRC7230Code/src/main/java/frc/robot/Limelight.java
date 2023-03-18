@@ -9,10 +9,10 @@ public class Limelight {
 
     public static double targetAngleX;
     
-    public static double targetX, targetY, targetPresent;
+    public static double targetX, targetY, visionTargets;
 
     public static double targetArea;
-    public static boolean coneTarget = true; // true if cone is target, false if cube
+    public static boolean coneTarget = false; // true if cone is target, false if cube
     public static String targetName = "cone";
     public static double[] gamePieceAreas = driveTrainConstants.coneScreenAreas;
     public static double tapeScreenArea;
@@ -34,7 +34,7 @@ public class Limelight {
         NetworkTableEntry tv = table.getEntry("tv");
         
         //read values periodically
-        targetPresent = tv.getDouble(0.0);
+        visionTargets = tv.getDouble(0.0);
         targetX = tx.getDouble(0.0);
         targetY = ty.getDouble(0.0);
         targetArea = ta.getDouble(0.0);
@@ -77,7 +77,7 @@ public class Limelight {
             tapeScreenArea = driveTrainConstants.tapeScreenAreas[1];
         }
         else {
-            NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(3);
+            NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(4);
         }
         return proceedMoving(tapeScreenArea);
     }
@@ -85,6 +85,11 @@ public class Limelight {
     public static double getTargetAngleX() {
         updateData();
         return targetX;
+    }
+
+    public static double getTargetAngleY(){
+        updateData();
+        return targetY;
     }
 
     public static boolean proceedMoving(double objAreaRequired) {

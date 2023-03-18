@@ -28,6 +28,7 @@ public class RunMechanisms {
   public boolean autonCompletedRotating = false;
   public String armAngle = "Ground Pickup";
   public boolean completedRotating = false;
+  private double angleYToTarget;
 
   public double getEncoderPosition(){
     double pos = armMotorEncoder.getAbsolutePosition()*360-50;
@@ -37,6 +38,18 @@ public class RunMechanisms {
     else {
       return pos;
     }
+  }
+
+  public void smartRotate(double vertOffset){
+    angleYToTarget = Limelight.getTargetAngleY();
+  if (angleYToTarget>driveTrainConstants.smartAngleMarginVisionArm + vertOffset){
+      armMotor.set(driveTrainConstants.armMotorSpeed);
+  }
+  else if (angleYToTarget<-driveTrainConstants.smartAngleMarginVisionArm + vertOffset){
+    armMotor.set(-driveTrainConstants.armMotorSpeed);
+       
+  }
+   
   }
 
   public void toggleArm(){
@@ -64,7 +77,7 @@ public class RunMechanisms {
     if (!(getEncoderPosition() < driveTrainConstants.armLowerExtension) && !(getEncoderPosition()<driveTrainConstants.armUpperLimit && getEncoderPosition()>driveTrainConstants.armUpperRetraction)){
       toggleArm(false);
     }
-    // System.out.println(getEncoderPosition());
+    System.out.println(getEncoderPosition());
   }
   public void rotateArmToAngle(){
     if (m_stick.getRawButton(robotConstants.SHELF_PICKUP_BUTTON)){
@@ -168,6 +181,7 @@ public class RunMechanisms {
         else if (needExtend && !prevButton){
           if (neededEncoderCounts != driveTrainConstants.lowPickupAngleEncoderCounts){
             toggleArm(false);
+            System.out.println("returning");
             inTimer=false;
             cpltRotUpd = false;
           }
@@ -365,7 +379,7 @@ public class RunMechanisms {
     }
   } 
   public void toggleClaw(boolean auto, boolean state){
-   if (auto || m_stick.getRawButtonPressed(robotConstants.CLAW_TOGGLE_BUTTON)){
+   if (auto || m_stick.getRawButtonPressed(robotConstants.CLAW_TOGGLE_BUTTON) || Mechanisms.driveJoystick.getRawButtonPressed(robotConstants.CLAW_TOGGLE_BUTTON)){
        clawSolenoid.set(state);
    }
  } 
