@@ -34,7 +34,7 @@ public class DriveTrain {
     private boolean buttonPressed;
     
     private boolean prevButton3 = false;
-    public boolean manualLayout = false; // layout of the joystick - manual or smart
+    public boolean manualLayout = true; // layout of the joystick - manual or smart
     private boolean driveModified;
     private double protoBalanceSpeed;
 
@@ -248,13 +248,14 @@ public class DriveTrain {
                 System.out.println(angleXToTarget);
                 // if (continueMoving) { // checking if target is enouph close to the robot. If not, continue moving
                     if (Limelight.visionTargets == 1){
+                        double margin = -4;
                         // m_runMechanisms.smartRotate(vertOffset);
-                        if (angleXToTarget>driveTrainConstants.smartAngleMarginVision){
+                        if (angleXToTarget>driveTrainConstants.smartAngleMarginVision + margin){
                             driveModified = true;
                             insideVisionMargin = false;
                             m_robotDrive.drive(driveTrainConstants.smartSpeedVision/2, -driveTrainConstants.smartSpeedVision);
                         }
-                        else if (angleXToTarget<-driveTrainConstants.smartAngleMarginVision){
+                        else if (angleXToTarget<-driveTrainConstants.smartAngleMarginVision + margin){
                             driveModified = true;
                             insideVisionMargin = false;
                             m_robotDrive.drive(-driveTrainConstants.smartSpeedVision, driveTrainConstants.smartSpeedVision/2);

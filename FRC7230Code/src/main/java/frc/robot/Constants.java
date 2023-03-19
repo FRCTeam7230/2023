@@ -115,18 +115,18 @@ public final class Constants {
     public static final double testDistance = 1;
 
     //autobalance
-    public static final double smartAngleMargin = 6;
+    public static final double smartAngleMargin = 3;
     public static final double smartAngleMargin2 = 4;
     public static final double smartAngleMargin3 = 2;
     public static final double targetAngle = -0.75;
     public static final double smartSpeed = 0.45;
-    public static final double slowSmartSpeed = 0.375;
+    public static final double slowSmartSpeed = 0.45;
     public static final double slowerSmartSpeed = 0.3;
     public static final double metersToCenterofBalance = 1;
 
     //vision
-    public static final double smartAngleMarginVision = 8;
-    public static final double smartAngleMarginVisionArm = 3;
+    public static final double smartAngleMarginVision = 3;
+    public static final double smartAngleMarginVisionArm = 1.5;
     public static final double smartSpeedVision = 0.55;
     public static final double[] coneScreenAreas = {0.8, 0.8}; // 0 - area of cone on the screen for ground pick up, 1 - for shelf pick up
     public static final double[] cubeScreenAreas = {1.0, 1.0}; // 0 for ground pick up, 1 for shelf pick up
@@ -141,11 +141,11 @@ public final class Constants {
     public static final double drift = 115;
     public static final double armLowerLimit = -67+drift;
     public static final double armLowerExtension = 20+drift;
-    public static final double armUpperLimit = 240+drift;
+    public static final double armUpperLimit = 195+drift;
     public static final double armUpperRetraction = 60+drift;
     public static final double armMotorSpeed = 0.55;
     public static final int rotationsToDegrees = 360;
-    public static final double lowScoreAngleEncoderCounts = 200+drift; //unextended
+    public static final double lowScoreAngleEncoderCounts = 180+drift; //unextended
     public static final double shelfAngleEncoderCounts = -20  +drift; //extended
     public static final double lowPickupAngleEncoderCounts = armLowerLimit+7; //extended
     public static final double armAngleMargin = 3.5;

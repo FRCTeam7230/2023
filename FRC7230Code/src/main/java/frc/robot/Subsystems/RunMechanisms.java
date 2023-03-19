@@ -32,8 +32,11 @@ public class RunMechanisms {
 
   public double getEncoderPosition(){
     double pos = armMotorEncoder.getAbsolutePosition()*360-50;
-    if (pos > 300){
+    if (pos > 330){
       return pos-360;
+    }
+    else if (pos < 0){
+      return pos+360;
     }
     else {
       return pos;
@@ -165,13 +168,13 @@ public class RunMechanisms {
         }
         if (needExtend && !completedRotating){
           toggleArm(true);
-          System.out.println("sending");
-          System.out.println(getEncoderPosition());
+          // System.out.println("sending");
+          // System.out.println(getEncoderPosition());
         }
         else if (needExtend && !prevButton){
           if (neededEncoderCounts != driveTrainConstants.lowPickupAngleEncoderCounts){
             toggleArm(false);
-            System.out.println("returning");
+            // System.out.println("returning");
             inTimer=false;
             cpltRotUpd = false;
           }
@@ -218,7 +221,7 @@ public class RunMechanisms {
       // }
       else if (needExtend && neededEncoderCounts == driveTrainConstants.lowPickupAngleEncoderCounts && Math.abs(getEncoderPosition() - driveTrainConstants.lowPickupAngleEncoderCounts - driveTrainConstants.groundPickupAngleMargin)<driveTrainConstants.armAngleMargin){
         toggleArm(true);
-        System.out.println("firing");
+        // System.out.println("firing");
       }
       else{
         completedRotating = false;
@@ -226,7 +229,7 @@ public class RunMechanisms {
           toggleArm(false);
           // if (getEncoderPosition() < driveTrainConstants.lowPickupAngleEncoderCounts -)
           // armMotor.set(-driveTrainConstants.armMotorSpeed);
-          System.out.println("out of position");
+          // System.out.println("out of position");
         }
       }
       
@@ -379,7 +382,7 @@ public class RunMechanisms {
    }
  }
  public void closeArm(Joystick stick){
-   if(stick.getRawButtonPressed(robotConstants.CLOSE_ARM_BUTTON)){
+   if(stick.getRawButtonPressed(robotConstants.CLOSE_ARM_BUTTON) || m_stick.getRawButton(robotConstants.SPEED_BUTTON)){
      toggleArm(false);
    }
  }
@@ -417,12 +420,14 @@ public class RunMechanisms {
     angleYToTarget = Limelight.getTargetAngleY();
     if (completedRotating){  
       if (angleYToTarget>driveTrainConstants.smartAngleMarginVisionArm + vertOffset){
-        if (!(getEncoderPosition()<driveTrainConstants.armLowerLimit || !Mechanisms.lowerLimitSwitch.get()))  
-        armMotor.set(driveTrainConstants.armMotorSpeed);
+        if (!(getEncoderPosition()<driveTrainConstants.armLowerLimit) || !Mechanisms.lowerLimitSwitch.get()){
+          armMotor.set(driveTrainConstants.armMotorSpeed);
+        }
       }
       else if (angleYToTarget<-driveTrainConstants.smartAngleMarginVisionArm + vertOffset){
-        if(!(getEncoderPosition()>driveTrainConstants.armUpperLimit || !Mechanisms.upperLimitSwitch.get()))
-        armMotor.set(-driveTrainConstants.armMotorSpeed);    
+        if(!(getEncoderPosition()>driveTrainConstants.armUpperLimit) || !Mechanisms.upperLimitSwitch.get()){
+          armMotor.set(-driveTrainConstants.armMotorSpeed);   
+        }
       }
       else{
         armMotor.set(0);

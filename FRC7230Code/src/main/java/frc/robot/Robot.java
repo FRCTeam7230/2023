@@ -46,6 +46,7 @@ public class Robot extends TimedRobot {
     autonPickup_chooser.setDefaultOption("Cone", "Cone");
     autonPickup_chooser.addOption("Cube", "Cube");
     SmartDashboard.putData("Auton Pickup choice", autonPickup_chooser);
+    Limelight.initializeLimelightOff();
 
     // CHECK THIS
     Mechanisms.armMotorEncoder.setDistancePerRotation(360);

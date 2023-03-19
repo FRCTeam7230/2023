@@ -13,7 +13,7 @@ public class Limelight {
 
     public static double targetArea;
     public static boolean coneTarget = false; // true if cone is target, false if cube
-    public static String targetName = "cone";
+    public static String targetName = "Cube";
     public static double[] gamePieceAreas = driveTrainConstants.coneScreenAreas;
     public static double tapeScreenArea;
     
@@ -65,6 +65,9 @@ public class Limelight {
 
     }
 
+    public static void initializeLimelightOff(){
+        NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(3);
+    }
 
     public static boolean updateTape(boolean highTarget, double[]tapeScreenAreas){
         if(highTarget && coneTarget) {
