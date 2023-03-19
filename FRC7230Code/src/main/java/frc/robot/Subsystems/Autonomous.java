@@ -39,9 +39,11 @@ public class Autonomous {
     
     if(autoState == "first") {
       if (coneLoaded){
+        // done = true;
         done = m_RunMechanisms.autonRotateArmToAngle(driveTrainConstants.coneHighAngleEncoderCounts);
       }
       else{
+        // done = true;
         done = m_RunMechanisms.autonRotateArmToAngle(driveTrainConstants.cubeHighAngleEncoderCounts);
       }
       if (done){
@@ -70,15 +72,16 @@ public class Autonomous {
     }
 
     if(autoState == "second" && midPosition){
-      if (autonomousTimer.get() < 4.25){
+      if (autonomousTimer.get() < 5){
         // System.out.println(autonomousTimer.get());
         m_DriveSubsystem.autonDriveSetDistance(-driveTrainConstants.metersToPieceFromMiddle);
       }
       else {
         m_DriveSubsystem.drive(0,0);
+        autoState = "third";
       }
       if (completedDrive){
-        autoState = "thirdno";
+        // autoState = "third";
       }
     }
     if(autoState == "second" && !midPosition){
@@ -88,9 +91,10 @@ public class Autonomous {
       }
       else {
         m_DriveSubsystem.drive(0,0); //safety
+        autoState = "third";
       }
       if (completedDrive){
-        autoState = "third";
+        // autoState = "third";
       }
     }
     if(autoState == "third"){
@@ -114,9 +118,13 @@ public class Autonomous {
           // if (autonomousTimer.get()<= 0.6 && autonomousTimer.get() > 0.3){ 
           //   m_RunMechanisms.toggleClaw(true);
           // }
-          // else if (autonomousTimer.get()<= 0.9 && autonomousTimer.get() > 0.6){ 
-          //   m_RunMechanisms.autonToggleArmExtension();
+          // 
+          // m_RunMechanisms.autonRotateArmToAngle(driveTrainConstants.shelfAngleEncoderCounts);
+          //   if (m_RunMechanisms.autonCompletedRotating){
+          // // else if (autonomousTimer.get()<= 0.9 && autonomousTimer.get() > 0.6){ 
+          //   m_RunMechanisms.autonToggleArmExtension(false);
           // }
+          //}
           // else{
           //   // autoState = "fourth";
           // }

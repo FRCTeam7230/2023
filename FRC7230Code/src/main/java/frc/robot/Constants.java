@@ -74,6 +74,7 @@ public final class Constants {
 
 
 
+    public static final int CLOSE_ARM_BUTTON = BUTTON7;
     public static final int EXTEND_TEST_BUTTON = BUTTON10;
     public static final int ARM_TEST_BUTTON_UP = BUTTON11;
     public static final int ARM_TEST_BUTTON_DOWN = BUTTON12;
@@ -121,17 +122,18 @@ public final class Constants {
     public static final double smartSpeed = 0.45;
     public static final double slowSmartSpeed = 0.375;
     public static final double slowerSmartSpeed = 0.3;
+    public static final double metersToCenterofBalance = 1;
 
     //vision
     public static final double smartAngleMarginVision = 8;
     public static final double smartAngleMarginVisionArm = 3;
     public static final double smartSpeedVision = 0.55;
-    public static final double[] coneScreenAreas = {4.5, 4.0}; // 0 - area of cone on the screen for ground pick up, 1 - for shelf pick up
-    public static final double[] cubeScreenAreas = {5.0, 4.0}; // 0 for ground pick up, 1 for shelf pick up
+    public static final double[] coneScreenAreas = {0.8, 0.8}; // 0 - area of cone on the screen for ground pick up, 1 - for shelf pick up
+    public static final double[] cubeScreenAreas = {1.0, 1.0}; // 0 for ground pick up, 1 for shelf pick up
     public static final double[] tapeScreenAreas = {0.12, 0.2}; // 0 - area of tape on the screen for high target, 1 - for middle target
     public static final double[] aprilTagScreenAreas = {1,1};
     public static final double coneVertOffsetAngle = 0;
-    public static final double cubeVertOffsetAngle = 0;
+    public static final double cubeVertOffsetAngle = 3.5;
     public static final double tapeOffsetAngle = 0;
     public static final double tagOffsetAngle = 0;
 

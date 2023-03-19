@@ -1,11 +1,11 @@
 package frc.robot.Subsystems;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.Constants.driveTrainConstants;
 import frc.robot.Constants.robotConstants;
 import frc.robot.Limelight;
 import frc.robot.Mechanisms;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Joystick;
 
 public class DriveTrain {
     
@@ -45,6 +45,7 @@ public class DriveTrain {
     private double angleYToTarget;
     private boolean continueMoving;
     private double vertOffset;
+    private double prevObject;
 
    
     public DriveTrain(DriveSubsystem subsystem, RunMechanisms runMechanisms, Joystick stick1, Joystick stick2){
@@ -192,24 +193,52 @@ public class DriveTrain {
             if (m_stick.getRawButton(robotConstants.ORIENT_SHELF_PICKUP_BUTTON)) {
                 Limelight.updateTarget();
                 continueMoving = Limelight.proceedMoving(gamePieceAreas[1]);
+                prevObject = gamePieceAreas[1];
+                if (Limelight.coneTarget){
+                    vertOffset = driveTrainConstants.coneVertOffsetAngle;
+                  }
+                  else{
+                    vertOffset = driveTrainConstants.cubeVertOffsetAngle;
+                  }
                 buttonPressed = true;
             }
             else if (m_stick.getRawButton(robotConstants.ORIENT_GROUND_PICKUP_BUTTON)) {
                 Limelight.updateTarget();
                 continueMoving = Limelight.proceedMoving(gamePieceAreas[0]);
+                prevObject = gamePieceAreas[0];
+                if (Limelight.coneTarget){
+                    vertOffset = driveTrainConstants.coneVertOffsetAngle;
+                  }
+                  else{
+                    vertOffset = driveTrainConstants.cubeVertOffsetAngle;
+                  }
                 buttonPressed = true;
             }
             else if (m_stick.getRawButton(robotConstants.ORIENT_HIGH_TARGET_BUTTON)) {
                 continueMoving = Limelight.updateTape(true, driveTrainConstants.tapeScreenAreas);
-
+                prevObject = driveTrainConstants.tapeScreenAreas[0];
+                if (Limelight.coneTarget){
+                    vertOffset = driveTrainConstants.tapeOffsetAngle;
+                  }
+                  else{
+                    vertOffset = driveTrainConstants.tagOffsetAngle;
+                  }
                 buttonPressed = true;
             }
             else if (m_stick.getRawButton(robotConstants.ORIENT_MID_TARGET_BUTTON)) {
                 continueMoving = Limelight.updateTape(false, driveTrainConstants.tapeScreenAreas);
+                prevObject = driveTrainConstants.tapeScreenAreas[1];
+                if (Limelight.coneTarget){
+                    vertOffset = driveTrainConstants.tapeOffsetAngle;
+                  }
+                  else{
+                    vertOffset = driveTrainConstants.tagOffsetAngle;
+                  }
                 buttonPressed = true;
             }
             else if (d_stick.getRawButton(robotConstants.ORIENT_BUTTON)) {
                 buttonPressed = true;
+                continueMoving = Limelight.proceedMoving(prevObject);
             }
             else {
                 buttonPressed = false;
@@ -219,7 +248,7 @@ public class DriveTrain {
                 System.out.println(angleXToTarget);
                 // if (continueMoving) { // checking if target is enouph close to the robot. If not, continue moving
                     if (Limelight.visionTargets == 1){
-                        m_runMechanisms.smartRotate(vertOffset);
+                        // m_runMechanisms.smartRotate(vertOffset);
                         if (angleXToTarget>driveTrainConstants.smartAngleMarginVision){
                             driveModified = true;
                             insideVisionMargin = false;
@@ -230,6 +259,9 @@ public class DriveTrain {
                             insideVisionMargin = false;
                             m_robotDrive.drive(-driveTrainConstants.smartSpeedVision, driveTrainConstants.smartSpeedVision/2);
                         }
+                        //else if (continueMoving){
+                            // m_robotDrive.drive(driveTrainConstants.smartSpeed, driveTrainConstants.smartSpeed);
+                        // }
                         else {
                             insideVisionMargin = true;
                             
@@ -285,6 +317,18 @@ public class DriveTrain {
             //when angle hit
             // System.out.println("Error" + gyroError);
             
+            /* drive to center of balance (drive to set distance)
+             if (surpassedMargin){
+                if (!prevButton3){
+                    m_robotDrive.resetEncoders();
+                }
+             m_robotDrive.autonDriveSetDistance(driveTrainConstants.metersToCenterofBalance);
+                if (Math.abs(gyroError) < driveTrainConstants.smartAngleMargin2){
+                    m_robotDrive.drive(0,0);
+                }
+             }
+             */
+
             //speed zones version
             /*
             if (surpassedMargin){

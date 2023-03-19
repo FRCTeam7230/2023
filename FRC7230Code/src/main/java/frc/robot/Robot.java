@@ -161,6 +161,7 @@ public class Robot extends TimedRobot {
     runMechanisms.toggleClaw(false);
     runMechanisms.testArm(Mechanisms.driveJoystick);
     runMechanisms.testExtension(Mechanisms.driveJoystick);
+    runMechanisms.closeArm(Mechanisms.driveJoystick);
     runMechanisms.rotateArmToAngle();
     runMechanisms.checkArm();
 

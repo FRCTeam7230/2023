@@ -40,17 +40,7 @@ public class RunMechanisms {
     }
   }
 
-  public void smartRotate(double vertOffset){
-    angleYToTarget = Limelight.getTargetAngleY();
-  if (angleYToTarget>driveTrainConstants.smartAngleMarginVisionArm + vertOffset){
-      armMotor.set(driveTrainConstants.armMotorSpeed);
-  }
-  else if (angleYToTarget<-driveTrainConstants.smartAngleMarginVisionArm + vertOffset){
-    armMotor.set(-driveTrainConstants.armMotorSpeed);
-       
-  }
-   
-  }
+  
 
   public void toggleArm(){
     if (Mechanisms.lowerLimitSwitch.get() && (getEncoderPosition()>driveTrainConstants.armLowerLimit && getEncoderPosition() < driveTrainConstants.armLowerExtension) || (getEncoderPosition()<driveTrainConstants.armUpperLimit && getEncoderPosition()>driveTrainConstants.armUpperRetraction)){
@@ -374,7 +364,7 @@ public class RunMechanisms {
    } 
    
    public void toggleClaw(boolean auto){
-    if (auto || m_stick.getRawButtonPressed(robotConstants.CLAW_TOGGLE_BUTTON)){
+    if (auto || m_stick.getRawButtonPressed(robotConstants.CLAW_TOGGLE_BUTTON) || Mechanisms.driveJoystick.getRawButtonPressed(robotConstants.CLAW_TOGGLE_BUTTON)){
         clawSolenoid.toggle();
     }
   } 
@@ -383,11 +373,16 @@ public class RunMechanisms {
        clawSolenoid.set(state);
    }
  } 
-  public void testExtension(Joystick stick){
-    if(stick.getRawButtonPressed(robotConstants.EXTEND_TEST_BUTTON)){
-      toggleArm();
-    }
-  }
+ public void testExtension(Joystick stick){
+   if(stick.getRawButtonPressed(robotConstants.EXTEND_TEST_BUTTON)){
+     toggleArm();
+   }
+ }
+ public void closeArm(Joystick stick){
+   if(stick.getRawButtonPressed(robotConstants.CLOSE_ARM_BUTTON)){
+     toggleArm(false);
+   }
+ }
   public void testArm(Joystick stick){
     
     if ( (!Mechanisms.upperLimitSwitch.get() && stick.getRawButton(robotConstants.ARM_TEST_BUTTON_UP)) || (!Mechanisms.lowerLimitSwitch.get()&& stick.getRawButton(robotConstants.ARM_TEST_BUTTON_DOWN))){
@@ -415,6 +410,23 @@ public class RunMechanisms {
     else {
       armMotor.set(0);
       // System.out.println("oob kill");
+    }
+  }
+
+  public void smartRotate(double vertOffset){
+    angleYToTarget = Limelight.getTargetAngleY();
+    if (completedRotating){  
+      if (angleYToTarget>driveTrainConstants.smartAngleMarginVisionArm + vertOffset){
+        if (!(getEncoderPosition()<driveTrainConstants.armLowerLimit || !Mechanisms.lowerLimitSwitch.get()))  
+        armMotor.set(driveTrainConstants.armMotorSpeed);
+      }
+      else if (angleYToTarget<-driveTrainConstants.smartAngleMarginVisionArm + vertOffset){
+        if(!(getEncoderPosition()>driveTrainConstants.armUpperLimit || !Mechanisms.upperLimitSwitch.get()))
+        armMotor.set(-driveTrainConstants.armMotorSpeed);    
+      }
+      else{
+        armMotor.set(0);
+      }
     }
   }
 }

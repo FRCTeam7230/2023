@@ -22,7 +22,7 @@ public class Limelight {
     // private static double tapeAreaPrc = 0.09; //percentage of cube on the screen to be able to score game piece 
     // private static double objAreaRequired = 0.0;
 
-    private static double objAreaMargin = 0.15;
+    private static double objAreaMargin = 0.10;
     private static double objAreaError;
     public  static boolean continueMoving = false;
 
